@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="25" height="25" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Basic" tilewidth="32" tileheight="32">
+  <image source="../img/PathAndObjects.png" width="512" height="512"/>
+ </tileset>
+ <layer name="Floor" width="25" height="25">
+  <data encoding="base64" compression="zlib">
+   eJzdlDtSw0AQRFciAELJARAaAiCUEpPKCVwHuBIn8A2AE4Av5FbVTlW7mVlJgROCV5JqV92z89ldSmk3wTm4IC5lvQI12IIWrGZoKlfgGmzAE7iR9SZrt4FHLZw5HvdZ+xm85CefRz0G0Wmddc9r9HkQHgMP9Rm/O3ALeseL/Srx1joolrNR+y6/r8WH91ZZi+Pz4jc60lXW2dfos+7W+bcRTf4v0leqdJwHjY09ojpOMdUvdmat4xIfT8Obr6lY5nr1hf+9XlmaO62Ld5aoJwdHS+ee+996p9STng9rR7PE8dveKAdWG+5lT7uTeDj+Jv3NF5/fu3tV27S0zpGG1YrvI50jL89zcjfIHv7mmOqghnpH9M67UlqL+sO7q1apfG/qXWeU5iKa32jmls72yCt4E95nrCmf4OuEfIMf8HtC9uDjn3AA2l3pbA==
+  </data>
+ </layer>
+ <layer name="Collision" width="25" height="25">
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAHgzCcQAAQ==
+  </data>
+ </layer>
+</map>

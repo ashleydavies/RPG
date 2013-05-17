@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<npc>
+    <name>Farmer Joe</name>
+    <dialog>
+        <node id="0" prompt="Hello there!">
+            <reply id="0" prompt="Hello!">
+                <action id="0" action="changeNode" args="3"/>
+            </reply>
+        </node>
+        <node id="1" prompt="How are you doing, player?">
+            <reply id="0" prompt="Good, thanks!">
+                <action id="0" action="changeNode" args="3"/>
+            </reply>
+            <reply id="1" prompt="Not too well! :(">
+                <action id="0" action="changeNode" args="4"/>
+            </reply>
+        </node>
+        <node id="2" prompt="That's great! I'm sorry but I'll need to get on with my work now!">
+            <reply id="0" prompt="Oh, sorry! I'll let you get on with that.">
+                <action id="0" action="endDialog"/>
+            </reply>
+        </node>
+    </dialog>
+</npc>
