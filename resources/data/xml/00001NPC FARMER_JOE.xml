@@ -4,21 +4,32 @@
 <npc>
     <name>Farmer Joe</name>
     <dialog>
-        <node id="0" prompt="Hello there!">
-            <reply id="0" prompt="Hello!">
+        <node id="0" prompt="'Hello there!'">
+            <reply id="0" prompt="'Hello!'">
+                <action id="0" action="changeNode" args="1"/>
+            </reply>
+        </node>
+        <node id="1" prompt="'How are you doing, player?'">
+            <reply id="0" prompt="'Good, thanks!'">
+                <action id="0" action="changeNode" args="2"/>
+            </reply>
+            <reply id="1" prompt="'Not too well! :('">
                 <action id="0" action="changeNode" args="3"/>
             </reply>
         </node>
-        <node id="1" prompt="How are you doing, player?">
-            <reply id="0" prompt="Good, thanks!">
-                <action id="0" action="changeNode" args="3"/>
-            </reply>
-            <reply id="1" prompt="Not too well! :(">
-                <action id="0" action="changeNode" args="4"/>
+        <node id="2" prompt="'That's great! I'm sorry but I'll need to get on with my work now!'">
+            <reply id="0" prompt="'Oh, sorry! I'll let you get on with that.'">
+                <action id="0" action="endDialog"/>
             </reply>
         </node>
-        <node id="2" prompt="That's great! I'm sorry but I'll need to get on with my work now!">
-            <reply id="0" prompt="Oh, sorry! I'll let you get on with that.">
+        <node id="3" prompt="'Oh no! What's wrong?'">
+            <reply id="0" prompt="'Nothing. I'm going to kill you unless you give me 50 gold!'">
+                <action id="0" action="giveGold" args="50"/>
+                <action id="1" action="changeNode" args="4"/>
+            </reply>
+        </node>
+        <node id="4" prompt="He grudgingly hands you the gold, refusing to speak to you anymore.">
+            <reply id="0" prompt="{DEFAULT_END}">
                 <action id="0" action="endDialog"/>
             </reply>
         </node>

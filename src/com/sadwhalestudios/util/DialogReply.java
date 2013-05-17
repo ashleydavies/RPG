@@ -21,7 +21,7 @@ public class DialogReply {
     @Override
     public String toString()
     {
-        String retString = prompt + " =ACTIONS= (" + actions.length + "): ";
+        String retString = prompt + "\n        =ACTIONS= (" + actions.length + "):\n          ";
         
         for (DialogAction dA: actions)
             retString += "[" + dA + "],";

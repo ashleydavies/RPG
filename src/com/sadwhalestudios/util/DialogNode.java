@@ -21,10 +21,10 @@ public class DialogNode {
     @Override
     public String toString()
     {
-        String retString = "CHAT NODE " + id + ":\n   " + prompt + "\n   =REPLIES= (" + replies.length + ")";
+        String retString = "CHAT NODE " + id + ":\n   " + prompt + "\n   =REPLIES= (" + replies.length + ")\n     ";
         
         for (DialogReply dR: replies)
-            retString += "[" + dR + "],";
+            retString += dR + "\n     ";
         
         return retString;
     }
