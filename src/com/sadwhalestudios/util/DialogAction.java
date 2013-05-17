@@ -14,7 +14,10 @@ public class DialogAction {
     {
         this.id = id;
         this.action = action;
-        this.args = args.split(",");
+        if (args != "")
+            this.args = args.split(",");
+        else
+            this.args = new String[0];
     }
     
     @Override

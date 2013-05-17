@@ -29,7 +29,7 @@
             </reply>
         </node>
         <node id="4" prompt="He grudgingly hands you the gold, refusing to speak to you anymore.">
-            <reply id="0" prompt="{DEFAULT_END}">
+            <reply id="0" prompt="[DEFAULT_DIALOG_END]">
                 <action id="0" action="endDialog"/>
             </reply>
         </node>
