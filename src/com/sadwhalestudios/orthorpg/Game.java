@@ -15,7 +15,7 @@ public class Game extends BasicGame {
     TiledMap map;
     Player player;
     NPC farmer_joe;
-    DialogGUI dGUI;
+    //DialogGUI dGUI;
     
     public static void main(String[] args) throws SlickException
     {
@@ -34,8 +34,8 @@ public class Game extends BasicGame {
     {
         map = new TiledMap("resources/map/map.tmx");
         player = new Player();
-        farmer_joe = new NPC(1);
-        dGUI = new DialogGUI(gc);
+        farmer_joe = new NPC(gc, 1);
+        farmer_joe.init(gc);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class Game extends BasicGame {
             System.exit(0);
         
         player.update(gc, delta);
-        dGUI.update(gc, delta);
+        farmer_joe.update(gc, delta);
     }
 
     @Override
@@ -54,7 +54,6 @@ public class Game extends BasicGame {
         map.render(0, 0);
         
         player.render(gc, graphics);
-        
-        dGUI.render(gc, graphics);
+        farmer_joe.render(gc, graphics);
     }
 }

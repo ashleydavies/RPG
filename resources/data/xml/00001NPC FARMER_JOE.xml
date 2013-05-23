@@ -3,8 +3,9 @@
 
 <npc>
     <name>Farmer Joe</name>
+    <avatar>fred.png</avatar>
     <dialog>
-        <node id="0" prompt="Farmer Joe glances in your direction, looking at you with uncertainty.\\'Hello there!'">
+        <node id="0" prompt="Farmer Joe glances in your direction, looking at you with uncertainty.[N][N]'Hello there!'">
             <reply id="0" prompt="'Hello!'">
                 <action id="0" action="changeNode" args="1"/>
             </reply>

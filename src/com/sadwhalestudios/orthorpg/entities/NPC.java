@@ -1,11 +1,16 @@
 package com.sadwhalestudios.orthorpg.entities;
 
+import com.sadwhalestudios.orthorpg.gui.DialogGUI;
 import com.sadwhalestudios.util.DialogAction;
 import com.sadwhalestudios.util.DialogNode;
 import com.sadwhalestudios.util.DialogReply;
 import com.sadwhalestudios.util.FileUtility;
 import com.sadwhalestudios.util.XMLParser;
 import java.io.File;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 import org.w3c.dom.*;
 
 /**
@@ -14,10 +19,12 @@ import org.w3c.dom.*;
  */
 public class NPC {
     Document info;
+    DialogNode[] dialog;
+    DialogGUI dGUI;
+    private String name;
+    private Image avatar;
     
-    String name;
-    
-    public NPC(int npcID)
+    public NPC(GameContainer gc, int npcID) throws SlickException
     {
         String startsWith = FileUtility.instance.IDFormat(npcID, 5) + "NPC";
         
@@ -30,11 +37,14 @@ public class NPC {
         // TODO: Sort this out
         
         name = info.getElementsByTagName("name").item(0).getTextContent();
+        avatar = new Image("resources/img/ui/avatar/npc/" + info.getElementsByTagName("avatar").item(0).getTextContent());
         
-        Node dialog = info.getElementsByTagName("dialog").item(0);
-        NodeList dialogNodes = dialog.getChildNodes();
+        Element dialogRoot = (Element)info.getElementsByTagName("dialog").item(0);
+        NodeList dialogNodes = dialogRoot.getElementsByTagName("node");
         
-        for (int i = 1; i < dialogNodes.getLength(); i += 2)
+        dialog = new DialogNode[dialogNodes.getLength()];
+        
+        for (int i = 0; i < dialogNodes.getLength(); i += 1)
         {
             Element i_dialogNode = (Element)dialogNodes.item(i);
             
@@ -72,7 +82,40 @@ public class NPC {
             
             DialogNode dNode1 = new DialogNode(i_dialogNodeID, i_dialogNodePrompt, i_replies);
             
+            dialog[i] = dNode1;
+            
             System.out.println(dNode1);
         }
+        
+        dGUI = new DialogGUI(gc, dialog, this);
+    }
+    
+    public void init(GameContainer gc) throws SlickException
+    {
+        
+    }
+    
+    public void update(GameContainer gc, int delta) throws SlickException
+    {
+        dGUI.update(gc, delta);
+    }
+    
+    public void render(GameContainer gc, Graphics graphics) throws SlickException
+    {
+        dGUI.render(gc, graphics);
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @return the avatar
+     */
+    public Image getAvatar() {
+        return avatar;
     }
 }

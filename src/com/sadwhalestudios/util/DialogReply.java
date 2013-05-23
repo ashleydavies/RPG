@@ -7,7 +7,7 @@ package com.sadwhalestudios.util;
  */
 public class DialogReply {
     final int id;
-    final String prompt;
+    private final String prompt;
     
     final DialogAction[] actions;
     
@@ -21,11 +21,18 @@ public class DialogReply {
     @Override
     public String toString()
     {
-        String retString = prompt + "\n        =ACTIONS= (" + actions.length + "):\n          ";
+        String retString = getPrompt() + "\n        =ACTIONS= (" + actions.length + "):\n          ";
         
         for (DialogAction dA: actions)
             retString += "[" + dA + "],";
         
         return retString;
+    }
+
+    /**
+     * @return the prompt
+     */
+    public String getPrompt() {
+        return prompt;
     }
 }

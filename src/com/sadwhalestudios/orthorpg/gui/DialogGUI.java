@@ -1,6 +1,10 @@
 package com.sadwhalestudios.orthorpg.gui;
 
+import com.sadwhalestudios.orthorpg.entities.NPC;
+import com.sadwhalestudios.util.DialogNode;
 import java.awt.Font;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -17,35 +21,45 @@ import org.newdawn.slick.geom.Rectangle;
  * @author
  * Ashley
  */
-public class DialogGUI {
-    Point position;
-    int width;
-    Image ui;
-    Image menu;
-    Image speaker;
-    TrueTypeFont dialogFont;
-    TrueTypeFont dialogTitleFont;
-    String content;
+public final class DialogGUI {
+    static Image ui;
+    static TrueTypeFont dialogFont;
+    static TrueTypeFont dialogTitleFont;
+    static int width, height;
     
-    public DialogGUI(GameContainer gc) throws SlickException {
-        ui = new Image("resources/img/ui/ui.png");
-        speaker = new Image("resources/img/ui/avatar/npc/fred.png");
-        
-        int width = 504;
-        this.width = width;
-        int height = 624;
+    Point position;
+    Image menu;
+    Image menuContent;
+    NPC parent;
+    
+    static
+    {
+        try {
+            ui = new Image("resources/img/ui/ui.png");
+            dialogFont = new TrueTypeFont(new Font("Arial", Font.PLAIN, 16), true);
+            dialogTitleFont = new TrueTypeFont(new Font("Arial", Font.BOLD, 36), true);
+            
+            width = 504;
+            height = 624; // TODO : Dynamic
+        } catch (SlickException e) {}
+    }
+    
+    public DialogGUI(GameContainer gc, DialogNode[] dialog, NPC parent) throws SlickException {
+        this.parent = parent;
         
         int x = gc.getWidth() / 2 - width / 2;
         int y = gc.getHeight() / 2 - height / 2;
         
-        position = new Point(x, y);        
+        position = new Point(x, y);
         menu = new Image(width, height);
+        menuContent = new Image(width, height);
         
-        dialogFont = new TrueTypeFont(new Font("Arial", Font.PLAIN, 16), true);
-        dialogTitleFont = new TrueTypeFont(new Font("Arial", Font.BOLD, 36), true);
+        String[] responsesUnprepared = dialog[0].getReplyPrompts();
+        String content = prepareString(dialog[0].getPrompt());
+        String[] responses = prepareStrings(responsesUnprepared);
         
         drawMenu(gc, new Rectangle(x, y, width, height));
-        prepareContent("Farmer Joe glances in your direction, looking at youu with uncertainty. 'Hello there!'");
+        drawMenuContent(gc, content, responses);
     }
     
     public void update(GameContainer gc, int delta) throws SlickException
@@ -95,9 +109,51 @@ public class DialogGUI {
         graphics.clear();
     }
     
-    public void prepareContent(String content)
+    public void drawMenuContent(GameContainer gc, String content, String[] responses)
+    {
+        Graphics graphics = gc.getGraphics();
+        
+        graphics.clear();
+        graphics.drawImage(parent.getAvatar(), 12, 12);
+        
+        graphics.setColor(Color.black);
+        graphics.setFont(dialogTitleFont);
+        graphics.drawString(parent.getName(), 12 + 64, 12);
+        
+        int y = (int) (12 + 32);
+        
+        graphics.setFont(dialogFont);
+        for (String line : content.split("\n"))
+            graphics.drawString(line, 12 + 64, y += 18);
+        
+        graphics.setColor(Color.blue);
+        y += 18;
+        
+        int replyN = 0;
+        
+        for (String reply : responses)
+            for (String line : reply.split("\n"))
+                graphics.drawString(++replyN + ": " + line, 12 + 64, y += 18);
+        
+        graphics.copyArea(menuContent, 0, 0);
+
+        graphics.clear();
+    }
+    
+    public final String[] prepareStrings(String[] content)
+    {
+        String[] retArray = new String[content.length];
+        int i = 0;
+        for (String str: content)
+            retArray[i++] = prepareString(str);
+        
+        return retArray;
+    }
+    
+    public final String prepareString(String content)
     {
         String prepString = "";
+        content = content.replace("[N]", "\n");
         String[] content_words = content.split(" ");
         
         int curLine = 0;
@@ -108,28 +164,17 @@ public class DialogGUI {
             if (curLine > width - 42 - 64 - 24)
             {
                 curLine = 0;
-                prepString += "\r\n";
+                prepString += "\n";
             }
             prepString += word + " ";
         }
         
-        this.content = prepString;
+        return prepString;
     }
     
     public void render(GameContainer gc, Graphics graphics) throws SlickException
     {
-        //renderWindow(gc, graphics);
         graphics.drawImage(menu, position.getX(), position.getY());
-        graphics.drawImage(speaker, position.getX() + 12, position.getY() + 12);
-        
-        graphics.setColor(Color.black);
-        graphics.setFont(dialogTitleFont);
-        graphics.drawString("Farmer Joe", position.getX() + 12 + 64, position.getY() + 12);
-        
-        int y = (int) (position.getY() + 12 + 32);
-        
-        graphics.setFont(dialogFont);
-        for (String line : content.split("\n"))
-            graphics.drawString(line, position.getX() + 12 + 64, y += 18);
+        graphics.drawImage(menuContent, position.getX(), position.getY());
     }
 }

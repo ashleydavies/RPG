@@ -7,9 +7,8 @@ package com.sadwhalestudios.util;
  */
 public class DialogNode {
     final int id;
-    final String prompt;
-    
-    final DialogReply[] replies;
+    private final String prompt;
+    private final DialogReply[] replies;
     
     public DialogNode(int id, String prompt, DialogReply[] replies)
     {
@@ -21,10 +20,33 @@ public class DialogNode {
     @Override
     public String toString()
     {
-        String retString = "CHAT NODE " + id + ":\n   " + prompt + "\n   =REPLIES= (" + replies.length + ")\n     ";
+        String retString = "CHAT NODE " + id + ":\n   " + getPrompt() + "\n   =REPLIES= (" + getReplies().length + ")\n     ";
         
-        for (DialogReply dR: replies)
+        for (DialogReply dR: getReplies())
             retString += dR + "\n     ";
+        
+        return retString;
+    }
+
+    /**
+     * @return the prompt
+     */
+    public String getPrompt() {
+        return prompt;
+    }
+
+    /**
+     * @return the replies
+     */
+    public DialogReply[] getReplies() {
+        return replies;
+    }
+
+    public String[] getReplyPrompts() {
+        String[] retString = new String[replies.length];
+        int i = 0;
+        for (DialogReply reply: replies)
+            retString[i++] = reply.getPrompt();
         
         return retString;
     }
