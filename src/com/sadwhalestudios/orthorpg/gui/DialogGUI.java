@@ -5,6 +5,7 @@ import com.sadwhalestudios.util.DialogNode;
 import java.awt.Font;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -15,6 +16,8 @@ import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.gui.GUIContext;
+import org.newdawn.slick.gui.MouseOverArea;
 
 /**
  *
@@ -31,6 +34,8 @@ public final class DialogGUI {
     Image menu;
     Image menuContent;
     NPC parent;
+    Boolean[] replyAreasMouseDown;
+    MouseOverArea[] replyAreas;
     
     static
     {
@@ -60,11 +65,6 @@ public final class DialogGUI {
         
         drawMenu(gc, new Rectangle(x, y, width, height));
         drawMenuContent(gc, content, responses);
-    }
-    
-    public void update(GameContainer gc, int delta) throws SlickException
-    {
-        
     }
     
     public void drawMenu(GameContainer gc, Rectangle rect)
@@ -109,8 +109,11 @@ public final class DialogGUI {
         graphics.clear();
     }
     
-    public void drawMenuContent(GameContainer gc, String content, String[] responses)
+    public void drawMenuContent(GameContainer gc, String content, String[] responses) throws SlickException
     {
+        replyAreas = new MouseOverArea[responses.length];
+        replyAreasMouseDown = new Boolean[responses.length];
+        
         Graphics graphics = gc.getGraphics();
         
         graphics.clear();
@@ -132,8 +135,15 @@ public final class DialogGUI {
         int replyN = 0;
         
         for (String reply : responses)
-            for (String line : reply.split("\n"))
-                graphics.drawString(++replyN + ": " + line, 12 + 64, y += 18);
+        {
+            int startY = y;
+            
+            //for (String line : reply.split("\n"))
+            graphics.drawString(++replyN + ": " + reply, 12 + 64, y += 18);
+            
+            replyAreas[replyN - 1] = new MouseOverArea(gc, new Image(width - 24 - 64, 18), (int) (position.getX() + 12 + 64), (int) (position.getY() + y));
+            replyAreasMouseDown[replyN - 1] = false;
+        }
         
         graphics.copyArea(menuContent, 0, 0);
 
@@ -161,7 +171,7 @@ public final class DialogGUI {
         for (String word: content_words)
         {
             curLine += dialogFont.getWidth(word);
-            if (curLine > width - 42 - 64 - 24)
+            if (curLine > width - 42 - 64 - 42)
             {
                 curLine = 0;
                 prepString += "\n";
@@ -170,6 +180,31 @@ public final class DialogGUI {
         }
         
         return prepString;
+    }
+    
+    public void update(GameContainer gc, int delta) throws SlickException
+    {
+        for (int i = 0; i < replyAreas.length; i++)
+        {
+            if (replyAreas[i].isMouseOver() && Mouse.isButtonDown(0))
+            {
+                replyAreasMouseDown[i] = true;
+                System.out.println("Mouse button down on " + i);
+            }
+            else if (replyAreas[i].isMouseOver() && !Mouse.isButtonDown(0) && replyAreasMouseDown[i] == true)
+            {
+                replyAreasMouseDown[i] = false;
+                
+                System.out.println("Clicked " + i);
+                parent.dialogReplyClicked(gc, i);
+                break;
+            }
+            
+            if (!replyAreas[i].isMouseOver())
+            {
+                replyAreasMouseDown[i] = false;
+            }
+        }
     }
     
     public void render(GameContainer gc, Graphics graphics) throws SlickException

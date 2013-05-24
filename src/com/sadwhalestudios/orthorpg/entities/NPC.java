@@ -23,6 +23,7 @@ public class NPC {
     DialogGUI dGUI;
     private String name;
     private Image avatar;
+    int curDialog = 0;
     
     public NPC(GameContainer gc, int npcID) throws SlickException
     {
@@ -104,6 +105,25 @@ public class NPC {
     {
         dGUI.render(gc, graphics);
     }
+    
+    public void dialogReplyClicked(GameContainer gc, int i) throws SlickException {
+        // i = reply clicked
+        
+        DialogReply reply = dialog[curDialog].getReply(i);
+        
+        for (DialogAction action: reply.getActions())
+        {
+            switch (action.getAction())
+            {
+                case "changeNode":
+                    curDialog = Integer.parseInt(action.getArg(0));
+                    dGUI.drawMenuContent(gc, dialog[curDialog].getPrompt(), dialog[curDialog].getReplyPrompts());
+            }
+        }
+    }
+    
+        
+        
 
     /**
      * @return the name

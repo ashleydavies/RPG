@@ -41,6 +41,13 @@ public class DialogNode {
     public DialogReply[] getReplies() {
         return replies;
     }
+    
+    /**
+     * @return a reply
+     */
+    public DialogReply getReply(int i) {
+        return replies[i];
+    }
 
     public String[] getReplyPrompts() {
         String[] retString = new String[replies.length];

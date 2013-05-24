@@ -9,7 +9,7 @@ public class DialogReply {
     final int id;
     private final String prompt;
     
-    final DialogAction[] actions;
+    private final DialogAction[] actions;
     
     public DialogReply(int id, String prompt, DialogAction[] actions)
     {
@@ -21,9 +21,9 @@ public class DialogReply {
     @Override
     public String toString()
     {
-        String retString = getPrompt() + "\n        =ACTIONS= (" + actions.length + "):\n          ";
+        String retString = getPrompt() + "\n        =ACTIONS= (" + getActions().length + "):\n          ";
         
-        for (DialogAction dA: actions)
+        for (DialogAction dA: getActions())
             retString += "[" + dA + "],";
         
         return retString;
@@ -34,5 +34,12 @@ public class DialogReply {
      */
     public String getPrompt() {
         return prompt;
+    }
+
+    /**
+     * @return the actions
+     */
+    public DialogAction[] getActions() {
+        return actions;
     }
 }

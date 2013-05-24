@@ -7,8 +7,8 @@ package com.sadwhalestudios.util;
  */
 public class DialogAction {
     final int id;
-    final String action;
-    final String[] args;
+    private final String action;
+    private final String[] args;
     
     public DialogAction(int id, String action, String args)
     {
@@ -23,13 +23,34 @@ public class DialogAction {
     @Override
     public String toString()
     {
-        String retString = action + " (";
+        String retString = getAction() + " (";
         
-        for (String arg: args)
+        for (String arg: getArgs())
             retString += arg + ",";
         
         retString += ")";
         
         return retString;
+    }
+
+    /**
+     * @return the action
+     */
+    public String getAction() {
+        return action;
+    }
+
+    /**
+     * @return the args
+     */
+    public String[] getArgs() {
+        return args;
+    }
+    
+    /**
+     * @return an arg
+     */
+    public String getArg(int i) {
+        return args[i];
     }
 }
