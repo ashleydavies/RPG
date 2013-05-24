@@ -15,7 +15,7 @@ public class Player extends Entity {
     public Player() throws SlickException
     {
         position = new Point(0, 0);
-        image = new Image("/resources/img/player.png");
+        image = new Image("img/player.png");
     }
     
     @Override

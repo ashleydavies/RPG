@@ -1,8 +1,6 @@
 package com.sadwhalestudios.orthorpg;
 
 import com.sadwhalestudios.orthorpg.entities.*;
-import com.sadwhalestudios.orthorpg.gui.DialogGUI;
-import com.sadwhalestudios.util.FileUtility;
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.*;
 import org.newdawn.slick.tiled.*;
@@ -20,7 +18,7 @@ public class Game extends BasicGame {
     public static void main(String[] args) throws SlickException
     {
         AppGameContainer app = new AppGameContainer(new Game());
-        app.setDisplayMode(1920, 1080, true);
+        app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), true);
         app.start();
     }
     
@@ -32,10 +30,9 @@ public class Game extends BasicGame {
     @Override
     public void init(GameContainer gc) throws SlickException
     {
-        map = new TiledMap("resources/map/map.tmx");
+        map = new TiledMap("map/map.tmx");
         player = new Player();
         farmer_joe = new NPC(gc, 1);
-        farmer_joe.init(gc);
     }
 
     @Override

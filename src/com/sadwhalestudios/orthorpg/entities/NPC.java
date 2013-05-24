@@ -4,9 +4,12 @@ import com.sadwhalestudios.orthorpg.gui.DialogGUI;
 import com.sadwhalestudios.util.DialogAction;
 import com.sadwhalestudios.util.DialogNode;
 import com.sadwhalestudios.util.DialogReply;
-import com.sadwhalestudios.util.FileUtility;
 import com.sadwhalestudios.util.XMLParser;
-import java.io.File;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -18,27 +21,34 @@ import org.w3c.dom.*;
  * @author Ashley
  */
 public class NPC {
+    static final Properties NPCSubstitution;
+    
     Document info;
     DialogNode[] dialog;
     DialogGUI dGUI;
-    private String name;
-    private Image avatar;
+    private final String name;
+    private final Image avatar;
     int curDialog = 0;
     
-    public NPC(GameContainer gc, int npcID) throws SlickException
+    static
     {
-        String startsWith = FileUtility.instance.IDFormat(npcID, 5) + "NPC";
-        
-        File infoXML = FileUtility.instance.getFileStartingWith("resources/data/xml", startsWith);
-
-        
-        info = XMLParser.instance.parseXML(infoXML);
+        NPCSubstitution = new Properties();
+        try {
+            NPCSubstitution.load(NPC.class.getClassLoader().getResourceAsStream("data/properties/NPCSubstitution.properties"));
+        } catch (IOException ex) {
+            Logger.getLogger(NPC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public NPC(GameContainer gc, int npcID) throws SlickException
+    {        
+        info = XMLParser.instance.parseXML(this.getClass().getClassLoader().getResourceAsStream("data/xml/00001NPC.xml"));
         
         
         // TODO: Sort this out
         
         name = info.getElementsByTagName("name").item(0).getTextContent();
-        avatar = new Image("resources/img/ui/avatar/npc/" + info.getElementsByTagName("avatar").item(0).getTextContent());
+        avatar = new Image("img/ui/avatar/npc/" + info.getElementsByTagName("avatar").item(0).getTextContent());
         
         Element dialogRoot = (Element)info.getElementsByTagName("dialog").item(0);
         NodeList dialogNodes = dialogRoot.getElementsByTagName("node");
@@ -50,7 +60,7 @@ public class NPC {
             Element i_dialogNode = (Element)dialogNodes.item(i);
             
             int i_dialogNodeID = Integer.parseInt(i_dialogNode.getAttribute("id"));
-            String i_dialogNodePrompt = i_dialogNode.getAttribute("prompt");
+            String i_dialogNodePrompt = substituteDialogString(i_dialogNode.getAttribute("prompt"));
             
             NodeList i_replyNodes = i_dialogNode.getElementsByTagName("reply");
             
@@ -61,7 +71,7 @@ public class NPC {
                 Element i_replyNode = (Element)i_replyNodes.item(o);
                 
                 int i_replyNodeID = Integer.parseInt(i_replyNode.getAttribute("id"));
-                String i_replyNodePrompt = i_replyNode.getAttribute("prompt");
+                String i_replyNodePrompt = substituteDialogString(i_replyNode.getAttribute("prompt"));
                 
                 NodeList i_actionNodes = i_replyNode.getElementsByTagName("action");
                 
@@ -91,9 +101,17 @@ public class NPC {
         dGUI = new DialogGUI(gc, dialog, this);
     }
     
-    public void init(GameContainer gc) throws SlickException
+    public final String substituteDialogString(String stringIn)
     {
+        Enumeration e = NPCSubstitution.propertyNames();
+
+        while (e.hasMoreElements()) {
+            String key = (String) e.nextElement();
+            stringIn = stringIn.replace("[" + key + "]", NPCSubstitution.getProperty(key));
+        }
+
         
+        return stringIn;
     }
     
     public void update(GameContainer gc, int delta) throws SlickException

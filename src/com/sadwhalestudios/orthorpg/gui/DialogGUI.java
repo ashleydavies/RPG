@@ -3,20 +3,15 @@ package com.sadwhalestudios.orthorpg.gui;
 import com.sadwhalestudios.orthorpg.entities.NPC;
 import com.sadwhalestudios.util.DialogNode;
 import java.awt.Font;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.gui.GUIContext;
 import org.newdawn.slick.gui.MouseOverArea;
 
 /**
@@ -40,7 +35,7 @@ public final class DialogGUI {
     static
     {
         try {
-            ui = new Image("resources/img/ui/ui.png");
+            ui = new Image("img/ui/ui.png");
             dialogFont = new TrueTypeFont(new Font("Arial", Font.PLAIN, 16), true);
             dialogTitleFont = new TrueTypeFont(new Font("Arial", Font.BOLD, 36), true);
             
@@ -59,9 +54,8 @@ public final class DialogGUI {
         menu = new Image(width, height);
         menuContent = new Image(width, height);
         
-        String[] responsesUnprepared = dialog[0].getReplyPrompts();
-        String content = prepareString(dialog[0].getPrompt());
-        String[] responses = prepareStrings(responsesUnprepared);
+        String content = dialog[0].getPrompt();
+        String[] responses = dialog[0].getReplyPrompts();
         
         drawMenu(gc, new Rectangle(x, y, width, height));
         drawMenuContent(gc, content, responses);
@@ -111,6 +105,9 @@ public final class DialogGUI {
     
     public void drawMenuContent(GameContainer gc, String content, String[] responses) throws SlickException
     {
+        content = prepareString(content);
+        responses = prepareStrings(responses);
+        
         replyAreas = new MouseOverArea[responses.length];
         replyAreasMouseDown = new Boolean[responses.length];
         
@@ -130,18 +127,24 @@ public final class DialogGUI {
             graphics.drawString(line, 12 + 64, y += 18);
         
         graphics.setColor(Color.blue);
-        y += 18;
+        y += 36;
         
         int replyN = 0;
         
         for (String reply : responses)
         {
-            int startY = y;
+            int lineN = 0;
+            for (String line : reply.split("\n"))
+            {
+                if (lineN == 0)
+                    graphics.drawString(++replyN + ": " + line, 12 + 64 - dialogFont.getWidth(replyN + ": "), y += 18);
+                else
+                    graphics.drawString(line, 12 + 64, y += 18);
+                
+                lineN++;
+            }
             
-            //for (String line : reply.split("\n"))
-            graphics.drawString(++replyN + ": " + reply, 12 + 64, y += 18);
-            
-            replyAreas[replyN - 1] = new MouseOverArea(gc, new Image(width - 24 - 64, 18), (int) (position.getX() + 12 + 64), (int) (position.getY() + y));
+            replyAreas[replyN - 1] = new MouseOverArea(gc, new Image(width - 24 - 64, 18 * lineN), (int) (position.getX() + 12 + 64), (int) (position.getY() + y - ((lineN - 1) * 18)));
             replyAreasMouseDown[replyN - 1] = false;
         }
         
@@ -162,18 +165,19 @@ public final class DialogGUI {
     
     public final String prepareString(String content)
     {
-        String prepString = "";
+        String prepString = " ";
         content = content.replace("[N]", "\n");
         String[] content_words = content.split(" ");
         
-        int curLine = 0;
+        int curLine = 1;
         
         for (String word: content_words)
         {
             curLine += dialogFont.getWidth(word);
+            System.out.println("Word: " + word + " curLine: " + curLine);
             if (curLine > width - 42 - 64 - 42)
             {
-                curLine = 0;
+                curLine = dialogFont.getWidth(word);
                 prepString += "\n";
             }
             prepString += word + " ";

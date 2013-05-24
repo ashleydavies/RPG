@@ -1,9 +1,9 @@
 package com.sadwhalestudios.util;
 
 import java.io.File;
+import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 
 /**
@@ -26,6 +26,17 @@ public final class XMLParser {
     }
     
     public Document parseXML(File file)
+    {
+        try
+        {
+            return dBuilder.parse(file);
+        }
+        catch (Exception e) {}
+        
+        return null;
+    }
+    
+    public Document parseXML(InputStream file)
     {
         try
         {
