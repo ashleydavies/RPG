@@ -2,6 +2,9 @@ package com.sadwhalestudios.util;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
  *
@@ -23,6 +26,7 @@ public final class FileUtility {
     public File[] getFilesStartingWith(String directory, final String startsWith)
     {
         File root = new File(directory);
+
         FilenameFilter beginsWith = new FilenameFilter()
         {
             @Override
@@ -31,9 +35,9 @@ public final class FileUtility {
                 return filename.startsWith(startsWith);
             }
         };
-        
+
         File[] files = root.listFiles(beginsWith);
-        
+
         return files;
     }
     

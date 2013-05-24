@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="25" height="25" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="Basic" tilewidth="32" tileheight="32">
-  <image source="../img/PathAndObjects.png" width="512" height="512"/>
+  <image source="tilesets/PathAndObjects.png" width="512" height="512"/>
  </tileset>
  <layer name="Floor" width="25" height="25">
   <data encoding="base64" compression="zlib">
-   eJzdlDtSw0AQRFciAELJARAaAiCUEpPKCVwHuBIn8A2AE4Av5FbVTlW7mVlJgROCV5JqV92z89ldSmk3wTm4IC5lvQI12IIWrGZoKlfgGmzAE7iR9SZrt4FHLZw5HvdZ+xm85CefRz0G0Wmddc9r9HkQHgMP9Rm/O3ALeseL/Srx1joolrNR+y6/r8WH91ZZi+Pz4jc60lXW2dfos+7W+bcRTf4v0leqdJwHjY09ojpOMdUvdmat4xIfT8Obr6lY5nr1hf+9XlmaO62Ld5aoJwdHS+ee+996p9STng9rR7PE8dveKAdWG+5lT7uTeDj+Jv3NF5/fu3tV27S0zpGG1YrvI50jL89zcjfIHv7mmOqghnpH9M67UlqL+sO7q1apfG/qXWeU5iKa32jmls72yCt4E95nrCmf4OuEfIMf8HtC9uDjn3AA2l3pbA==
+   eJzdlD1SwzAQhW1TkJRWCqBMUgCl3UCrNHCdwJVygtwgcALgQjzPaGfevNm1nSJNim/ijKT3tNqfY1VVxwluwYJYynoNGrADCaxmaCp34B68gFfwIOst6EAfeDTCjePxWLTfwHv55XjaotsWjyw6SciB1+DzJDyLxxpsSjzsk0qctqZe7FeLN+eB72bx2JsN2tvyvRafRHtr0jKf1tmby76OdBWL1+jpXJKz7NHJuUhfqUlb9dUjyuMU+hZaL5zjaM8UnobXX1N3mevVj5z3auXct9O8eLFENZkdLe17nkNWO2M16fmw9s5ZZ1a0N3oDyw3XsqfN803vrz2s8XuzV7VNS/McaViueB5pH3nvPOftsuzh/3ynJsihzoje+VbG1qL68GaVzW9Pi2e7MtYXUf9GPXdubw/swYfwOWNNOYGvC/INfsDvBfkDhyvhH2hd6lk=
   </data>
  </layer>
  <layer name="Collision" width="25" height="25">
