@@ -10,6 +10,7 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.lwjgl.input.Mouse;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -28,6 +29,7 @@ public class NPC {
     DialogGUI dGUI;
     private final String name;
     private final Image avatar;
+    Boolean dialogShowing = false;
     int curDialog = 0;
     
     static
@@ -98,7 +100,7 @@ public class NPC {
             System.out.println(dNode1);
         }
         
-        dGUI = new DialogGUI(gc, dialog, this);
+        setupDialog(gc);
     }
     
     public final String substituteDialogString(String stringIn)
@@ -109,19 +111,23 @@ public class NPC {
             String key = (String) e.nextElement();
             stringIn = stringIn.replace("[" + key + "]", NPCSubstitution.getProperty(key));
         }
-
         
         return stringIn;
     }
     
     public void update(GameContainer gc, int delta) throws SlickException
     {
-        dGUI.update(gc, delta);
+        if (dialogShowing)
+            dGUI.update(gc, delta);
+        
+        if (!dialogShowing && Mouse.isButtonDown(0))
+            beginDialog(gc);
     }
     
     public void render(GameContainer gc, Graphics graphics) throws SlickException
     {
-        dGUI.render(gc, graphics);
+        if (dialogShowing)
+            dGUI.render(gc, graphics);
     }
     
     public void dialogReplyClicked(GameContainer gc, int i) throws SlickException {
@@ -136,12 +142,30 @@ public class NPC {
                 case "changeNode":
                     curDialog = Integer.parseInt(action.getArg(0));
                     dGUI.drawMenuContent(gc, dialog[curDialog].getPrompt(), dialog[curDialog].getReplyPrompts());
+                    break;
+                case "endDialog":
+                    endDialog();
             }
         }
     }
     
+    public void setupDialog(GameContainer gc) throws SlickException
+    {
+        dGUI = new DialogGUI(gc, dialog, this);
+    }
+    
+    public void beginDialog(GameContainer gc) throws SlickException
+    {
+        dialogShowing = true;
         
-        
+        curDialog = 0;
+        dGUI.drawMenuContent(gc, dialog[0].getPrompt(), dialog[0].getReplyPrompts());
+    }
+    
+    public void endDialog()
+    {
+        dialogShowing = false;
+    }
 
     /**
      * @return the name

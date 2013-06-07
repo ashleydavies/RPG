@@ -25,6 +25,20 @@
             <reply id="0" prompt="[BATTLE_BEGIN_DIALOG_END]">
                 <action id="0" action="endDialog"/>
             </reply>
+            <reply id="1" prompt="'Wait, no! I'll pay!' (Pay 30 coins)">
+                <action id="0" action="intdata_decrease" args="0,30">
+                    <condition id="0" conditionID="0" val="1"/>
+                </action>
+                <action id="1" action="changeNode" args="6">
+                    <condition id="0" conditionID="0" val="1"/>
+                </action>
+                
+                <action id="2" action="changeNode" args="5">
+                    <condition id="0" conditionID="0" val="0"/>
+                </action>
+                
+                <condition id="0" condition="intdata_morethan" args="0,29"/>
+            </reply>
         </node>
         <node id="3" prompt="'Thank you.' A sense of relief passes across his face. He must be protecting something very important, strange for an unaugmented human.">
             <reply id="0" prompt="[DEFAULT_DIALOG_END]">
@@ -35,6 +49,24 @@
             <reply id="0" prompt="[DEFAULT_DIALOG_END]">
                 <action id="0" action="endDialog"/>
             </reply>
+        </node>
+        <node id="5" prompt="'Who do you think you're tricking! You don't even have 30 coins! Get off my land right now or I'll be forced to fight you!'">
+            <reply id="0" prompt="'Calm down, I'll leave your land now.'">
+                <action id="0" action="changeNode" args="7"/>
+            </reply>
+            <reply id="1" prompt="[BATTLE_BEGIN_DIALOG_END]">
+                <action id="0" action="endDialog"/>
+            </reply>
+        </node>
+        <node id="6" prompt="He takes your money from a considerable distance, stretching towards you. He quietly slides them into his pocket and looks in your direction with distaste. [N][N] 'So? What do you want now? Clear off!'">
+            <reply id="0" prompt="[DEFAULT_DIALOG_END]">
+                <action id="0" action="endDialog"/>
+            </reply>            
+        </node>
+        <node id="7" prompt="He, already annoyed at your presence and lying about giving him money, is more annoyed about your laid back attitude to the situation. [N][N] '... I gave you a chance...' He jumps forward with his spear in hand.">
+            <reply id="0" prompt="[BATTLE_BEGIN_DIALOG_END]">
+                <action id="0" action="endDialog"/>
+            </reply>            
         </node>
     </dialog>
 </npc>

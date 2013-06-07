@@ -18,7 +18,7 @@ public class Game extends BasicGame {
     public static void main(String[] args) throws SlickException
     {
         AppGameContainer app = new AppGameContainer(new Game());
-        app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), true);
+        app.setDisplayMode(800, 800, false);
         app.start();
     }
     
