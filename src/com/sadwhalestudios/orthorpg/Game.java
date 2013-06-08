@@ -1,6 +1,7 @@
 package com.sadwhalestudios.orthorpg;
 
 import com.sadwhalestudios.orthorpg.entities.*;
+import com.sadwhalestudios.util.SaveData;
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.*;
 import org.newdawn.slick.tiled.*;
@@ -10,9 +11,12 @@ import org.newdawn.slick.tiled.*;
  * @author Ashley
  */
 public class Game extends BasicGame {
+    private static Game Instance;
+    
     TiledMap map;
     Player player;
     NPC farmer_joe;
+    private SaveData currentGameData;
     //DialogGUI dGUI;
     
     public static void main(String[] args) throws SlickException
@@ -22,9 +26,10 @@ public class Game extends BasicGame {
         app.start();
     }
     
-    public Game()
+    private Game()
     {
         super("Orthographic RPG Test");
+        Instance = this;
     }
     
     @Override
@@ -33,6 +38,8 @@ public class Game extends BasicGame {
         map = new TiledMap("map/map.tmx");
         player = new Player();
         farmer_joe = new NPC(gc, 1);
+        currentGameData = new SaveData();
+        currentGameData.setIntSaveData(0, 50);
     }
 
     @Override
@@ -52,5 +59,19 @@ public class Game extends BasicGame {
         
         player.render(gc, graphics);
         farmer_joe.render(gc, graphics);
+    }
+    
+    /**
+     * @return the Instance
+     */
+    public static Game getInstance() {
+        return Instance;
+    }
+
+    /**
+     * @return the currentGameData
+     */
+    public SaveData getCurrentGameData() {
+        return currentGameData;
     }
 }

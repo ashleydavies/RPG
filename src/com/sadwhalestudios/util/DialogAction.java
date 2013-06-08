@@ -24,10 +24,15 @@ public class DialogAction {
     @Override
     public String toString()
     {
-        String retString = getAction() + " (";
+        String retString = getAction() + " ARGS: (";
         
         for (String arg: getArgs())
             retString += arg + ",";
+        
+        retString += ") CONDITIONS: (";
+        
+        for (DialogCondition cond: conditions)
+            retString += cond + ",";
         
         retString += ")";
         
@@ -62,7 +67,7 @@ public class DialogAction {
         return conditions;
     }
     
-    public boolean meetsConditions()
+    public boolean conditionsMet()
     {
         for (DialogCondition condition: conditions)
         {

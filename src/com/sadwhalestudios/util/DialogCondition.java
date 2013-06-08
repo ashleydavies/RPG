@@ -1,5 +1,7 @@
 package com.sadwhalestudios.util;
 
+import com.sadwhalestudios.orthorpg.Game;
+
 /**
  *
  * @author Ashley
@@ -21,7 +23,29 @@ public class DialogCondition {
     
     public boolean conditionMet()
     {
+        switch (condition)
+        {
+            case "intdata_morethan":
+                return Game.getInstance().getCurrentGameData().getIntSaveData(Integer.parseInt(args[0])) > Integer.parseInt(args[1]);
+            case "intdata_lessthan":
+                return Game.getInstance().getCurrentGameData().getIntSaveData(Integer.parseInt(args[0])) < Integer.parseInt(args[1]);
+            case "intdata_equalto":
+                return Game.getInstance().getCurrentGameData().getIntSaveData(Integer.parseInt(args[0])) == Integer.parseInt(args[1]);
+        }
         return true;
+    }
+    
+    @Override
+    public String toString()
+    {
+       String retString = getCondition() + "(";
+        
+        for (String arg: getArgs())
+            retString += arg + ",";
+        
+        retString += ")";
+        
+        return retString;
     }
 
     /**

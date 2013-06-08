@@ -84,7 +84,7 @@ public class NPC {
                 
                 for (int l = 0; l < i_conditionNodes.getLength(); l++)
                 {
-                    Element i_conditionNode = (Element)i_actionNodes.item(l);
+                    Element i_conditionNode = (Element)i_conditionNodes.item(l);
                     
                     int i_conditionNodeID = Integer.parseInt(i_conditionNode.getAttribute("id"));
                     String i_conditionNodeCondition = i_conditionNode.getAttribute("condition");
@@ -165,14 +165,18 @@ public class NPC {
         
         for (DialogAction action: reply.getActions())
         {
-            switch (action.getAction())
+            // Check if action conditions are met
+            if (action.conditionsMet())
             {
-                case "changeNode":
-                    curDialog = Integer.parseInt(action.getArg(0));
-                    dGUI.drawMenuContent(gc, dialog[curDialog].getPrompt(), dialog[curDialog].getReplyPrompts());
-                    break;
-                case "endDialog":
-                    endDialog();
+                switch (action.getAction())
+                {
+                    case "changeNode":
+                        curDialog = Integer.parseInt(action.getArg(0));
+                        dGUI.drawMenuContent(gc, dialog[curDialog].getPrompt(), dialog[curDialog].getReplyPrompts());
+                        break;
+                    case "endDialog":
+                        endDialog();
+                }
             }
         }
     }

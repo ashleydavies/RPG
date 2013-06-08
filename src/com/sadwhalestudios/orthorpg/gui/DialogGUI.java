@@ -200,7 +200,6 @@ public final class DialogGUI {
             if (replyAreas[i].isMouseOver() && Mouse.isButtonDown(0))
             {
                 replyAreasMouseDown[i] = true;
-                System.out.println("Mouse button down on " + i);
             }
             else if (replyAreas[i].isMouseOver() && !Mouse.isButtonDown(0) && replyAreasMouseDown[i] == true)
             {
