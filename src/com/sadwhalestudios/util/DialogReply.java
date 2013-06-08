@@ -10,12 +10,14 @@ public class DialogReply {
     private final String prompt;
     
     private final DialogAction[] actions;
+    //private final DialogCondition[] conditions;
     
-    public DialogReply(int id, String prompt, DialogAction[] actions)
+    public DialogReply(int id, String prompt, DialogAction[] actions)//, DialogCondition[] conditions)
     {
         this.id = id;
         this.prompt = prompt;
         this.actions = actions;
+        //this.conditions = conditions;
     }
     
     @Override
@@ -42,4 +44,11 @@ public class DialogReply {
     public DialogAction[] getActions() {
         return actions;
     }
+
+    /**
+     * @return the conditions
+     *
+    public DialogCondition[] getConditions() {
+        return conditions;
+    }*/
 }

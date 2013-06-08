@@ -21,7 +21,7 @@ public class DialogCondition {
     
     public boolean conditionMet()
     {
-        
+        return true;
     }
 
     /**

@@ -27,17 +27,18 @@
             </reply>
             <reply id="1" prompt="'Wait, no! I'll pay!' (Pay 30 coins)">
                 <action id="0" action="intdata_decrease" args="0,30">
-                    <condition id="0" conditionID="0" val="1"/>
+                    <condition id="0" conditionID="0"/>
                 </action>
                 <action id="1" action="changeNode" args="6">
-                    <condition id="0" conditionID="0" val="1"/>
+                    <condition id="0" conditionID="0"/>
                 </action>
                 
                 <action id="2" action="changeNode" args="5">
-                    <condition id="0" conditionID="0" val="0"/>
+                    <condition id="0" conditionID="1"/>
                 </action>
                 
                 <condition id="0" condition="intdata_morethan" args="0,29"/>
+                <condition id="1" condition="intdata_lessthan" args="0,30"/>
             </reply>
         </node>
         <node id="3" prompt="'Thank you.' A sense of relief passes across his face. He must be protecting something very important, strange for an unaugmented human.">

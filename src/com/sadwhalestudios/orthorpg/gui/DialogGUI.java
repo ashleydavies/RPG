@@ -181,7 +181,7 @@ public final class DialogGUI {
             }
             
             curLine += dialogFont.getWidth(word);
-            System.out.println("Word: " + word + " curLine: " + curLine);
+            //System.out.println("Word: " + word + " curLine: " + curLine);
             if (curLine > width - 42 - 64 - 42)
             {
                 curLine = dialogFont.getWidth(word);

@@ -8,8 +8,9 @@ public class DialogAction {
     final int id;
     private final String action;
     private final String[] args;
+    private final DialogCondition[] conditions;
     
-    public DialogAction(int id, String action, String args)
+    public DialogAction(int id, String action, String args, DialogCondition[] conditions)
     {
         this.id = id;
         this.action = action;
@@ -17,6 +18,7 @@ public class DialogAction {
             this.args = args.split(",");
         else
             this.args = new String[0];
+        this.conditions = conditions;
     }
     
     @Override
@@ -51,5 +53,25 @@ public class DialogAction {
      */
     public String getArg(int i) {
         return args[i];
+    }
+
+    /**
+     * @return the conditions
+     */
+    public DialogCondition[] getConditions() {
+        return conditions;
+    }
+    
+    public boolean meetsConditions()
+    {
+        for (DialogCondition condition: conditions)
+        {
+            if (!condition.conditionMet())
+            {
+                return false;
+            }
+        }
+        
+        return true;
     }
 }

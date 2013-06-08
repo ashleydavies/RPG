@@ -2,6 +2,7 @@ package com.sadwhalestudios.orthorpg.entities;
 
 import com.sadwhalestudios.orthorpg.gui.DialogGUI;
 import com.sadwhalestudios.util.DialogAction;
+import com.sadwhalestudios.util.DialogCondition;
 import com.sadwhalestudios.util.DialogNode;
 import com.sadwhalestudios.util.DialogReply;
 import com.sadwhalestudios.util.XMLParser;
@@ -75,19 +76,46 @@ public class NPC {
                 int i_replyNodeID = Integer.parseInt(i_replyNode.getAttribute("id"));
                 String i_replyNodePrompt = substituteDialogString(i_replyNode.getAttribute("prompt"));
                 
+                NodeList i_conditionNodes = i_replyNode.getElementsByTagName("condition");
                 NodeList i_actionNodes = i_replyNode.getElementsByTagName("action");
                 
+                DialogCondition[] i_conditions = new DialogCondition[i_conditionNodes.getLength()];
                 DialogAction[] i_actions = new DialogAction[i_actionNodes.getLength()];
+                
+                for (int l = 0; l < i_conditionNodes.getLength(); l++)
+                {
+                    Element i_conditionNode = (Element)i_actionNodes.item(l);
+                    
+                    int i_conditionNodeID = Integer.parseInt(i_conditionNode.getAttribute("id"));
+                    String i_conditionNodeCondition = i_conditionNode.getAttribute("condition");
+                    String i_conditionNodeArguments = i_conditionNode.getAttribute("args");
+                    
+                    i_conditions[i_conditionNodeID] = new DialogCondition(i_conditionNodeID, i_conditionNodeCondition, i_conditionNodeArguments);
+                }
                 
                 for (int j = 0; j < i_actionNodes.getLength(); j++)
                 {
                     Element i_actionNode = (Element)i_actionNodes.item(j);
                     
                     int i_actionNodeID = Integer.parseInt(i_actionNode.getAttribute("id"));
-                    String i_actionNodePrompt = i_actionNode.getAttribute("action");
+                    String i_actionNodeAction = i_actionNode.getAttribute("action");
                     String i_actionNodeArguments = i_actionNode.getAttribute("args");
                     
-                    i_actions[i_actionNodeID] = new DialogAction(i_actionNodeID, i_actionNodePrompt, i_actionNodeArguments);
+                    //Check which conditions apply to this action.
+                    NodeList i_actionNodeConditionNodes = i_actionNode.getElementsByTagName("condition");
+                    DialogCondition[] i_actionNodeConditions = new DialogCondition[i_actionNodeConditionNodes.getLength()];
+                    
+                    for (int k = 0; k < i_actionNodeConditionNodes.getLength(); k++)
+                    {
+                        Element i_actionNodeConditionNode = (Element)i_actionNodeConditionNodes.item(k);
+                        
+                        int i_actionNodeConditionNodeID = Integer.parseInt(i_actionNodeConditionNode.getAttribute("id"));
+                        int i_actionNodeConditionNodeConditionID = Integer.parseInt(i_actionNodeConditionNode.getAttribute("conditionID"));
+                        
+                        i_actionNodeConditions[i_actionNodeConditionNodeID] = i_conditions[i_actionNodeConditionNodeConditionID];
+                    }
+                    
+                    i_actions[i_actionNodeID] = new DialogAction(i_actionNodeID, i_actionNodeAction, i_actionNodeArguments, i_actionNodeConditions);
                 }
                 
                 i_replies[i_replyNodeID] = new DialogReply(i_replyNodeID, i_replyNodePrompt, i_actions);
