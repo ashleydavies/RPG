@@ -29,7 +29,7 @@ public class NPC {
     DialogGUI dGUI;
     private final String name;
     private final Image avatar;
-    Boolean dialogShowing = false;
+    boolean dialogShowing = false;
     int curDialog = 0;
     
     static

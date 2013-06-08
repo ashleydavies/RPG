@@ -5,7 +5,7 @@
     <name>Farmer Joe</name>
     <avatar>fred.png</avatar>
     <dialog>
-        <node id="0" prompt="Farmer Joe glances in your direction, looking at you with uncertainty. From his expression of worry you feel he distrusts you. [N][N] 'Ah, I knew you would come eventually.' He sighs under his breath, 'Do you require the package?'">
+        <node id="0" prompt="Farmer Joe glances in your direction, looking at you with uncertainty. From his expression of worry you feel he distrusts you. [N] [N] 'Ah, I knew you would come eventually.' He sighs under his breath, 'Do you require the package?'">
             <reply id="0" prompt="'Who are you? What is this package?'">
                 <action id="0" action="changeNode" args="1"/>
             </reply>
@@ -58,12 +58,12 @@
                 <action id="0" action="endDialog"/>
             </reply>
         </node>
-        <node id="6" prompt="He takes your money from a considerable distance, stretching towards you. He quietly slides them into his pocket and looks in your direction with distaste. [N][N] 'So? What do you want now? Clear off!'">
+        <node id="6" prompt="He takes your money from a considerable distance, stretching towards you. He quietly slides them into his pocket and looks in your direction with distaste. [N] [N] 'So? What do you want now? Clear off!'">
             <reply id="0" prompt="[DEFAULT_DIALOG_END]">
                 <action id="0" action="endDialog"/>
             </reply>            
         </node>
-        <node id="7" prompt="He, already annoyed at your presence and lying about giving him money, is more annoyed about your laid back attitude to the situation. [N][N] '... I gave you a chance...' He jumps forward with his spear in hand.">
+        <node id="7" prompt="He, already annoyed at your presence and lying about giving him money, is more annoyed about your laid back attitude to the situation. [N] [N] '... I gave you a chance...' He jumps forward with his spear in hand.">
             <reply id="0" prompt="[BATTLE_BEGIN_DIALOG_END]">
                 <action id="0" action="endDialog"/>
             </reply>            

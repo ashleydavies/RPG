@@ -29,7 +29,7 @@ public final class DialogGUI {
     Image menu;
     Image menuContent;
     NPC parent;
-    Boolean[] replyAreasMouseDown;
+    boolean[] replyAreasMouseDown;
     MouseOverArea[] replyAreas;
     
     static
@@ -109,7 +109,7 @@ public final class DialogGUI {
         responses = prepareStrings(responses);
         
         replyAreas = new MouseOverArea[responses.length];
-        replyAreasMouseDown = new Boolean[responses.length];
+        replyAreasMouseDown = new boolean[responses.length];
         
         Graphics graphics = gc.getGraphics();
         
@@ -173,6 +173,13 @@ public final class DialogGUI {
         
         for (String word: content_words)
         {
+            if ("\n".equals(word))
+            {
+                prepString += "\n";
+                curLine = 0;
+                continue;
+            }
+            
             curLine += dialogFont.getWidth(word);
             System.out.println("Word: " + word + " curLine: " + curLine);
             if (curLine > width - 42 - 64 - 42)

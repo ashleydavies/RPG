@@ -2,8 +2,7 @@ package com.sadwhalestudios.util;
 
 /**
  *
- * @author
- * Ashley
+ * @author Ashley
  */
 public class DialogAction {
     final int id;
@@ -14,7 +13,7 @@ public class DialogAction {
     {
         this.id = id;
         this.action = action;
-        if (args != "")
+        if (!"".equals(args))
             this.args = args.split(",");
         else
             this.args = new String[0];

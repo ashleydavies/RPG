@@ -10,13 +10,13 @@ public class SaveData {
     static final int MAX_STRING_SAVE_DATA = 100;
     
     int intSaveData[];
-    Boolean boolSaveData[];
+    boolean boolSaveData[];
     String stringSaveData[];
     
     public void SaveData()
     {
         intSaveData = new int[MAX_INT_SAVE_DATA];
-        boolSaveData = new Boolean[MAX_BOOL_SAVE_DATA];
+        boolSaveData = new boolean[MAX_BOOL_SAVE_DATA];
         stringSaveData = new String[MAX_STRING_SAVE_DATA];
     }
 }
