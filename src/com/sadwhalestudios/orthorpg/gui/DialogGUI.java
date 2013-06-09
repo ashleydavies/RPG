@@ -1,5 +1,6 @@
 package com.sadwhalestudios.orthorpg.gui;
 
+import com.sadwhalestudios.orthorpg.Game;
 import com.sadwhalestudios.orthorpg.entities.NPC;
 import com.sadwhalestudios.util.DialogNode;
 import java.awt.Font;
@@ -28,6 +29,7 @@ public final class DialogGUI {
     Point position;
     Image menu;
     Image menuContent;
+    Image menuPrimaryContent;
     NPC parent;
     boolean[] replyAreasMouseDown;
     MouseOverArea[] replyAreas;
@@ -53,11 +55,13 @@ public final class DialogGUI {
         position = new Point(x, y);
         menu = new Image(width, height);
         menuContent = new Image(width, height);
+        menuPrimaryContent = new Image(width, height);
         
         String content = dialog[0].getPrompt();
         String[] responses = dialog[0].getReplyPrompts();
         
         drawMenu(gc, new Rectangle(x, y, width, height));
+        drawMenuPrimaryContent(gc);
         drawMenuContent(gc, content, responses);
     }
     
@@ -99,7 +103,20 @@ public final class DialogGUI {
                 graphics.drawImage(inner, 60 * x + 12, 60 * y + 12);
         
         graphics.copyArea(menu, 0, 0);
+        graphics.clear();
+    }
+    
+    
+    public void drawMenuPrimaryContent(GameContainer gc)
+    {
+        Graphics graphics = gc.getGraphics();
+        graphics.clear();
         
+        // Draw standard menu UI (Todo: Move to a higher-tier GUI class and copy down)
+        graphics.setColor(Color.black);
+        graphics.drawString(Game.getInstance().getCurrentGameData().getIntSaveData(0) + " coins", 24, menuPrimaryContent.getHeight() - 24 - 12);
+        
+        graphics.copyArea(menuPrimaryContent, 0, 0);
         graphics.clear();
     }
     
@@ -149,7 +166,6 @@ public final class DialogGUI {
         }
         
         graphics.copyArea(menuContent, 0, 0);
-
         graphics.clear();
     }
     
@@ -207,6 +223,9 @@ public final class DialogGUI {
                 
                 System.out.println("Clicked " + i);
                 parent.dialogReplyClicked(gc, i);
+                
+                drawMenuPrimaryContent(gc);
+                
                 break;
             }
             
@@ -220,6 +239,7 @@ public final class DialogGUI {
     public void render(GameContainer gc, Graphics graphics) throws SlickException
     {
         graphics.drawImage(menu, position.getX(), position.getY());
+        graphics.drawImage(menuPrimaryContent, position.getX(), position.getY());
         graphics.drawImage(menuContent, position.getX(), position.getY());
     }
 }

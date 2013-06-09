@@ -38,6 +38,19 @@ public class DialogAction {
         
         return retString;
     }
+    
+    public boolean conditionsMet()
+    {
+        for (DialogCondition condition: conditions)
+        {
+            if (!condition.conditionMet())
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
 
     /**
      * @return the action
@@ -65,18 +78,5 @@ public class DialogAction {
      */
     public DialogCondition[] getConditions() {
         return conditions;
-    }
-    
-    public boolean conditionsMet()
-    {
-        for (DialogCondition condition: conditions)
-        {
-            if (!condition.conditionMet())
-            {
-                return false;
-            }
-        }
-        
-        return true;
     }
 }

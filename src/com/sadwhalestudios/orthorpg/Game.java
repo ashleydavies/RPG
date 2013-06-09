@@ -35,11 +35,12 @@ public class Game extends BasicGame {
     @Override
     public void init(GameContainer gc) throws SlickException
     {
+        currentGameData = new SaveData();
+        currentGameData.setIntSaveData(0, 50);
+        
         map = new TiledMap("map/map.tmx");
         player = new Player();
         farmer_joe = new NPC(gc, 1);
-        currentGameData = new SaveData();
-        currentGameData.setIntSaveData(0, 50);
     }
 
     @Override

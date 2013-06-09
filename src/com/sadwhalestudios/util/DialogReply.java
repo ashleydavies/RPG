@@ -10,14 +10,14 @@ public class DialogReply {
     private final String prompt;
     
     private final DialogAction[] actions;
-    //private final DialogCondition[] conditions;
+    private final DialogCondition[] conditions;
     
-    public DialogReply(int id, String prompt, DialogAction[] actions)//, DialogCondition[] conditions)
+    public DialogReply(int id, String prompt, DialogAction[] actions, DialogCondition[] conditions)
     {
         this.id = id;
         this.prompt = prompt;
         this.actions = actions;
-        //this.conditions = conditions;
+        this.conditions = conditions;
     }
     
     @Override
@@ -29,6 +29,19 @@ public class DialogReply {
             retString += "[" + dA + "],";
         
         return retString;
+    }
+    
+    public boolean conditionsMet()
+    {
+        for (DialogCondition condition: conditions)
+        {
+            if (!condition.conditionMet())
+            {
+                return false;
+            }
+        }
+        
+        return true;
     }
 
     /**
@@ -47,8 +60,8 @@ public class DialogReply {
 
     /**
      * @return the conditions
-     *
+     */
     public DialogCondition[] getConditions() {
         return conditions;
-    }*/
+    }
 }

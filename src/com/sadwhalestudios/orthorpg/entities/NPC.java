@@ -1,10 +1,12 @@
 package com.sadwhalestudios.orthorpg.entities;
 
+import com.sadwhalestudios.orthorpg.Game;
 import com.sadwhalestudios.orthorpg.gui.DialogGUI;
 import com.sadwhalestudios.util.DialogAction;
 import com.sadwhalestudios.util.DialogCondition;
 import com.sadwhalestudios.util.DialogNode;
 import com.sadwhalestudios.util.DialogReply;
+import com.sadwhalestudios.util.SaveData;
 import com.sadwhalestudios.util.XMLParser;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -58,6 +60,21 @@ public class NPC {
         
         dialog = new DialogNode[dialogNodes.getLength()];
         
+        NodeList i_conditionNodes = dialogRoot.getElementsByTagName("condition");
+
+        DialogCondition[] i_conditions = new DialogCondition[i_conditionNodes.getLength()];
+
+        for (int l = 0; l < i_conditionNodes.getLength(); l++)
+        {
+            Element i_conditionNode = (Element)i_conditionNodes.item(l);
+
+            int i_conditionNodeID = Integer.parseInt(i_conditionNode.getAttribute("id"));
+            String i_conditionNodeCondition = i_conditionNode.getAttribute("condition");
+            String i_conditionNodeArguments = i_conditionNode.getAttribute("args");
+
+            i_conditions[i_conditionNodeID] = new DialogCondition(i_conditionNodeID, i_conditionNodeCondition, i_conditionNodeArguments);
+        }
+        
         for (int i = 0; i < dialogNodes.getLength(); i += 1)
         {
             Element i_dialogNode = (Element)dialogNodes.item(i);
@@ -76,21 +93,20 @@ public class NPC {
                 int i_replyNodeID = Integer.parseInt(i_replyNode.getAttribute("id"));
                 String i_replyNodePrompt = substituteDialogString(i_replyNode.getAttribute("prompt"));
                 
-                NodeList i_conditionNodes = i_replyNode.getElementsByTagName("condition");
                 NodeList i_actionNodes = i_replyNode.getElementsByTagName("action");
+                NodeList i_replyNodeConditionNodes = i_replyNode.getElementsByTagName("replyCondition");
                 
-                DialogCondition[] i_conditions = new DialogCondition[i_conditionNodes.getLength()];
                 DialogAction[] i_actions = new DialogAction[i_actionNodes.getLength()];
+                DialogCondition[] i_replyNodeConditions = new DialogCondition[i_replyNodeConditionNodes.getLength()];
                 
-                for (int l = 0; l < i_conditionNodes.getLength(); l++)
+                for (int p = 0; p < i_replyNodeConditionNodes.getLength(); p++)
                 {
-                    Element i_conditionNode = (Element)i_conditionNodes.item(l);
+                    Element i_replyNodeConditionNode = (Element)i_replyNodeConditionNodes.item(p);
                     
-                    int i_conditionNodeID = Integer.parseInt(i_conditionNode.getAttribute("id"));
-                    String i_conditionNodeCondition = i_conditionNode.getAttribute("condition");
-                    String i_conditionNodeArguments = i_conditionNode.getAttribute("args");
+                    int i_replyNodeConditionNodeID = Integer.parseInt(i_replyNodeConditionNode.getAttribute("id"));
+                    int i_replyNodeConditionNodeConditionID = Integer.parseInt(i_replyNodeConditionNode.getAttribute("conditionID"));
                     
-                    i_conditions[i_conditionNodeID] = new DialogCondition(i_conditionNodeID, i_conditionNodeCondition, i_conditionNodeArguments);
+                    i_replyNodeConditions[i_replyNodeConditionNodeID] = i_conditions[i_replyNodeConditionNodeConditionID];
                 }
                 
                 for (int j = 0; j < i_actionNodes.getLength(); j++)
@@ -102,7 +118,7 @@ public class NPC {
                     String i_actionNodeArguments = i_actionNode.getAttribute("args");
                     
                     //Check which conditions apply to this action.
-                    NodeList i_actionNodeConditionNodes = i_actionNode.getElementsByTagName("condition");
+                    NodeList i_actionNodeConditionNodes = i_actionNode.getElementsByTagName("actionCondition");
                     DialogCondition[] i_actionNodeConditions = new DialogCondition[i_actionNodeConditionNodes.getLength()];
                     
                     for (int k = 0; k < i_actionNodeConditionNodes.getLength(); k++)
@@ -118,7 +134,7 @@ public class NPC {
                     i_actions[i_actionNodeID] = new DialogAction(i_actionNodeID, i_actionNodeAction, i_actionNodeArguments, i_actionNodeConditions);
                 }
                 
-                i_replies[i_replyNodeID] = new DialogReply(i_replyNodeID, i_replyNodePrompt, i_actions);
+                i_replies[i_replyNodeID] = new DialogReply(i_replyNodeID, i_replyNodePrompt, i_actions, i_replyNodeConditions);
             }
             
             DialogNode dNode1 = new DialogNode(i_dialogNodeID, i_dialogNodePrompt, i_replies);
@@ -161,21 +177,49 @@ public class NPC {
     public void dialogReplyClicked(GameContainer gc, int i) throws SlickException {
         // i = reply clicked
         
-        DialogReply reply = dialog[curDialog].getReply(i);
-        
+        DialogReply reply = dialog[curDialog].getReplyCM(i);
+        System.out.println(reply);
         for (DialogAction action: reply.getActions())
         {
+            System.out.println("ACTION: " + action);
             // Check if action conditions are met
             if (action.conditionsMet())
             {
+                SaveData data = Game.getInstance().getCurrentGameData();
                 switch (action.getAction())
                 {
                     case "changeNode":
+                    {
                         curDialog = Integer.parseInt(action.getArg(0));
                         dGUI.drawMenuContent(gc, dialog[curDialog].getPrompt(), dialog[curDialog].getReplyPrompts());
                         break;
+                    }
+                    case "intdata_decrease":
+                    {
+                        int iData = Integer.parseInt(action.getArg(0));
+                        int modif = Integer.parseInt(action.getArg(1));
+                        data.setIntSaveData(iData, data.getIntSaveData(iData) - modif);
+                        break;
+                    }
+                    case "intdata_increase":
+                    {
+                        int iData = Integer.parseInt(action.getArg(0));
+                        int modif = Integer.parseInt(action.getArg(1));
+                        data.setIntSaveData(iData, data.getIntSaveData(iData) + modif);
+                        break;
+                    }
+                    case "intdata_set":
+                    {
+                        int iData = Integer.parseInt(action.getArg(0));
+                        int modif = Integer.parseInt(action.getArg(1));
+                        data.setIntSaveData(iData, modif);
+                        break;
+                    }
                     case "endDialog":
+                    {
                         endDialog();
+                        break;
+                    }
                 }
             }
         }

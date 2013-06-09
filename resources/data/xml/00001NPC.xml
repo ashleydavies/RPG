@@ -26,19 +26,25 @@
                 <action id="0" action="endDialog"/>
             </reply>
             <reply id="1" prompt="'Wait, no! I'll pay!' (Pay 30 coins)">
-                <action id="0" action="intdata_decrease" args="0,30">
-                    <condition id="0" conditionID="0"/>
+                <action id="0" action="changeNode" args="6">
+                    <actionCondition id="0" conditionID="0"/>
                 </action>
-                <action id="1" action="changeNode" args="6">
-                    <condition id="0" conditionID="0"/>
-                </action>
-                
-                <action id="2" action="changeNode" args="5">
-                    <condition id="0" conditionID="1"/>
+                <action id="1" action="changeNode" args="5">
+                    <actionCondition id="0" conditionID="1"/>
                 </action>
                 
-                <condition id="0" condition="intdata_morethan" args="0,29"/>
-                <condition id="1" condition="intdata_lessthan" args="0,30"/>
+                <action id="2" action="intdata_decrease" args="0,30">
+                    <actionCondition id="0" conditionID="0"/>
+                </action>
+            </reply>
+            <reply id="2" prompt="'I'm sorry, I didn't mean to offend you. It's fine, I'll leave now'">
+                <action id="0" action="changeNode" args="8"/>
+                
+                <replyCondition id="0" conditionID="2"/>
+            </reply>
+            <reply id="3" prompt="'Herp derp'">
+                <action id="0" action="endDialog"/>
+                <action id="1" action="intdata_increase" args="1,3"/>
             </reply>
         </node>
         <node id="3" prompt="'Thank you.' A sense of relief passes across his face. He must be protecting something very important, strange for an unaugmented human.">
@@ -62,12 +68,24 @@
         <node id="6" prompt="He takes your money from a considerable distance, stretching towards you. He quietly slides them into his pocket and looks in your direction with distaste. [N] [N] 'So? What do you want now? Clear off!'">
             <reply id="0" prompt="[DEFAULT_DIALOG_END]">
                 <action id="0" action="endDialog"/>
-            </reply>            
+            </reply>
         </node>
         <node id="7" prompt="He, already annoyed at your presence and lying about giving him money, is more annoyed about your laid back attitude to the situation. [N] [N] '... I gave you a chance...' He jumps forward with his spear in hand.">
             <reply id="0" prompt="[BATTLE_BEGIN_DIALOG_END]">
                 <action id="0" action="endDialog"/>
             </reply>            
         </node>
+        <node id="8" prompt="You manage to calm him down by changing your tone of voice slightly. 'Sorry for being so aggressive, but I really do need you to leave my land now'">
+            <reply id="0" prompt="I've changed my mind (Enter combat mode)">
+                <action id="0" action="endDialog"/>
+            </reply>
+            <reply id="1" prompt="[DEFAULT_DIALOG_END]">
+                <action id="0" action="endDialog"/>
+            </reply>
+        </node>
+        
+        <condition id="0" condition="intdata_morethan" args="0,29"/>
+        <condition id="1" condition="intdata_lessthan" args="0,30"/>
+        <condition id="2" condition="intdata_morethan" args="1,5"/>
     </dialog>
 </npc>

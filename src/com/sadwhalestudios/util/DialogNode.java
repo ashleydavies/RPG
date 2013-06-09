@@ -48,12 +48,37 @@ public class DialogNode {
     public DialogReply getReply(int i) {
         return replies[i];
     }
+    
+    /**
+     * 
+     * @return a reply based on whether conditions are met (Ie n would be the n-1th reply that has conditions met.
+     */
+    public DialogReply getReplyCM(int i) {
+        int k = 0;
+        
+        for (DialogReply reply: replies)
+            if (reply.conditionsMet())
+                if (k == i)
+                    return reply;
+                else
+                    k++;
+        
+        return null;
+    }
 
     public String[] getReplyPrompts() {
-        String[] retString = new String[replies.length];
+        //Only where conditions met
+        int count = 0;
+        
+        for (DialogReply reply: replies)
+            if (reply.conditionsMet())
+                count++;
+        
+        String[] retString = new String[count];
         int i = 0;
         for (DialogReply reply: replies)
-            retString[i++] = reply.getPrompt();
+            if (reply.conditionsMet())
+                retString[i++] = reply.getPrompt();
         
         return retString;
     }
