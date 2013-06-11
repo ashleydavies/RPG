@@ -50,7 +50,7 @@ public class NPC {
         info = XMLParser.instance.parseXML(this.getClass().getClassLoader().getResourceAsStream("data/xml/00001NPC.xml"));
         
         
-        // TODO: Sort this out
+        // TODO: Sort out parsing code; preferably shift out of constructor to avoid laggy game loading.
         
         name = info.getElementsByTagName("name").item(0).getTextContent();
         avatar = new Image("img/ui/avatar/npc/" + info.getElementsByTagName("avatar").item(0).getTextContent());

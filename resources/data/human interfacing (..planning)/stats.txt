@@ -1,0 +1,34 @@
+CORE
+
+Strength
+Intelligence
+Fortitude
+Agility
+
+
+SUB-CORE
+
+Persuasiveness
+Perception
+Luck
+Mechanics
+
+
+PHYSICAL COMBAT
+
+Swordsmanship
+Archery
+Speed
+Analysis
+Evasiveness
+Pickpocketing
+
+
+MAGIC
+
+Magic (Makes all magic stronger)
+Combat magic
+Blessing magic
+Dark Magic
+Utility magic
+Healing magic

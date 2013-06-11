@@ -42,7 +42,7 @@ public final class DialogGUI {
             dialogTitleFont = new TrueTypeFont(new Font("Arial", Font.BOLD, 36), true);
             
             width = 504;
-            height = 624; // TODO : Dynamic
+            height = 624; // TODO : Make GUI sizing dynamic based on resolution
         } catch (SlickException e) {}
     }
     
@@ -114,7 +114,7 @@ public final class DialogGUI {
         
         // Draw standard menu UI (Todo: Move to a higher-tier GUI class and copy down)
         graphics.setColor(Color.black);
-        graphics.drawString(Game.getInstance().getCurrentGameData().getIntSaveData(0) + " coins", 24, menuPrimaryContent.getHeight() - 24 - 12);
+        graphics.drawString(Game.getInstance().getCurrentGameData().getIntSaveData(0) + " coins", 24, height - 36);
         
         graphics.copyArea(menuPrimaryContent, 0, 0);
         graphics.clear();

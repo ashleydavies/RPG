@@ -1,0 +1,4 @@
+0 = Money
+1 - 100 = Reserved Core
+101 - 200 = Reserved Stats
+201 - 1000 = Reserved NPCData
