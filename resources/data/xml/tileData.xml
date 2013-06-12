@@ -6,6 +6,8 @@
     <tileInfo>
         <tile id="0">
             <name>grass</name>
+            <collision>0</collision>
+            
         </tile>
     </tileInfo>
 </data>
