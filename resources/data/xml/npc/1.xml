@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <npc>
     <name>Farmer Joe</name>
     <avatar>fred.png</avatar>
+    
     <dialog>
         <node id="0" prompt="Farmer Joe glances in your direction, looking at you with uncertainty. From his expression of worry you feel he distrusts you. [N] [N] 'Ah, I knew you would come eventually.' He sighs under his breath, 'Do you require the package?'">
             <reply id="0" prompt="'Who are you? What is this package?'">

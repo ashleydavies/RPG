@@ -47,7 +47,7 @@ public class NPC {
     
     public NPC(GameContainer gc, int npcID) throws SlickException
     {        
-        info = XMLParser.instance.parseXML(this.getClass().getClassLoader().getResourceAsStream("data/xml/00001NPC.xml"));
+        info = XMLParser.instance.parseXML(this.getClass().getClassLoader().getResourceAsStream("data/xml/npc/1.xml"));
         
         
         // TODO: Sort out parsing code; preferably shift out of constructor to avoid laggy game loading.

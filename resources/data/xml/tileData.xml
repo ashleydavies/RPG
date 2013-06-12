@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<data>
+    <tileCount>1</tileCount>
+    
+    <tileInfo>
+        <tile id="0">
+            <name>grass</name>
+        </tile>
+    </tileInfo>
+</data>
