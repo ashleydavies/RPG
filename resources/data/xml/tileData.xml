@@ -8,6 +8,53 @@
             <name>grass</name>
             <collision>0</collision>
             
+            <textureType>static</textureType>
+            <texture id="0">
+                <spritesheet>0</spritesheet>
+                <xPos>0</xPos>
+                <yPos>0</yPos>
+            </texture>
+        </tile>
+        <tile id="1">
+            <name>dirt</name>
+            <collision>0</collision>
+            
+            <textureType>static</textureType>
+            <texture id="0">
+                <spritesheet>0</spritesheet>
+                <xPos>32</xPos>
+                <yPos>0</yPos>
+            </texture>
+        </tile>
+        <tile id="2">
+            <name>water</name>
+            <collision>1</collision>
+            
+            <textureType>dynamic</textureType>
+            <textureData>
+                <frameTime>0.1</frameTime>
+                <frameCount>4</frameCount>
+            </textureData>
+            <texture id="0">
+                <spritesheet>0</spritesheet>
+                <xPos>64</xPos>
+                <yPos>0</yPos>
+            </texture>
+            <texture id="1">
+                <spritesheet>0</spritesheet>
+                <xPos>64</xPos>
+                <yPos>32</yPos>
+            </texture>
+            <texture id="2">
+                <spritesheet>0</spritesheet>
+                <xPos>64</xPos>
+                <yPos>64</yPos>
+            </texture>
+            <texture id="3">
+                <spritesheet>0</spritesheet>
+                <xPos>64</xPos>
+                <yPos>96</yPos>
+            </texture>
         </tile>
     </tileInfo>
 </data>

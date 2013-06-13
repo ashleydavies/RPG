@@ -4,38 +4,51 @@
     <name>Wilted Forest</name>
     <icon></icon>
     <tileData>
-        <row id="0">
-            <column id="0">
-                <tile id="0" tileID="0"/>
-            </column>
-            <column id="1">
-                <tile id="0" tileID="0"/>
-            </column>
-            <column id="2">
-                <tile id="0" tileID="0"/>
-            </column>
-        </row>
-        <row id="1">
-            <column id="0">
-                <tile id="0" tileID="0"/>
-            </column>
-            <column id="1">
-                <tile id="0" tileID="0"/>
-            </column>
-            <column id="2">
-                <tile id="0" tileID="0"/>
-            </column>
-        </row>
-        <row id="2">
-            <column id="0">
-                <tile id="0" tileID="0"/>
-            </column>
-            <column id="1">
-                <tile id="0" tileID="0"/>
-            </column>
-            <column id="2">
-                <tile id="0" tileID="0"/>
-            </column>
-        </row>
+        <layer id="0">
+            <row id="0">
+                <column id="0">
+                    <tile id="0" tileID="0"/>
+                </column>
+                <column id="1">
+                    <tile id="0" tileID="0"/>
+                </column>
+                <column id="2">
+                    <tile id="0" tileID="0"/>
+                </column>
+            </row>
+            <row id="1">
+                <column id="0">
+                    <tile id="0" tileID="1"/>
+                </column>
+                <column id="1">
+                    <tile id="0" tileID="0"/>
+                </column>
+                <column id="2">
+                    <tile id="0" tileID="1"/>
+                </column>
+            </row>
+            <row id="2">
+                <column id="0">
+                    <tile id="0" tileID="2"/>
+                </column>
+                <column id="1">
+                    <tile id="0" tileID="1"/>
+                </column>
+                <column id="2">
+                    <tile id="0" tileID="2"/>
+                </column>
+            </row>
+            <row id="3">
+                <column id="0">
+                    <tile id="0" tileID="2"/>
+                </column>
+                <column id="1">
+                    <tile id="0" tileID="2"/>
+                </column>
+                <column id="2">
+                    <tile id="0" tileID="2"/>
+                </column>
+            </row>
+        </layer>
     </tileData>
 </map>
