@@ -2,10 +2,10 @@ package com.sadwhalestudios.orthorpg.entities;
 
 import com.sadwhalestudios.orthorpg.Game;
 import com.sadwhalestudios.orthorpg.gui.DialogGUI;
-import com.sadwhalestudios.util.DialogAction;
-import com.sadwhalestudios.util.DialogCondition;
-import com.sadwhalestudios.util.DialogNode;
-import com.sadwhalestudios.util.DialogReply;
+import com.sadwhalestudios.util.dialog.DialogAction;
+import com.sadwhalestudios.util.dialog.DialogCondition;
+import com.sadwhalestudios.util.dialog.DialogNode;
+import com.sadwhalestudios.util.dialog.DialogReply;
 import com.sadwhalestudios.util.SaveData;
 import com.sadwhalestudios.util.XMLParser;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.sadwhalestudios.util;
+package com.sadwhalestudios.util.dialog;
 
 import com.sadwhalestudios.orthorpg.Game;
 

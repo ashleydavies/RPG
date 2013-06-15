@@ -2,7 +2,7 @@ package com.sadwhalestudios.orthorpg.gui;
 
 import com.sadwhalestudios.orthorpg.Game;
 import com.sadwhalestudios.orthorpg.entities.NPC;
-import com.sadwhalestudios.util.DialogNode;
+import com.sadwhalestudios.util.dialog.DialogNode;
 import java.awt.Font;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
