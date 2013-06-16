@@ -8,106 +8,46 @@
     <tileData>
         <layer id="0">
             <row id="0">
-                <col id="0">
-                    <tile tileID="0"/>
-                </col>
-                <col id="1">
-                    <tile tileID="0"/>
-                </col>
-                <col id="2">
-                    <tile tileID="0"/>
-                </col>
-                <col id="3">
-                    <tile tileID="0"/>
-                </col>
-                <col id="4">
-                    <tile tileID="0"/>
-                </col>
+                <tile col="0" tileID="0"/>
+                <tile col="1" tileID="0"/>
+                <tile col="2" tileID="0"/>
+                <tile col="3" tileID="0"/>
+                <tile col="4" tileID="0"/>
             </row>
             <row id="1">
-                <col id="0">
-                    <tile tileID="1"/>
-                </col>
-                <col id="1">
-                    <tile tileID="0"/>
-                </col>
-                <col id="2">
-                    <tile tileID="1"/>
-                </col>
-                <col id="3">
-                    <tile tileID="1"/>
-                </col>
-                <col id="4">
-                    <tile tileID="1"/>
-                </col>
+                <tile col="0" tileID="1"/>
+                <tile col="1" tileID="0"/>
+                <tile col="2" tileID="0"/>
+                <tile col="3" tileID="1"/>
+                <tile col="4" tileID="1"/>
             </row>
             <row id="2">
-                <col id="0">
-                    <tile tileID="2"/>
-                </col>
-                <col id="1">
-                    <tile tileID="1"/>
-                </col>
-                <col id="2">
-                    <tile tileID="2"/>
-                </col>
-                <col id="3">
-                    <tile tileID="2"/>
-                </col>
-                <col id="4">
-                    <tile tileID="2"/>
-                </col>
+                <tile col="0" tileID="1"/>
+                <tile col="1" tileID="1"/>
+                <tile col="2" tileID="1"/>
+                <tile col="3" tileID="1"/>
+                <tile col="4" tileID="2"/>
             </row>
             <row id="3">
-                <col id="0">
-                    <tile tileID="2"/>
-                </col>
-                <col id="1">
-                    <tile tileID="2"/>
-                </col>
-                <col id="2">
-                    <tile tileID="2"/>
-                </col>
-                <col id="3">
-                    <tile tileID="2"/>
-                </col>
-                <col id="4">
-                    <tile tileID="2"/>
-                </col>
+                <tile col="0" tileID="2"/>
+                <tile col="1" tileID="2"/>
+                <tile col="2" tileID="1"/>
+                <tile col="3" tileID="1"/>
+                <tile col="4" tileID="2"/>
             </row>
             <row id="4">
-                <col id="0">
-                    <tile tileID="2"/>
-                </col>
-                <col id="1">
-                    <tile tileID="2"/>
-                </col>
-                <col id="2">
-                    <tile tileID="2"/>
-                </col>
-                <col id="3">
-                    <tile tileID="2"/>
-                </col>
-                <col id="4">
-                    <tile tileID="2"/>
-                </col>
+                <tile col="0" tileID="2"/>
+                <tile col="1" tileID="2"/>
+                <tile col="2" tileID="2"/>
+                <tile col="3" tileID="2"/>
+                <tile col="4" tileID="2"/>
             </row>
             <row id="5">
-                <col id="0">
-                    <tile tileID="2"/>
-                </col>
-                <col id="1">
-                    <tile tileID="2"/>
-                </col>
-                <col id="2">
-                    <tile tileID="2"/>
-                </col>
-                <col id="3">
-                    <tile tileID="2"/>
-                </col>
-                <col id="4">
-                    <tile tileID="2"/>
-                </col>
+                <tile col="0" tileID="2"/>
+                <tile col="1" tileID="2"/>
+                <tile col="2" tileID="2"/>
+                <tile col="3" tileID="2"/>
+                <tile col="4" tileID="2"/>
             </row>
         </layer>
     </tileData>

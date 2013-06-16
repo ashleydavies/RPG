@@ -43,6 +43,6 @@ public class Player extends Entity {
     @Override
     public void render(GameContainer gc, Graphics graphics)
     {
-        image.draw(position.getX(), position.getY());
+        image.draw((int)position.getX(), (int)position.getY());
     }
 }
