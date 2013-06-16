@@ -6,7 +6,7 @@ package com.sadwhalestudios.util.map;
  * Ashley
  */
 public class MapTileData {
-    protected final int id;
+    private final int id;
     protected int data[];
     
     public MapTileData(int Id)
@@ -24,5 +24,12 @@ public class MapTileData {
     public int getData(int dataID)
     {
         return data[dataID];
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
     }
 }

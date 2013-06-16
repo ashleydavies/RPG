@@ -1,6 +1,8 @@
 package com.sadwhalestudios.util.map;
 
 import com.sadwhalestudios.util.XMLParser;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -17,9 +19,11 @@ public class Map {
     int height;
     MapLayer layers[];
     
-    public void render()
+    public void render(GameContainer gc, Graphics graphics)
     {
-        
+        // TODO: Don't render every individual tile every frame; clip & combime
+        for (MapLayer layer: layers)
+            layer.render(gc, graphics);
     }
     
     public void load()

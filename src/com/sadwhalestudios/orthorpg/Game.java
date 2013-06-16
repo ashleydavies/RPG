@@ -63,6 +63,7 @@ public class Game extends BasicGame {
     {
         //map.render(0, 0);
         
+        map.render(gc, graphics);
         player.render(gc, graphics);
         farmer_joe.render(gc, graphics);
     }
