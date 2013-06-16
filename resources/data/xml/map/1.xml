@@ -51,4 +51,11 @@
             </row>
         </layer>
     </tileData>
+    <NPCs>
+        <NPC id="0">
+            <id>1</id>
+            <xPos>0</xPos>
+            <yPos>0</yPos>
+        </NPC>
+    </NPCs>
 </map>

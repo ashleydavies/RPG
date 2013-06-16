@@ -14,12 +14,9 @@ import org.newdawn.slick.tiled.*;
 public class Game extends BasicGame {
     private static Game Instance;
     
-    //TiledMap map;
     Map map;
     Player player;
-    NPC farmer_joe;
     private SaveData currentGameData;
-    //DialogGUI dGUI;
     
     public static void main(String[] args) throws SlickException
     {
@@ -40,12 +37,10 @@ public class Game extends BasicGame {
         currentGameData = new SaveData();
         currentGameData.setIntSaveData(0, 50);
         
-        //map = new TiledMap("map/map.tmx");
         player = new Player();
-        farmer_joe = new NPC(gc, 1);
         System.out.println("Initialising map");
         map = new Map();
-        map.load();
+        map.load(gc);
     }
 
     @Override
@@ -55,17 +50,14 @@ public class Game extends BasicGame {
             System.exit(0);
         
         player.update(gc, delta);
-        farmer_joe.update(gc, delta);
+        map.update(gc, delta);
     }
 
     @Override
     public void render(GameContainer gc, Graphics graphics) throws SlickException
     {
-        //map.render(0, 0);
-        
         map.render(gc, graphics);
         player.render(gc, graphics);
-        farmer_joe.render(gc, graphics);
     }
     
     /**

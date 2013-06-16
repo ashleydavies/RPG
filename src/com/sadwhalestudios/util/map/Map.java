@@ -1,8 +1,10 @@
 package com.sadwhalestudios.util.map;
 
+import com.sadwhalestudios.orthorpg.entities.NPC;
 import com.sadwhalestudios.util.XMLParser;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -18,15 +20,25 @@ public class Map {
     int width;
     int height;
     MapLayer layers[];
+    NPC npcs[];
     
-    public void render(GameContainer gc, Graphics graphics)
+    public void update(GameContainer gc, int delta) throws SlickException
+    {
+        for (NPC npc: npcs)
+            npc.update(gc, delta);
+    }
+    
+    public void render(GameContainer gc, Graphics graphics) throws SlickException
     {
         // TODO: Don't render every individual tile every frame; clip & combime
         for (MapLayer layer: layers)
             layer.render(gc, graphics);
+        
+        for (NPC npc: npcs)
+            npc.render(gc, graphics);
     }
     
-    public void load()
+    public void load(GameContainer gc) throws SlickException
     {
         info = XMLParser.instance.parseXML(this.getClass().getClassLoader().getResourceAsStream("data/xml/map/1.xml"));
         
@@ -69,6 +81,23 @@ public class Map {
             }
             
             layers[i_layerNodeID] = new MapLayer(i_layerTiles);
+        }
+        
+        Element entityRoot = (Element)info.getElementsByTagName("NPCs").item(0);
+        
+        NodeList npcNodes = entityRoot.getElementsByTagName("NPC");
+        npcs = new NPC[npcNodes.getLength()];
+        
+        for (int i = 0; i < npcNodes.getLength(); i++)
+        {
+            Element i_npcNode = (Element)npcNodes.item(i);
+            
+            int i_npcID = Integer.parseInt(i_npcNode.getAttribute("id"));
+            int i_npcTypeID = Integer.parseInt(i_npcNode.getElementsByTagName("id").item(0).getTextContent());
+            int xPos = Integer.parseInt(i_npcNode.getElementsByTagName("xPos").item(0).getTextContent());
+            int yPos = Integer.parseInt(i_npcNode.getElementsByTagName("yPos").item(0).getTextContent());
+            
+            npcs[i_npcID] = new NPC(gc, i_npcTypeID);
         }
     }
 }
