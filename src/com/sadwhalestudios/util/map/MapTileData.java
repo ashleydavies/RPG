@@ -6,11 +6,14 @@ package com.sadwhalestudios.util.map;
  * Ashley
  */
 public class MapTileData {
+    protected final int id;
     protected int data[];
     
-    public MapTileData(int dataLength)
+    public MapTileData(int Id)
     {
-        data = new int[dataLength];
+        id = Id;
+        data = new int[1];
+        System.out.println("Tile Data Initialised: " + id);
     }
     
     public void setData(int dataID, int setData)

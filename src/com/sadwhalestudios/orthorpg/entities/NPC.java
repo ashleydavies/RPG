@@ -75,7 +75,7 @@ public class NPC {
             i_conditions[i_conditionNodeID] = new DialogCondition(i_conditionNodeID, i_conditionNodeCondition, i_conditionNodeArguments);
         }
         
-        for (int i = 0; i < dialogNodes.getLength(); i += 1)
+        for (int i = 0; i < dialogNodes.getLength(); i++)
         {
             Element i_dialogNode = (Element)dialogNodes.item(i);
             

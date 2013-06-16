@@ -7,4 +7,9 @@ package com.sadwhalestudios.util.map;
  */
 public class MapLayer {
     MapTileData tiles[][];
+    
+    public MapLayer(MapTileData Tiles[][])
+    {
+        tiles = Tiles;
+    }
 }

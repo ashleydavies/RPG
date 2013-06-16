@@ -2,6 +2,7 @@ package com.sadwhalestudios.orthorpg;
 
 import com.sadwhalestudios.orthorpg.entities.*;
 import com.sadwhalestudios.util.SaveData;
+import com.sadwhalestudios.util.map.Map;
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.*;
 import org.newdawn.slick.tiled.*;
@@ -13,7 +14,8 @@ import org.newdawn.slick.tiled.*;
 public class Game extends BasicGame {
     private static Game Instance;
     
-    TiledMap map;
+    //TiledMap map;
+    Map map;
     Player player;
     NPC farmer_joe;
     private SaveData currentGameData;
@@ -38,9 +40,12 @@ public class Game extends BasicGame {
         currentGameData = new SaveData();
         currentGameData.setIntSaveData(0, 50);
         
-        map = new TiledMap("map/map.tmx");
+        //map = new TiledMap("map/map.tmx");
         player = new Player();
         farmer_joe = new NPC(gc, 1);
+        System.out.println("Initialising map");
+        map = new Map();
+        map.load();
     }
 
     @Override
@@ -56,7 +61,7 @@ public class Game extends BasicGame {
     @Override
     public void render(GameContainer gc, Graphics graphics) throws SlickException
     {
-        map.render(0, 0);
+        //map.render(0, 0);
         
         player.render(gc, graphics);
         farmer_joe.render(gc, graphics);
