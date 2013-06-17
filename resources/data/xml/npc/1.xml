@@ -3,6 +3,11 @@
 <npc>
     <name>Farmer Joe</name>
     <avatar>fred.png</avatar>
+    <texture id="0">
+        <spritesheet>1</spritesheet>
+        <xPos>0</xPos>
+        <yPos>0</yPos>
+    </texture>
     
     <dialog>
         <node id="0" prompt="Farmer Joe glances in your direction, looking at you with uncertainty. From his expression of worry you feel he distrusts you. [N] [N] 'Ah, I knew you would come eventually.' He sighs under his breath, 'Do you require the package?'">

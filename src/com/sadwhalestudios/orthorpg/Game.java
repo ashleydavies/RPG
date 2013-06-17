@@ -5,7 +5,6 @@ import com.sadwhalestudios.util.SaveData;
 import com.sadwhalestudios.util.map.Map;
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.*;
-import org.newdawn.slick.tiled.*;
 
 /**
  *
@@ -15,6 +14,7 @@ public class Game extends BasicGame {
     private static Game Instance;
     
     Map map;
+    private Input input;
     Player player;
     private SaveData currentGameData;
     
@@ -37,6 +37,7 @@ public class Game extends BasicGame {
         currentGameData = new SaveData();
         currentGameData.setIntSaveData(0, 50);
         
+        input = new Input(gc.getHeight());
         player = new Player();
         System.out.println("Initialising map");
         map = new Map();
@@ -72,5 +73,12 @@ public class Game extends BasicGame {
      */
     public SaveData getCurrentGameData() {
         return currentGameData;
+    }
+
+    /**
+     * @return the input
+     */
+    public Input getInput() {
+        return input;
     }
 }

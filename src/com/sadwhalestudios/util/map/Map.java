@@ -15,6 +15,7 @@ import org.w3c.dom.NodeList;
  * Ashley
  */
 public class Map {
+    int id;
     String name;
     Document info;
     int width;

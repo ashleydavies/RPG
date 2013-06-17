@@ -7,6 +7,7 @@ import com.sadwhalestudios.util.dialog.DialogCondition;
 import com.sadwhalestudios.util.dialog.DialogNode;
 import com.sadwhalestudios.util.dialog.DialogReply;
 import com.sadwhalestudios.util.SaveData;
+import com.sadwhalestudios.util.SpriteSheet;
 import com.sadwhalestudios.util.XMLParser;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -14,6 +15,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.lwjgl.input.Mouse;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -32,6 +34,7 @@ public class NPC {
     DialogGUI dGUI;
     private final String name;
     private final Image avatar;
+    private final Image texture;
     boolean dialogShowing = false;
     int curDialog = 0;
     
@@ -54,6 +57,13 @@ public class NPC {
         
         name = info.getElementsByTagName("name").item(0).getTextContent();
         avatar = new Image("img/ui/avatar/npc/" + info.getElementsByTagName("avatar").item(0).getTextContent());
+        
+        Element textureElem = (Element)info.getElementsByTagName("texture").item(0);
+        int spriteSheet = Integer.parseInt(textureElem.getElementsByTagName("spritesheet").item(0).getTextContent());
+        int xPos = Integer.parseInt(textureElem.getElementsByTagName("xPos").item(0).getTextContent());
+        int yPos = Integer.parseInt(textureElem.getElementsByTagName("yPos").item(0).getTextContent());
+        
+        texture = SpriteSheet.getSpriteSheet(spriteSheet).getSubImage(xPos, yPos, 32, 64);
         
         Element dialogRoot = (Element)info.getElementsByTagName("dialog").item(0);
         NodeList dialogNodes = dialogRoot.getElementsByTagName("node");
@@ -164,14 +174,26 @@ public class NPC {
         if (dialogShowing)
             dGUI.update(gc, delta);
         
-        if (!dialogShowing && Mouse.isButtonDown(0))
+        if (!dialogShowing && Mouse.isButtonDown(0) && mouseOverThis())
+        {
             beginDialog(gc);
+            System.out.println("Showing Dialog");
+        }
     }
     
     public void render(GameContainer gc, Graphics graphics) throws SlickException
     {
+        graphics.drawImage(texture, 0, 0);
+        
         if (dialogShowing)
             dGUI.render(gc, graphics);
+    }
+    
+    public boolean mouseOverThis()
+    {
+        int mouseX = Game.getInstance().getInput().getMouseX();
+        int mouseY = Game.getInstance().getInput().getMouseY();
+        return (mouseX > 0 && mouseX < 32 && mouseY > 0 && mouseY < 64);
     }
     
     public void dialogReplyClicked(GameContainer gc, int i) throws SlickException {
