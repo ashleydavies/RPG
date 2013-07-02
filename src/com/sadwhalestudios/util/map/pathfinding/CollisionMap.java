@@ -4,6 +4,8 @@
  */
 package com.sadwhalestudios.util.map.pathfinding;
 
+import com.sadwhalestudios.util.map.Map;
+
 /**
  *
  * @author
@@ -11,4 +13,9 @@ package com.sadwhalestudios.util.map.pathfinding;
  */
 public class CollisionMap {
     boolean map[][];
+    
+    public CollisionMap(Map map)
+    {
+        
+    }
 }

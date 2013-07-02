@@ -15,6 +15,11 @@ public class MapLayer {
     {
         tiles = Tiles;
     }
+    
+    public boolean getCollideable(int x, int y)
+    {
+        return MapTile.getTile(tiles[y][x].getId()).getCollision();
+    }
 
     void render(GameContainer gc, Graphics graphics) {
         int y = 0;

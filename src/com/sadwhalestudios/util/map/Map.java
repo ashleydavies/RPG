@@ -29,6 +29,17 @@ public class Map {
             npc.update(gc, delta);
     }
     
+    public boolean getCollideable(int x, int y)
+    {
+        for (MapLayer layer: layers)
+        {
+            if (layer.getCollideable(x, y))
+                return true;
+        }
+        
+        return false;
+    }
+    
     public void render(GameContainer gc, Graphics graphics) throws SlickException
     {
         // TODO: Don't render every individual tile every frame; clip & combime
@@ -95,8 +106,8 @@ public class Map {
             
             int i_npcID = Integer.parseInt(i_npcNode.getAttribute("id"));
             int i_npcTypeID = Integer.parseInt(i_npcNode.getElementsByTagName("id").item(0).getTextContent());
-            int xPos = Integer.parseInt(i_npcNode.getElementsByTagName("xPos").item(0).getTextContent());
-            int yPos = Integer.parseInt(i_npcNode.getElementsByTagName("yPos").item(0).getTextContent());
+            //int xPos = Integer.parseInt(i_npcNode.getElementsByTagName("xPos").item(0).getTextContent());
+            //int yPos = Integer.parseInt(i_npcNode.getElementsByTagName("yPos").item(0).getTextContent());
             
             npcs[i_npcID] = new NPC(gc, i_npcTypeID);
         }
