@@ -29,11 +29,11 @@ public class Map {
             npc.update(gc, delta);
     }
     
-    public boolean getCollideable(int x, int y)
+    public boolean getCollideable(int y, int x)
     {
         for (MapLayer layer: layers)
         {
-            if (layer.getCollideable(x, y))
+            if (layer.getCollideable(y, x))
                 return true;
         }
         
@@ -111,5 +111,15 @@ public class Map {
             
             npcs[i_npcID] = new NPC(gc, i_npcTypeID);
         }
+    }
+    
+    public int getWidth()
+    {
+    	return width;
+    }
+    
+    public int getHeight()
+    {
+    	return height;
     }
 }

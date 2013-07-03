@@ -16,7 +16,7 @@ public class MapLayer {
         tiles = Tiles;
     }
     
-    public boolean getCollideable(int x, int y)
+    public boolean getCollideable(int y, int x)
     {
         return MapTile.getTile(tiles[y][x].getId()).getCollision();
     }

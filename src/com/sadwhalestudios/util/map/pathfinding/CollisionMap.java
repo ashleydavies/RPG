@@ -12,10 +12,27 @@ import com.sadwhalestudios.util.map.Map;
  * Ashley
  */
 public class CollisionMap {
-    boolean map[][];
+    boolean collisionData[][];
     
     public CollisionMap(Map map)
     {
-        
+    	collisionData = new boolean[map.getHeight()][map.getWidth()];
+    	
+    	int y = 0;
+    	
+    	for (boolean[] column: collisionData)
+    	{    		
+    		for (int x = 0; x < column.length; x++)
+    		{
+    			column[x] = false;
+    			
+    			if (map.getCollideable(y, x))
+    			{
+    				column[x] = true;
+    			}
+    		}
+    		
+    		y++;
+    	}
     }
 }
