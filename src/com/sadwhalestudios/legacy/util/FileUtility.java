@@ -1,10 +1,7 @@
-package com.sadwhalestudios.util;
+package com.sadwhalestudios.legacy.util;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 /**
  *

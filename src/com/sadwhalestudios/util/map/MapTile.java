@@ -24,7 +24,7 @@ public class MapTile {
     
     int id;
     String name;
-    boolean collision;
+    private boolean collision;
     TextureType textureType;
     Image[] textures;
     
@@ -72,6 +72,11 @@ public class MapTile {
         collision = Collision;
         textureType = TextureType;
         textures = Textures;
+    }
+    
+    public boolean getCollision()
+    {
+        return collision;
     }
     
     public void render(GameContainer gc, Graphics graphics, int x, int y)
