@@ -15,7 +15,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.lwjgl.input.Mouse;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -159,7 +158,7 @@ public class NPC {
     
     public final String substituteDialogString(String stringIn)
     {
-        Enumeration e = NPCSubstitution.propertyNames();
+        Enumeration<?> e = NPCSubstitution.propertyNames();
 
         while (e.hasMoreElements()) {
             String key = (String) e.nextElement();

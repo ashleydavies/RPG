@@ -1,4 +1,4 @@
-package com.sadwhalestudios.event;
+package com.sadwhalestudios.legacy.event;
 
 /**
  *

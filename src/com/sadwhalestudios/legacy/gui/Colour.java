@@ -1,4 +1,4 @@
-package com.sadwhalestudios.gui;
+package com.sadwhalestudios.legacy.gui;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
