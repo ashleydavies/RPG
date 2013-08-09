@@ -156,6 +156,11 @@ public class NPC {
         setupDialog(gc);
     }
     
+    public void stepTo()
+    {
+    	
+    }
+    
     public final String substituteDialogString(String stringIn)
     {
         Enumeration<?> e = NPCSubstitution.propertyNames();

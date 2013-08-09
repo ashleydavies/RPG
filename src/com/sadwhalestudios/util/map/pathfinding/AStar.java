@@ -15,7 +15,7 @@ import java.util.Set;
 * "Path" method mostly credits to WhiteFang on StackOverflow; see http://stackoverflow.com/questions/5601889/
 */
 public class AStar {
-	public class Node
+	public static class Node
 	{
 		Node parent;
 		List<Node> neighbors = new ArrayList<Node>();
@@ -27,7 +27,7 @@ public class AStar {
 		int cost;
 	}
 	
-	public List<Node> getNeighbors(Node[][] matrix, int x, int y)
+	public static List<Node> getNeighbors(Node[][] matrix, int x, int y)
 	{
 		List<Node> neighbors = new ArrayList<Node>();
 		
@@ -43,37 +43,29 @@ public class AStar {
 		return neighbors;
 	}
 	
-	public Node[][] getNodeMatrix(CollisionMap map)
+	public static Node[][] getNodeMatrix(CollisionMap map)
 	{
 		Node[][] matrix;
 		
 		matrix = new Node[map.getRows()][map.getColumns()];
 		
-		for (int y = 0; y < map.getRows(); y++)
-		{			
+		for (int y = 0; y < map.getRows(); y++)		
 			for (int x = 0; x < map.getColumns(); x++)
-			{
 				if (!map.getCollision(x, y))
 				{
 					matrix[y][x] = new Node();
 					matrix[y][x].x = x;
 					matrix[y][x].y = y;
 				}
-			}
-		}
 		
 		
 		// Form neighbourly relations. More convenient [Only possible way with this system?] to do this in a second loop after all nodes made.
 		for (int y = 0; y < map.getRows(); y++)
-		{			
 			for (int x = 0; x < map.getColumns(); x++)
-			{
 				if (matrix[y][x] != null)
 				{
 					matrix[y][x].neighbors = getNeighbors(matrix, x, y);
 				}
-			}
-		}
 		
 		return matrix;
 	}
@@ -94,22 +86,14 @@ public class AStar {
 			Node current = null;
 			
 			if (open.size() == 0)
-			{
 				return null;
-			}
 			
 			for (Node node: open)
-			{
 				if (current == null || node.f < current.f)
-				{
 					current = node;
-				}
-			}
 			
 			if (current == end)
-			{
 				break;
-			}
 			
 			open.remove(current);
 			closed.add(current);
@@ -117,9 +101,7 @@ public class AStar {
 			for (Node neighbor: current.neighbors)
 			{
 				if (neighbor == null)
-				{
 					continue;
-				}
 				
 				int g = current.g + neighbor.cost;
 				

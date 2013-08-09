@@ -2,6 +2,10 @@ package com.sadwhalestudios.util.map;
 
 import com.sadwhalestudios.orthorpg.entities.NPC;
 import com.sadwhalestudios.util.XMLParser;
+import com.sadwhalestudios.util.map.pathfinding.AStar.Node;
+import com.sadwhalestudios.util.map.pathfinding.AStar;
+import com.sadwhalestudios.util.map.pathfinding.CollisionMap;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -22,6 +26,8 @@ public class Map {
     int height;
     MapLayer layers[];
     NPC npcs[];
+    CollisionMap collisionMap;
+    Node[][] nodeMatrix;
     
     public void update(GameContainer gc, int delta) throws SlickException
     {
@@ -42,7 +48,7 @@ public class Map {
     
     public void render(GameContainer gc, Graphics graphics) throws SlickException
     {
-        // TODO: Don't render every individual tile every frame; clip & combime
+        // TODO: Don't render every individual tile every frame; clip & combine
         for (MapLayer layer: layers)
             layer.render(gc, graphics);
         
@@ -106,11 +112,12 @@ public class Map {
             
             int i_npcID = Integer.parseInt(i_npcNode.getAttribute("id"));
             int i_npcTypeID = Integer.parseInt(i_npcNode.getElementsByTagName("id").item(0).getTextContent());
-            //int xPos = Integer.parseInt(i_npcNode.getElementsByTagName("xPos").item(0).getTextContent());
-            //int yPos = Integer.parseInt(i_npcNode.getElementsByTagName("yPos").item(0).getTextContent());
             
             npcs[i_npcID] = new NPC(gc, i_npcTypeID);
         }
+        
+        collisionMap = new CollisionMap(this);
+        nodeMatrix = AStar.getNodeMatrix(collisionMap);
     }
     
     public int getWidth()
