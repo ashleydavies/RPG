@@ -4,7 +4,7 @@
     <name>Wilted Forest</name>
     <icon></icon>
     <mapWidth>15</mapWidth>
-    <mapHeight>6</mapHeight>
+    <mapHeight>9</mapHeight>
     <tileData>
         <layer id="0">
             <row id="0">
@@ -88,9 +88,9 @@
                 <tile col="9" tileID="2"/>
                 <tile col="10" tileID="2"/>
                 <tile col="11" tileID="2"/>
-                <tile col="12" tileID="2"/>
-                <tile col="13" tileID="2"/>
-                <tile col="14" tileID="2"/>
+                <tile col="12" tileID="1"/>
+                <tile col="13" tileID="1"/>
+                <tile col="14" tileID="1"/>
             </row>
             <row id="5">
                 <tile col="0" tileID="2"/>
@@ -106,8 +106,59 @@
                 <tile col="10" tileID="2"/>
                 <tile col="11" tileID="2"/>
                 <tile col="12" tileID="2"/>
-                <tile col="13" tileID="2"/>
-                <tile col="14" tileID="2"/>
+                <tile col="13" tileID="1"/>
+                <tile col="14" tileID="1"/>
+            </row>
+            <row id="6">
+                <tile col="0" tileID="2"/>
+                <tile col="1" tileID="2"/>
+                <tile col="2" tileID="2"/>
+                <tile col="3" tileID="2"/>
+                <tile col="4" tileID="2"/>
+                <tile col="5" tileID="2"/>
+                <tile col="6" tileID="2"/>
+                <tile col="7" tileID="2"/>
+                <tile col="8" tileID="2"/>
+                <tile col="9" tileID="2"/>
+                <tile col="10" tileID="2"/>
+                <tile col="11" tileID="1"/>
+                <tile col="12" tileID="1"/>
+                <tile col="13" tileID="1"/>
+                <tile col="14" tileID="1"/>
+            </row>
+            <row id="7">
+                <tile col="0" tileID="2"/>
+                <tile col="1" tileID="2"/>
+                <tile col="2" tileID="2"/>
+                <tile col="3" tileID="2"/>
+                <tile col="4" tileID="2"/>
+                <tile col="5" tileID="2"/>
+                <tile col="6" tileID="2"/>
+                <tile col="7" tileID="2"/>
+                <tile col="8" tileID="1"/>
+                <tile col="9" tileID="1"/>
+                <tile col="10" tileID="1"/>
+                <tile col="11" tileID="1"/>
+                <tile col="12" tileID="1"/>
+                <tile col="13" tileID="1"/>
+                <tile col="14" tileID="1"/>
+            </row>
+            <row id="8">
+                <tile col="0" tileID="2"/>
+                <tile col="1" tileID="2"/>
+                <tile col="2" tileID="2"/>
+                <tile col="3" tileID="2"/>
+                <tile col="4" tileID="2"/>
+                <tile col="5" tileID="2"/>
+                <tile col="6" tileID="2"/>
+                <tile col="7" tileID="2"/>
+                <tile col="8" tileID="1"/>
+                <tile col="9" tileID="1"/>
+                <tile col="10" tileID="1"/>
+                <tile col="11" tileID="1"/>
+                <tile col="12" tileID="1"/>
+                <tile col="13" tileID="1"/>
+                <tile col="14" tileID="1"/>
             </row>
         </layer>
     </tileData>
