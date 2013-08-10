@@ -40,7 +40,10 @@ public class Map {
         for (MapLayer layer: layers)
         {
             if (layer.getCollideable(y, x))
+            {
+            	System.out.println("Found a collision! :O");
                 return true;
+            }
         }
         
         return false;
@@ -113,11 +116,16 @@ public class Map {
             int i_npcID = Integer.parseInt(i_npcNode.getAttribute("id"));
             int i_npcTypeID = Integer.parseInt(i_npcNode.getElementsByTagName("id").item(0).getTextContent());
             
-            npcs[i_npcID] = new NPC(gc, i_npcTypeID);
+            npcs[i_npcID] = new NPC(gc, i_npcTypeID, this);
         }
         
         collisionMap = new CollisionMap(this);
         nodeMatrix = AStar.getNodeMatrix(collisionMap);
+    }
+    
+    public Node[][] getNodeMatrix()
+    {
+    	return nodeMatrix;
     }
     
     public int getWidth()

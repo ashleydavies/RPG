@@ -6,14 +6,19 @@ import com.sadwhalestudios.util.dialog.DialogAction;
 import com.sadwhalestudios.util.dialog.DialogCondition;
 import com.sadwhalestudios.util.dialog.DialogNode;
 import com.sadwhalestudios.util.dialog.DialogReply;
+import com.sadwhalestudios.util.map.Map;
+import com.sadwhalestudios.util.map.pathfinding.AStar;
 import com.sadwhalestudios.util.SaveData;
 import com.sadwhalestudios.util.SpriteSheet;
 import com.sadwhalestudios.util.XMLParser;
+
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -31,6 +36,7 @@ public class NPC {
     Document info;
     DialogNode[] dialog;
     DialogGUI dGUI;
+    private final Map map;
     private final String name;
     private final Image avatar;
     private final Image texture;
@@ -47,8 +53,10 @@ public class NPC {
         }
     }
     
-    public NPC(GameContainer gc, int npcID) throws SlickException
-    {        
+    public NPC(GameContainer gc, int npcID, Map mapA) throws SlickException
+    {
+    	map = mapA;
+    	
         info = XMLParser.instance.parseXML(this.getClass().getClassLoader().getResourceAsStream("data/xml/npc/1.xml"));
         
         
@@ -156,15 +164,24 @@ public class NPC {
         setupDialog(gc);
     }
     
-    public void stepTo()
+    int xPos = 0;
+    int yPos = 1;
+    
+    public void stepTo(int x, int y)
     {
+    	List<AStar.Node> path = AStar.path(map.getNodeMatrix()[yPos][xPos], map.getNodeMatrix()[y][x]);
     	
+    	if (!path.isEmpty())
+    	{
+    		xPos = path.get(0).getX();
+    		yPos = path.get(0).getY();
+    	}
     }
     
     public final String substituteDialogString(String stringIn)
     {
         Enumeration<?> e = NPCSubstitution.propertyNames();
-
+        
         while (e.hasMoreElements()) {
             String key = (String) e.nextElement();
             stringIn = stringIn.replace("[" + key + "]", NPCSubstitution.getProperty(key));
@@ -183,11 +200,13 @@ public class NPC {
             beginDialog(gc);
             System.out.println("Showing Dialog");
         }
+        if (Math.random() > 0.99)
+        	stepTo(8, 7);
     }
     
     public void render(GameContainer gc, Graphics graphics) throws SlickException
     {
-        graphics.drawImage(texture, 0, 0);
+        graphics.drawImage(texture, xPos * 32, yPos * 32 - 32);
         
         if (dialogShowing)
             dGUI.render(gc, graphics);

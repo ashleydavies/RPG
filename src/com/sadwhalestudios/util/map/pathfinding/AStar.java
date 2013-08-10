@@ -1,6 +1,7 @@
 package com.sadwhalestudios.util.map.pathfinding;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +26,16 @@ public class AStar {
 		int x;
 		int y;
 		int cost;
+		
+		public int getX()
+		{
+			return x;
+		}
+		
+		public int getY()
+		{
+			return y;
+		}
 	}
 	
 	public static List<Node> getNeighbors(Node[][] matrix, int x, int y)
@@ -34,11 +45,11 @@ public class AStar {
 		if (y > 0 && matrix[y - 1][x] != null)
 			neighbors.add(matrix[y - 1][x]);
 		if (x > 0 && matrix[y][x - 1] != null)
-			neighbors.add(matrix[y - 1][x]);
+			neighbors.add(matrix[y][x - 1]);
 		if (y < matrix.length - 1 && matrix[y + 1][x] != null)
-			neighbors.add(matrix[y - 1][x]);
+			neighbors.add(matrix[y + 1][x]);
 		if (x < matrix[0].length - 1 && matrix[y][x + 1] != null)
-			neighbors.add(matrix[y-1][x]);
+			neighbors.add(matrix[y][x + 1]);
 		
 		return neighbors;
 	}
@@ -57,6 +68,10 @@ public class AStar {
 					matrix[y][x].x = x;
 					matrix[y][x].y = y;
 				}
+				else
+				{
+					System.out.println("Collision swag at " + Integer.toString(x) + " " + Integer.toString(y));
+				}
 		
 		
 		// Form neighbourly relations. More convenient [Only possible way with this system?] to do this in a second loop after all nodes made.
@@ -70,19 +85,26 @@ public class AStar {
 		return matrix;
 	}
 	
-	public List<Node> path(CollisionMap map, Node beginning, Node end)
-	{		
+	public static List<Node> path(Node beginning, Node end)
+	{
+		System.out.println("Initiating pathfinding");
 		beginning.g = 0;
 		beginning.h = heuristic(beginning, end);
 		beginning.f = beginning.h;
+		beginning.parent = null;
 		
 		Set<Node> open = new HashSet<Node>();
 		Set<Node> closed = new HashSet<Node>();
+		
+		if (beginning == end)
+			System.out.println("Already at end");
 		
 		open.add(beginning);
 		
 		while (true)
 		{
+			System.out.println("In pathfinding loop...");
+			
 			Node current = null;
 			
 			if (open.size() == 0)
@@ -100,6 +122,7 @@ public class AStar {
 			
 			for (Node neighbor: current.neighbors)
 			{
+				System.out.println("Looking through neighbor");
 				if (neighbor == null)
 					continue;
 				
@@ -122,6 +145,8 @@ public class AStar {
 			}
 		}
 		
+		System.out.println("Pathfinding successful");
+		
 		List<Node> returnNodes = new ArrayList<Node>();
 		
 		Node current = end;
@@ -131,12 +156,20 @@ public class AStar {
 			returnNodes.add(current);
 			current = current.parent;
 		}
-		returnNodes.add(beginning);
+		//returnNodes.add(beginning);
+		Collections.reverse(returnNodes);
+		
+		System.out.println("Path to end:");
+		
+		for (Node node: returnNodes)
+		{
+			System.out.println("Step " + Integer.toString(node.getX()) + " " + Integer.toString(node.getY()));
+		}
 		
 		return returnNodes;
 	}
 
-	private int heuristic(Node beginning, Node end) {
+	private static int heuristic(Node beginning, Node end) {
 		return (Math.abs(beginning.x - end.x) + Math.abs(beginning.y - end.y)); 
 	}
 }

@@ -44,7 +44,7 @@ public class MapTile {
             
             int i_tileNodeID = Integer.parseInt(i_tileNode.getAttribute("id"));
             String i_tileName = i_tileNode.getElementsByTagName("name").item(0).getTextContent();
-            boolean i_tileCollision = (i_tileNode.getElementsByTagName("collision").item(0).getTextContent() == "1");
+            boolean i_tileCollision = (Integer.parseInt(i_tileNode.getElementsByTagName("collision").item(0).getTextContent())) == 1 ? true : false;
             TextureType i_textureType = TextureType.valueOf(i_tileNode.getElementsByTagName("textureType").item(0).getTextContent().toUpperCase());
             
             NodeList textureNodes = i_tileNode.getElementsByTagName("texture");
