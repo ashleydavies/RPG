@@ -11,8 +11,7 @@ public class DialogCondition {
     private final String condition;
     private final String[] args;
     
-    public DialogCondition(int id, String condition, String args)
-    {
+    public DialogCondition(int id, String condition, String args) {
         this.id = id;
         this.condition = condition;
         if (!"".equals(args))
@@ -21,8 +20,7 @@ public class DialogCondition {
             this.args = new String[0];
     }
     
-    public boolean conditionMet()
-    {
+    public boolean conditionMet() {
         switch (condition)
         {
             case "intdata_morethan":
@@ -36,8 +34,7 @@ public class DialogCondition {
     }
     
     @Override
-    public String toString()
-    {
+    public String toString() {
        String retString = getCondition() + "(";
         
         for (String arg: getArgs())

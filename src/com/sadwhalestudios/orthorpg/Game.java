@@ -18,35 +18,30 @@ public class Game extends BasicGame {
     Player player;
     private SaveData currentGameData;
     
-    public static void main(String[] args) throws SlickException
-    {
+    public static void main(String[] args) throws SlickException {
         AppGameContainer app = new AppGameContainer(new Game());
         app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), true);
         app.start();
     }
     
-    private Game()
-    {
+    private Game() {
         super("Orthographic RPG Test");
         Instance = this;
     }
     
     @Override
-    public void init(GameContainer gc) throws SlickException
-    {
+    public void init(GameContainer gc) throws SlickException {
         currentGameData = new SaveData();
         currentGameData.setIntSaveData(0, 50);
         
         input = new Input(gc.getHeight());
         player = new Player();
-        System.out.println("Initialising map");
         map = new Map();
         map.load(gc);
     }
 
     @Override
-    public void update(GameContainer gc, int delta) throws SlickException
-    {
+    public void update(GameContainer gc, int delta) throws SlickException {
         if (Keyboard.isKeyDown(Input.KEY_ESCAPE))
             System.exit(0);
         
@@ -55,8 +50,7 @@ public class Game extends BasicGame {
     }
 
     @Override
-    public void render(GameContainer gc, Graphics graphics) throws SlickException
-    {
+    public void render(GameContainer gc, Graphics graphics) throws SlickException {
         map.render(gc, graphics);
         player.render(gc, graphics);
     }

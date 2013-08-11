@@ -157,8 +157,6 @@ public class NPC {
             DialogNode dNode1 = new DialogNode(i_dialogNodeID, i_dialogNodePrompt, i_replies);
             
             dialog[i] = dNode1;
-            
-            System.out.println(dNode1);
         }
         
         setupDialog(gc);

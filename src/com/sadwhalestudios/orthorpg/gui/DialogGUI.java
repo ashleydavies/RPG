@@ -34,8 +34,7 @@ public final class DialogGUI {
     boolean[] replyAreasMouseDown;
     MouseOverArea[] replyAreas;
     
-    static
-    {
+    static {
         try {
             ui = new Image("img/ui/ui.png");
             dialogFont = new TrueTypeFont(new Font("Arial", Font.PLAIN, 16), true);
@@ -65,8 +64,7 @@ public final class DialogGUI {
         drawMenuContent(gc, content, responses);
     }
     
-    public void drawMenu(GameContainer gc, Rectangle rect)
-    {
+    public void drawMenu(GameContainer gc, Rectangle rect) {
         Image border_tl = ui.getSubImage(0, 0, 12, 12);
         Image border_tr = ui.getSubImage(12, 0, 12, 12);
         Image border_bl = ui.getSubImage(0, 12, 12, 12);
@@ -107,8 +105,7 @@ public final class DialogGUI {
     }
     
     
-    public void drawMenuPrimaryContent(GameContainer gc)
-    {
+    public void drawMenuPrimaryContent(GameContainer gc) {
         Graphics graphics = gc.getGraphics();
         graphics.clear();
         
@@ -120,8 +117,7 @@ public final class DialogGUI {
         graphics.clear();
     }
     
-    public void drawMenuContent(GameContainer gc, String content, String[] responses) throws SlickException
-    {
+    public void drawMenuContent(GameContainer gc, String content, String[] responses) throws SlickException {
         content = prepareString(content);
         responses = prepareStrings(responses);
         
@@ -148,11 +144,9 @@ public final class DialogGUI {
         
         int replyN = 0;
         
-        for (String reply : responses)
-        {
+        for (String reply : responses) {
             int lineN = 0;
-            for (String line : reply.split("\n"))
-            {
+            for (String line : reply.split("\n")) {
                 if (lineN == 0)
                     graphics.drawString(++replyN + ": " + line, 12 + 64 - dialogFont.getWidth(replyN + ": "), y += 18);
                 else
@@ -169,8 +163,7 @@ public final class DialogGUI {
         graphics.clear();
     }
     
-    public final String[] prepareStrings(String[] content)
-    {
+    public final String[] prepareStrings(String[] content) {
         String[] retArray = new String[content.length];
         int i = 0;
         for (String str: content)
@@ -179,18 +172,15 @@ public final class DialogGUI {
         return retArray;
     }
     
-    public final String prepareString(String content)
-    {
+    public final String prepareString(String content) {
         String prepString = " ";
         content = content.replace("[N]", "\n");
         String[] content_words = content.split(" ");
         
         int curLine = 1;
         
-        for (String word: content_words)
-        {
-            if ("\n".equals(word))
-            {
+        for (String word: content_words) {
+            if ("\n".equals(word)) {
                 prepString += "\n";
                 curLine = 0;
                 continue;
@@ -198,8 +188,7 @@ public final class DialogGUI {
             
             curLine += dialogFont.getWidth(word);
             //System.out.println("Word: " + word + " curLine: " + curLine);
-            if (curLine > width - 42 - 64 - 42)
-            {
+            if (curLine > width - 42 - 64 - 42) {
                 curLine = dialogFont.getWidth(word);
                 prepString += "\n";
             }
@@ -209,16 +198,12 @@ public final class DialogGUI {
         return prepString;
     }
     
-    public void update(GameContainer gc, int delta) throws SlickException
-    {
-        for (int i = 0; i < replyAreas.length; i++)
-        {
-            if (replyAreas[i].isMouseOver() && Mouse.isButtonDown(0))
-            {
+    public void update(GameContainer gc, int delta) throws SlickException {
+        for (int i = 0; i < replyAreas.length; i++) {
+            if (replyAreas[i].isMouseOver() && Mouse.isButtonDown(0)) {
                 replyAreasMouseDown[i] = true;
             }
-            else if (replyAreas[i].isMouseOver() && !Mouse.isButtonDown(0) && replyAreasMouseDown[i] == true)
-            {
+            else if (replyAreas[i].isMouseOver() && !Mouse.isButtonDown(0) && replyAreasMouseDown[i] == true) {
                 replyAreasMouseDown[i] = false;
                 
                 System.out.println("Clicked " + i);
@@ -229,15 +214,13 @@ public final class DialogGUI {
                 break;
             }
             
-            if (!replyAreas[i].isMouseOver())
-            {
+            if (!replyAreas[i].isMouseOver()) {
                 replyAreasMouseDown[i] = false;
             }
         }
     }
     
-    public void render(GameContainer gc, Graphics graphics) throws SlickException
-    {
+    public void render(GameContainer gc, Graphics graphics) throws SlickException {
         graphics.drawImage(menu, position.getX(), position.getY());
         graphics.drawImage(menuPrimaryContent, position.getX(), position.getY());
         graphics.drawImage(menuContent, position.getX(), position.getY());
