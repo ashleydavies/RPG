@@ -13,13 +13,11 @@ public class SaveData {
     boolean boolSaveData[] = new boolean[MAX_BOOL_SAVE_DATA];
     String stringSaveData[] = new String[MAX_STRING_SAVE_DATA];
     
-    public int getIntSaveData(int id)
-    {
+    public int getIntSaveData(int id) {
         return intSaveData[id];
     }
     
-    public void setIntSaveData(int id, int dt)
-    {
+    public void setIntSaveData(int id, int dt) {
         intSaveData[id] = dt;
     }
 }

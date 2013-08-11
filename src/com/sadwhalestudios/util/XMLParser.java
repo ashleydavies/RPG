@@ -16,19 +16,15 @@ public final class XMLParser {
     
     public static XMLParser instance = new XMLParser();
     
-    private XMLParser()
-    {
-        try
-        {
+    private XMLParser() {
+        try {
             dBuilder = dbFactory.newDocumentBuilder();
         }
         catch (Exception e) {}
     }
     
-    public Document parseXML(File file)
-    {
-        try
-        {
+    public Document parseXML(File file) {
+        try {
             return dBuilder.parse(file);
         }
         catch (Exception e) {}
@@ -36,10 +32,8 @@ public final class XMLParser {
         return null;
     }
     
-    public Document parseXML(InputStream file)
-    {
-        try
-        {
+    public Document parseXML(InputStream file) {
+        try {
             return dBuilder.parse(file);
         }
         catch (Exception e) {}

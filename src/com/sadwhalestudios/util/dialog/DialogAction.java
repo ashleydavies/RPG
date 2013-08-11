@@ -10,8 +10,7 @@ public class DialogAction {
     private final String[] args;
     private final DialogCondition[] conditions;
     
-    public DialogAction(int id, String action, String args, DialogCondition[] conditions)
-    {
+    public DialogAction(int id, String action, String args, DialogCondition[] conditions) {
         this.id = id;
         this.action = action;
         if (!"".equals(args))
@@ -22,8 +21,7 @@ public class DialogAction {
     }
     
     @Override
-    public String toString()
-    {
+    public String toString() {
         String retString = getAction() + " ARGS: (";
         
         for (String arg: getArgs())
@@ -39,8 +37,7 @@ public class DialogAction {
         return retString;
     }
     
-    public boolean conditionsMet()
-    {
+    public boolean conditionsMet() {
         for (DialogCondition condition: conditions)
         {
             if (!condition.conditionMet())
