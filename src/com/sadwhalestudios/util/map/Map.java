@@ -29,19 +29,14 @@ public class Map {
     CollisionMap collisionMap;
     Node[][] nodeMatrix;
     
-    public void update(GameContainer gc, int delta) throws SlickException
-    {
+    public void update(GameContainer gc, int delta) throws SlickException {
         for (NPC npc: npcs)
             npc.update(gc, delta);
     }
     
-    public boolean getCollideable(int y, int x)
-    {
-        for (MapLayer layer: layers)
-        {
-            if (layer.getCollideable(y, x))
-            {
-            	System.out.println("Found a collision! :O");
+    public boolean getCollideable(int y, int x) {
+        for (MapLayer layer: layers) {
+            if (layer.getCollideable(y, x)) {
                 return true;
             }
         }
@@ -49,8 +44,7 @@ public class Map {
         return false;
     }
     
-    public void render(GameContainer gc, Graphics graphics) throws SlickException
-    {
+    public void render(GameContainer gc, Graphics graphics) throws SlickException {
         // TODO: Don't render every individual tile every frame; clip & combine
         for (MapLayer layer: layers)
             layer.render(gc, graphics);
@@ -72,8 +66,7 @@ public class Map {
         
         layers = new MapLayer[layerNodes.getLength()];
         
-        for (int i = 0; i < layerNodes.getLength(); i++)
-        {
+        for (int i = 0; i < layerNodes.getLength(); i++) {
             Element i_layerNode = (Element)layerNodes.item(i);
             
             int i_layerNodeID = Integer.parseInt(i_layerNode.getAttribute("id"));
@@ -81,8 +74,7 @@ public class Map {
             NodeList i_rowNodes = i_layerNode.getElementsByTagName("row");
             MapTileData[][] i_layerTiles = new MapTileData[height][width];
             
-            for (int r = 0; r < i_rowNodes.getLength(); r++)
-            {
+            for (int r = 0; r < i_rowNodes.getLength(); r++) {
                 Element i_rowNode = (Element)i_rowNodes.item(r);
                 
                 int i_rowNodeID = Integer.parseInt(i_rowNode.getAttribute("id"));
@@ -90,8 +82,7 @@ public class Map {
                 NodeList i_colNodes = i_rowNode.getElementsByTagName("tile");
                 i_layerTiles[i_rowNodeID] = new MapTileData[width];
                 
-                for (int c = 0; c < i_colNodes.getLength(); c++)
-                {
+                for (int c = 0; c < i_colNodes.getLength(); c++) {
                     Element i_tile = (Element)i_colNodes.item(c);
                     
                     int i_colID = Integer.parseInt(i_tile.getAttribute("col"));
@@ -109,8 +100,7 @@ public class Map {
         NodeList npcNodes = entityRoot.getElementsByTagName("NPC");
         npcs = new NPC[npcNodes.getLength()];
         
-        for (int i = 0; i < npcNodes.getLength(); i++)
-        {
+        for (int i = 0; i < npcNodes.getLength(); i++) {
             Element i_npcNode = (Element)npcNodes.item(i);
             
             int i_npcID = Integer.parseInt(i_npcNode.getAttribute("id"));
@@ -123,18 +113,15 @@ public class Map {
         nodeMatrix = AStar.getNodeMatrix(collisionMap);
     }
     
-    public Node[][] getNodeMatrix()
-    {
+    public Node[][] getNodeMatrix() {
     	return nodeMatrix;
     }
     
-    public int getWidth()
-    {
+    public int getWidth() {
     	return width;
     }
     
-    public int getHeight()
-    {
+    public int getHeight() {
     	return height;
     }
 }

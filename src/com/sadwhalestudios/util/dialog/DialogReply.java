@@ -14,8 +14,7 @@ public class DialogReply {
     private final DialogAction[] actions;
     private final DialogCondition[] conditions;
     
-    public DialogReply(int id, String prompt, DialogAction[] actions, DialogCondition[] conditions)
-    {
+    public DialogReply(int id, String prompt, DialogAction[] actions, DialogCondition[] conditions) {
         this.id = id;
         this.prompt = prompt;
         this.actions = actions;
@@ -23,8 +22,7 @@ public class DialogReply {
     }
     
     @Override
-    public String toString()
-    {
+    public String toString() {
         String retString = getPrompt() + "\n        =ACTIONS= (" + getActions().length + "):\n          ";
         
         for (DialogAction dA: getActions())
@@ -33,12 +31,9 @@ public class DialogReply {
         return retString;
     }
     
-    public boolean conditionsMet()
-    {
-        for (DialogCondition condition: conditions)
-        {
-            if (!condition.conditionMet())
-            {
+    public boolean conditionsMet() {
+        for (DialogCondition condition: conditions) {
+            if (!condition.conditionMet()) {
                 return false;
             }
         }

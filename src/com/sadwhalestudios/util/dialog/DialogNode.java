@@ -10,16 +10,14 @@ public class DialogNode {
     private final String prompt;
     private final DialogReply[] replies;
     
-    public DialogNode(int id, String prompt, DialogReply[] replies)
-    {
+    public DialogNode(int id, String prompt, DialogReply[] replies) {
         this.id = id;
         this.prompt = prompt;
         this.replies = replies;
     }
     
     @Override
-    public String toString()
-    {
+    public String toString() {
         String retString = "CHAT NODE " + id + ":\n   " + getPrompt() + "\n   =REPLIES= (" + getReplies().length + ")\n     ";
         
         for (DialogReply dR: getReplies())

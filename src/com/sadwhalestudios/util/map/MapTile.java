@@ -17,8 +17,7 @@ import org.w3c.dom.NodeList;
 public class MapTile {
     static MapTile[] tiles;
     
-    public static MapTile getTile(int id)
-    {
+    public static MapTile getTile(int id) {
         return tiles[id];
     }
     
@@ -28,8 +27,7 @@ public class MapTile {
     TextureType textureType;
     Image[] textures;
     
-    static
-    {
+    static {
         Document info = XMLParser.instance.parseXML(MapTile.class.getClassLoader().getResourceAsStream("data/xml/tileData.xml"));
         
         int tileCount = Integer.parseInt(info.getElementsByTagName("tileCount").item(0).getTextContent());
@@ -38,8 +36,7 @@ public class MapTile {
         Element tileRoot = (Element)info.getElementsByTagName("tileInfo").item(0);
         NodeList tileNodes = tileRoot.getElementsByTagName("tile");
         
-        for (int i = 0; i < tileCount; i++)
-        {
+        for (int i = 0; i < tileCount; i++) {
             Element i_tileNode = (Element)tileNodes.item(i);
             
             int i_tileNodeID = Integer.parseInt(i_tileNode.getAttribute("id"));
@@ -51,8 +48,7 @@ public class MapTile {
             
             Image[] textures = new Image[textureNodes.getLength()];
             
-            for (int t = 0; t < textureNodes.getLength(); t++)
-            {
+            for (int t = 0; t < textureNodes.getLength(); t++) {
                 Element i_textureNode = (Element)textureNodes.item(t);
                 int i_textureID = Integer.parseInt(i_textureNode.getAttribute("id"));
                 int i_textureSpritesheet = Integer.parseInt(i_textureNode.getElementsByTagName("spritesheet").item(0).getTextContent());
@@ -65,8 +61,7 @@ public class MapTile {
         }
     }
     
-    private MapTile(int tileID, String Name, boolean Collision, TextureType TextureType, Image[] Textures)
-    {
+    private MapTile(int tileID, String Name, boolean Collision, TextureType TextureType, Image[] Textures) {
         id = tileID;
         name = Name;
         collision = Collision;
@@ -74,13 +69,11 @@ public class MapTile {
         textures = Textures;
     }
     
-    public boolean getCollision()
-    {
+    public boolean getCollision() {
         return collision;
     }
     
-    public void render(GameContainer gc, Graphics graphics, int x, int y)
-    {
+    public void render(GameContainer gc, Graphics graphics, int x, int y) {
         graphics.drawImage(textures[0], x, y); // TODO: Support different TextureTypes other than static!
     }
 }
