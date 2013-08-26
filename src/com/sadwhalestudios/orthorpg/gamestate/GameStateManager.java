@@ -1,20 +1,30 @@
 package com.sadwhalestudios.orthorpg.gamestate;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+
 public class GameStateManager {
-	List<GameState> gameStates;
+	List<State> gameStates;
 	
-	public void setState(GameState state) {
-		for (GameState i_state: gameStates) {
+	public GameStateManager() {
+		gameStates = new ArrayList<State>();
+	}
+	
+	public void setState(GameContainer gc, State state) throws SlickException {
+		for (State i_state: gameStates) {
 			i_state.unload();
 		}
 		
 		gameStates.clear();
-		gameStates.add(state);
+		pushState(gc, state);
 	}
 	
-	public void pushState(GameState state) {
+	public void pushState(GameContainer gc, State state) throws SlickException {
+		state.load(gc);
 		gameStates.add(state);
 	}
 	
@@ -22,16 +32,16 @@ public class GameStateManager {
 		gameStates.remove(getActiveStateIndex());
 	}
 	
-	public void update() {
-		getActiveState().update();
+	public void update(GameContainer gc, int delta) throws SlickException {
+		getActiveState().update(gc, delta);
 	}
 	
-	public void render() {
-		for (GameState i_state: gameStates)
-			i_state.render();
+	public void render(GameContainer gc, Graphics graphics) throws SlickException {
+		for (State i_state: gameStates)
+			i_state.render(gc, graphics);
 	}
 	
-	private GameState getActiveState() {
+	private State getActiveState() {
 		return gameStates.get(getActiveStateIndex());
 	}
 	
