@@ -1,5 +1,7 @@
 package com.sadwhalestudios.util.dialog;
 
+import com.sadwhalestudios.orthorpg.gamestate.states.GameState;
+
 /**
  *
  * @author
@@ -50,12 +52,13 @@ public class DialogNode {
     /**
      * 
      * @return a reply based on whether conditions are met (Ie n would be the n-1th reply that has conditions met.
+     * Basically gets the i-th reply while filtering ones that don't meet the conditions.
      */
-    public DialogReply getReplyCM(int i) {
+    public DialogReply getReplyCM(GameState game, int i) {
         int k = 0;
         
         for (DialogReply reply: replies)
-            if (reply.conditionsMet())
+            if (reply.conditionsMet(game))
                 if (k == i)
                     return reply;
                 else
@@ -64,18 +67,18 @@ public class DialogNode {
         return null;
     }
 
-    public String[] getReplyPrompts() {
+    public String[] getReplyPrompts(GameState game) {
         //Only where conditions met
         int count = 0;
         
         for (DialogReply reply: replies)
-            if (reply.conditionsMet())
+            if (reply.conditionsMet(game))
                 count++;
         
         String[] retString = new String[count];
         int i = 0;
         for (DialogReply reply: replies)
-            if (reply.conditionsMet())
+            if (reply.conditionsMet(game))
                 retString[i++] = reply.getPrompt();
         
         return retString;

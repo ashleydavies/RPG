@@ -1,6 +1,6 @@
 package com.sadwhalestudios.orthorpg.entities;
 
-import com.sadwhalestudios.orthorpg.Game;
+import com.sadwhalestudios.orthorpg.gamestate.states.GameState;
 import com.sadwhalestudios.orthorpg.gui.DialogGUI;
 import com.sadwhalestudios.util.dialog.DialogAction;
 import com.sadwhalestudios.util.dialog.DialogCondition;
@@ -53,7 +53,7 @@ public class NPC {
         }
     }
     
-    public NPC(GameContainer gc, int npcID, Map mapA) throws SlickException
+    public NPC(GameContainer gc, GameState game, int npcID, Map mapA) throws SlickException
     {
     	map = mapA;
     	
@@ -159,7 +159,7 @@ public class NPC {
             dialog[i] = dNode1;
         }
         
-        setupDialog(gc);
+        setupDialog(gc, game);
     }
     
     int xPos = 0;
@@ -188,16 +188,17 @@ public class NPC {
         return stringIn;
     }
     
-    public void update(GameContainer gc, int delta) throws SlickException
+    public void update(GameContainer gc, GameState game, int delta) throws SlickException
     {
         if (dialogShowing)
-            dGUI.update(gc, delta);
+            dGUI.update(gc, game, delta);
         
-        if (!dialogShowing && Mouse.isButtonDown(0) && mouseOverThis())
+        if (!dialogShowing && Mouse.isButtonDown(0) && mouseOverThis(game))
         {
-            beginDialog(gc);
+            beginDialog(gc, game);
             System.out.println("Showing Dialog");
         }
+        
         if (Math.random() > 0.99)
         	stepTo(8, 7);
     }
@@ -210,31 +211,31 @@ public class NPC {
             dGUI.render(gc, graphics);
     }
     
-    public boolean mouseOverThis()
-    {
-        int mouseX = Game.getInstance().getInput().getMouseX();
-        int mouseY = Game.getInstance().getInput().getMouseY();
+    public boolean mouseOverThis(GameState game)
+    {	
+        int mouseX = game.getInput().getMouseX();
+        int mouseY = game.getInput().getMouseY();
         return (mouseX > 0 && mouseX < 32 && mouseY > 0 && mouseY < 64);
     }
     
-    public void dialogReplyClicked(GameContainer gc, int i) throws SlickException {
+    public void dialogReplyClicked(GameContainer gc, GameState game, int i) throws SlickException {
         // i = reply clicked
         
-        DialogReply reply = dialog[curDialog].getReplyCM(i);
+        DialogReply reply = dialog[curDialog].getReplyCM(game, i);
         System.out.println(reply);
         for (DialogAction action: reply.getActions())
         {
             System.out.println("ACTION: " + action);
             // Check if action conditions are met
-            if (action.conditionsMet())
+            if (action.conditionsMet(game))
             {
-                SaveData data = Game.getInstance().getCurrentGameData();
+                SaveData data = game.getCurrentGameData();
                 switch (action.getAction())
                 {
                     case "changeNode":
                     {
                         curDialog = Integer.parseInt(action.getArg(0));
-                        dGUI.drawMenuContent(gc, dialog[curDialog].getPrompt(), dialog[curDialog].getReplyPrompts());
+                        dGUI.renderPrimaryContent(gc, dialog[curDialog].getPrompt(), dialog[curDialog].getReplyPrompts(game));
                         break;
                     }
                     case "intdata_decrease":
@@ -268,17 +269,17 @@ public class NPC {
         }
     }
     
-    public void setupDialog(GameContainer gc) throws SlickException
+    public void setupDialog(GameContainer gc, GameState game) throws SlickException
     {
-        dGUI = new DialogGUI(gc, dialog, this);
+        dGUI = new DialogGUI(gc, game, dialog, this);
     }
     
-    public void beginDialog(GameContainer gc) throws SlickException
+    public void beginDialog(GameContainer gc, GameState game) throws SlickException
     {
         dialogShowing = true;
         
         curDialog = 0;
-        dGUI.drawMenuContent(gc, dialog[0].getPrompt(), dialog[0].getReplyPrompts());
+        dGUI.renderPrimaryContent(gc, dialog[0].getPrompt(), dialog[0].getReplyPrompts(game));
     }
     
     public void endDialog()

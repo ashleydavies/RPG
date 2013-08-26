@@ -1,6 +1,6 @@
 package com.sadwhalestudios.util.dialog;
 
-import com.sadwhalestudios.orthorpg.Game;
+import com.sadwhalestudios.orthorpg.gamestate.states.GameState;
 
 /**
  *
@@ -20,15 +20,15 @@ public class DialogCondition {
             this.args = new String[0];
     }
     
-    public boolean conditionMet() {
+    public boolean conditionMet(GameState game) {
         switch (condition)
         {
             case "intdata_morethan":
-                return Game.getInstance().getCurrentGameData().getIntSaveData(Integer.parseInt(args[0])) > Integer.parseInt(args[1]);
+                return game.getCurrentGameData().getIntSaveData(Integer.parseInt(args[0])) > Integer.parseInt(args[1]);
             case "intdata_lessthan":
-                return Game.getInstance().getCurrentGameData().getIntSaveData(Integer.parseInt(args[0])) < Integer.parseInt(args[1]);
+                return game.getCurrentGameData().getIntSaveData(Integer.parseInt(args[0])) < Integer.parseInt(args[1]);
             case "intdata_equalto":
-                return Game.getInstance().getCurrentGameData().getIntSaveData(Integer.parseInt(args[0])) == Integer.parseInt(args[1]);
+                return game.getCurrentGameData().getIntSaveData(Integer.parseInt(args[0])) == Integer.parseInt(args[1]);
         }
         return true;
     }
