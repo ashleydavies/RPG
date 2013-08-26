@@ -1,9 +1,11 @@
 package com.sadwhalestudios.orthorpg.gui;
 
-import com.sadwhalestudios.orthorpg.Game;
 import com.sadwhalestudios.orthorpg.entities.NPC;
+import com.sadwhalestudios.orthorpg.gamestate.states.GameState;
 import com.sadwhalestudios.util.dialog.DialogNode;
+
 import java.awt.Font;
+
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -11,8 +13,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
-import org.newdawn.slick.geom.Point;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.MouseOverArea;
 
 /**
@@ -20,16 +20,12 @@ import org.newdawn.slick.gui.MouseOverArea;
  * @author
  * Ashley
  */
-public final class DialogGUI {
-    static Image ui;
+public final class DialogGUI extends GUIWindow {
     static TrueTypeFont dialogFont;
     static TrueTypeFont dialogTitleFont;
-    static int width, height;
     
-    Point position;
-    Image menu;
-    Image menuContent;
-    Image menuPrimaryContent;
+    
+    
     NPC parent;
     boolean[] replyAreasMouseDown;
     MouseOverArea[] replyAreas;
@@ -39,85 +35,21 @@ public final class DialogGUI {
             ui = new Image("img/ui/ui.png");
             dialogFont = new TrueTypeFont(new Font("Arial", Font.PLAIN, 16), true);
             dialogTitleFont = new TrueTypeFont(new Font("Arial", Font.BOLD, 36), true);
-            
-            width = 504;
-            height = 624; // TODO : Make GUI sizing dynamic based on resolution
         } catch (SlickException e) {}
     }
     
-    public DialogGUI(GameContainer gc, DialogNode[] dialog, NPC parent) throws SlickException {
+    public DialogGUI(GameContainer gc, GameState game, DialogNode[] dialog, NPC parent) throws SlickException {
+    	super(gc, game, 504, 624);
+    	
         this.parent = parent;
         
-        int x = gc.getWidth() / 2 - width / 2;
-        int y = gc.getHeight() / 2 - height / 2;
-        
-        position = new Point(x, y);
-        menu = new Image(width, height);
-        menuContent = new Image(width, height);
-        menuPrimaryContent = new Image(width, height);
-        
         String content = dialog[0].getPrompt();
-        String[] responses = dialog[0].getReplyPrompts();
+        String[] responses = dialog[0].getReplyPrompts(game);
         
-        drawMenu(gc, new Rectangle(x, y, width, height));
-        drawMenuPrimaryContent(gc);
-        drawMenuContent(gc, content, responses);
+        renderPrimaryContent(gc, content, responses);
     }
     
-    public void drawMenu(GameContainer gc, Rectangle rect) {
-        Image border_tl = ui.getSubImage(0, 0, 12, 12);
-        Image border_tr = ui.getSubImage(12, 0, 12, 12);
-        Image border_bl = ui.getSubImage(0, 12, 12, 12);
-        Image border_br = ui.getSubImage(12, 12, 12, 12);
-        Image border_t = ui.getSubImage(12, 24, 12, 12);
-        Image border_l = ui.getSubImage(0, 24, 12, 12);
-        Image border_r = ui.getSubImage(12, 36, 12, 12);
-        Image border_b = ui.getSubImage(0, 36, 12, 12);
-        Image inner = ui.getSubImage(24, 0, 60, 60);
-        
-        Graphics graphics = gc.getGraphics();
-        
-        graphics.clear();
-        
-        graphics.drawImage(border_tl, 0, 0);
-        graphics.drawImage(border_tr, rect.getWidth() - 12, 0);
-        graphics.drawImage(border_bl, 0, rect.getHeight() - 12);
-        graphics.drawImage(border_br, rect.getWidth() - 12, rect.getHeight() - 12);
-        
-        for (int i = 1; i <= (rect.getWidth() - 24) / 12; i++)
-        {
-            graphics.drawImage(border_t, 12 * i, 0);
-            graphics.drawImage(border_b, 12 * i, rect.getHeight() - 12);
-        }
-        
-        for (int i = 1; i <= (rect.getHeight() - 24) / 12; i++)
-        {
-            graphics.drawImage(border_l, 0, 12 * i);
-            graphics.drawImage(border_r, rect.getWidth() - 12, 12 * i);
-        }
-        
-        for (int x = 0; x < (rect.getWidth() - 24) / 60; x++)
-            for (int y = 0; y < (rect.getHeight() - 24) / 60; y++)
-                graphics.drawImage(inner, 60 * x + 12, 60 * y + 12);
-        
-        graphics.copyArea(menu, 0, 0);
-        graphics.clear();
-    }
-    
-    
-    public void drawMenuPrimaryContent(GameContainer gc) {
-        Graphics graphics = gc.getGraphics();
-        graphics.clear();
-        
-        // Draw standard menu UI (Todo: Move to a higher-tier GUI class and copy down)
-        graphics.setColor(Color.black);
-        graphics.drawString(Game.getInstance().getCurrentGameData().getIntSaveData(0) + " coins", 24, height - 36);
-        
-        graphics.copyArea(menuPrimaryContent, 0, 0);
-        graphics.clear();
-    }
-    
-    public void drawMenuContent(GameContainer gc, String content, String[] responses) throws SlickException {
+    public void renderPrimaryContent(GameContainer gc, String content, String[] responses) throws SlickException {
         content = prepareString(content);
         responses = prepareStrings(responses);
         
@@ -155,11 +87,11 @@ public final class DialogGUI {
                 lineN++;
             }
             
-            replyAreas[replyN - 1] = new MouseOverArea(gc, new Image(width - 24 - 64, 18 * lineN), (int) (position.getX() + 12 + 64), (int) (position.getY() + y - ((lineN - 1) * 18)));
+            replyAreas[replyN - 1] = new MouseOverArea(gc, new Image((int) (windowRect.getWidth() - 24 - 64), 18 * lineN), (int) (windowRect.getX() + 12 + 64), (int) (windowRect.getY() + y - ((lineN - 1) * 18)));
             replyAreasMouseDown[replyN - 1] = false;
         }
         
-        graphics.copyArea(menuContent, 0, 0);
+        graphics.copyArea(windowDynamicContent, 0, 0);
         graphics.clear();
     }
     
@@ -187,8 +119,8 @@ public final class DialogGUI {
             }
             
             curLine += dialogFont.getWidth(word);
-            //System.out.println("Word: " + word + " curLine: " + curLine);
-            if (curLine > width - 42 - 64 - 42) {
+            
+            if (curLine > windowRect.getWidth() - 42 - 64 - 42) {
                 curLine = dialogFont.getWidth(word);
                 prepString += "\n";
             }
@@ -198,7 +130,7 @@ public final class DialogGUI {
         return prepString;
     }
     
-    public void update(GameContainer gc, int delta) throws SlickException {
+    public void update(GameContainer gc, GameState game, int delta) throws SlickException {
         for (int i = 0; i < replyAreas.length; i++) {
             if (replyAreas[i].isMouseOver() && Mouse.isButtonDown(0)) {
                 replyAreasMouseDown[i] = true;
@@ -207,9 +139,9 @@ public final class DialogGUI {
                 replyAreasMouseDown[i] = false;
                 
                 System.out.println("Clicked " + i);
-                parent.dialogReplyClicked(gc, i);
+                parent.dialogReplyClicked(gc, game, i);
                 
-                drawMenuPrimaryContent(gc);
+                renderDefaultContent(gc, game);
                 
                 break;
             }
@@ -221,8 +153,8 @@ public final class DialogGUI {
     }
     
     public void render(GameContainer gc, Graphics graphics) throws SlickException {
-        graphics.drawImage(menu, position.getX(), position.getY());
-        graphics.drawImage(menuPrimaryContent, position.getX(), position.getY());
-        graphics.drawImage(menuContent, position.getX(), position.getY());
+        graphics.drawImage(windowBg, windowRect.getX(), windowRect.getY());
+        graphics.drawImage(windowDefaultContent, windowRect.getX(), windowRect.getY());
+        graphics.drawImage(windowDynamicContent, windowRect.getX(), windowRect.getY());
     }
 }

@@ -1,23 +1,17 @@
 package com.sadwhalestudios.orthorpg;
 
-import com.sadwhalestudios.orthorpg.entities.*;
-import com.sadwhalestudios.util.SaveData;
-import com.sadwhalestudios.util.map.Map;
-import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.*;
+
+import com.sadwhalestudios.orthorpg.gamestate.GameStateManager;
+import com.sadwhalestudios.orthorpg.gamestate.states.GameState;
 
 /**
  *
  * @author Ashley
  */
 public class Game extends BasicGame {
-    private static Game Instance;
-    
-    Map map;
-    private Input input;
-    Player player;
-    private SaveData currentGameData;
-    
+	GameStateManager gsm;
+	
     public static void main(String[] args) throws SlickException {
         AppGameContainer app = new AppGameContainer(new Game());
         app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), true);
@@ -25,54 +19,23 @@ public class Game extends BasicGame {
     }
     
     private Game() {
-        super("Orthographic RPG Test");
-        Instance = this;
+        super("Slabrek RPG Test");
     }
     
     @Override
     public void init(GameContainer gc) throws SlickException {
-        currentGameData = new SaveData();
-        currentGameData.setIntSaveData(0, 50);
-        
-        input = new Input(gc.getHeight());
-        player = new Player();
-        map = new Map();
-        map.load(gc);
+    	gsm = new GameStateManager();
+    	GameState s = new GameState(gsm);
+        gsm.pushState(gc, s);
     }
 
     @Override
     public void update(GameContainer gc, int delta) throws SlickException {
-        if (Keyboard.isKeyDown(Input.KEY_ESCAPE))
-            System.exit(0);
-        
-        player.update(gc, delta);
-        map.update(gc, delta);
+        gsm.update(gc, delta);
     }
 
     @Override
     public void render(GameContainer gc, Graphics graphics) throws SlickException {
-        map.render(gc, graphics);
-        player.render(gc, graphics);
-    }
-    
-    /**
-     * @return the Instance
-     */
-    public static Game getInstance() {
-        return Instance;
-    }
-
-    /**
-     * @return the currentGameData
-     */
-    public SaveData getCurrentGameData() {
-        return currentGameData;
-    }
-
-    /**
-     * @return the input
-     */
-    public Input getInput() {
-        return input;
+        gsm.render(gc, graphics);
     }
 }

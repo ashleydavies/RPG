@@ -1,5 +1,6 @@
 package com.sadwhalestudios.util.dialog;
 
+import com.sadwhalestudios.orthorpg.gamestate.states.GameState;
 import com.sadwhalestudios.util.dialog.DialogAction;
 
 /**
@@ -31,9 +32,9 @@ public class DialogReply {
         return retString;
     }
     
-    public boolean conditionsMet() {
+    public boolean conditionsMet(GameState game) {
         for (DialogCondition condition: conditions) {
-            if (!condition.conditionMet()) {
+            if (!condition.conditionMet(game)) {
                 return false;
             }
         }

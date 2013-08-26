@@ -1,6 +1,7 @@
 package com.sadwhalestudios.util.map;
 
 import com.sadwhalestudios.orthorpg.entities.NPC;
+import com.sadwhalestudios.orthorpg.gamestate.states.GameState;
 import com.sadwhalestudios.util.XMLParser;
 import com.sadwhalestudios.util.map.pathfinding.AStar.Node;
 import com.sadwhalestudios.util.map.pathfinding.AStar;
@@ -29,9 +30,9 @@ public class Map {
     CollisionMap collisionMap;
     Node[][] nodeMatrix;
     
-    public void update(GameContainer gc, int delta) throws SlickException {
+    public void update(GameContainer gc, GameState game, int delta) throws SlickException {
         for (NPC npc: npcs)
-            npc.update(gc, delta);
+            npc.update(gc, game, delta);
     }
     
     public boolean getCollideable(int y, int x) {
@@ -53,7 +54,7 @@ public class Map {
             npc.render(gc, graphics);
     }
     
-    public void load(GameContainer gc) throws SlickException
+    public void load(GameContainer gc, GameState game) throws SlickException
     {
         info = XMLParser.instance.parseXML(this.getClass().getClassLoader().getResourceAsStream("data/xml/map/1.xml"));
         
@@ -106,7 +107,7 @@ public class Map {
             int i_npcID = Integer.parseInt(i_npcNode.getAttribute("id"));
             int i_npcTypeID = Integer.parseInt(i_npcNode.getElementsByTagName("id").item(0).getTextContent());
             
-            npcs[i_npcID] = new NPC(gc, i_npcTypeID, this);
+            npcs[i_npcID] = new NPC(gc, game, i_npcTypeID, this);
         }
         
         collisionMap = new CollisionMap(this);
