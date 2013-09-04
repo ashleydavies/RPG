@@ -30,6 +30,7 @@ public final class DialogGUI extends GUIWindow {
     private MouseOverArea[] replyAreas;
     private DialogNode[] dialog;
 	private int currentDialog;
+	private Dialogable parent;
     
     static {
         try {
@@ -39,7 +40,7 @@ public final class DialogGUI extends GUIWindow {
         } catch (SlickException e) {}
     }
     
-    public DialogGUI(GameContainer gc, GameState game, DialogNode[] dialog) throws SlickException {
+    public DialogGUI(GameContainer gc, GameState game, DialogNode[] dialog, Dialogable parent) throws SlickException {
     	super(gc, game, 504, 624);
         
         String content = dialog[0].getPrompt();
@@ -56,14 +57,6 @@ public final class DialogGUI extends GUIWindow {
         replyAreasMouseDown = new boolean[responses.length];
         
         Graphics graphics = gc.getGraphics();
-        
-        /*
-        graphics.clear();
-        graphics.drawImage(parent.getAvatar(), 12, 12);
-        
-        graphics.setColor(Color.black);
-        graphics.setFont(dialogTitleFont);
-        graphics.drawString(parent.getName(), 12 + 64, 12);*/
         
         int y = (int) (12 + 32);
         

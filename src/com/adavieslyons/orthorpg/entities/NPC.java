@@ -2,6 +2,7 @@ package com.adavieslyons.orthorpg.entities;
 
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.orthorpg.gui.DialogGUI;
+import com.adavieslyons.orthorpg.gui.Dialogable;
 import com.adavieslyons.util.SpriteSheet;
 import com.adavieslyons.util.XMLParser;
 import com.adavieslyons.util.dialog.DialogAction;
@@ -30,7 +31,7 @@ import org.w3c.dom.*;
  *
  * @author Ashley
  */
-public class NPC {
+public class NPC implements Dialogable {
     static final Properties NPCSubstitution;
     
     Document info;
@@ -253,5 +254,10 @@ public class NPC {
 
 	public void setPreviousPosition(Rectangle previousPosition) {
 		this.previousPosition = previousPosition;
+	}
+
+	@Override
+	public void dialogCloseRequested() {
+		dGUI.endDialog();
 	}
 }
