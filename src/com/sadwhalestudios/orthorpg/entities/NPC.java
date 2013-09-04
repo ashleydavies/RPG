@@ -24,6 +24,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.w3c.dom.*;
 
 /**
@@ -34,7 +35,6 @@ public class NPC {
     static final Properties NPCSubstitution;
     
     Document info;
-    DialogNode[] dialog;
     DialogGUI dGUI;
     private final Map map;
     private final String name;
@@ -42,6 +42,10 @@ public class NPC {
     private final Image texture;
     boolean dialogShowing = false;
     int curDialog = 0;
+    
+    private Rectangle previousPosition;
+    private Rectangle occupiedPosition;
+    private Rectangle renderPosition;
     
     static
     {
@@ -75,7 +79,7 @@ public class NPC {
         Element dialogRoot = (Element)info.getElementsByTagName("dialog").item(0);
         NodeList dialogNodes = dialogRoot.getElementsByTagName("node");
         
-        dialog = new DialogNode[dialogNodes.getLength()];
+        DialogNode[] dialog = new DialogNode[dialogNodes.getLength()];
         
         NodeList i_conditionNodes = dialogRoot.getElementsByTagName("condition");
 
@@ -159,7 +163,11 @@ public class NPC {
             dialog[i] = dNode1;
         }
         
-        setupDialog(gc, game);
+        setupDialog(gc, game, dialog);
+    }
+    
+    public void setupDialog(GameContainer gc, GameState game, DialogNode[] dialog) throws SlickException {
+        dGUI = new DialogGUI(gc, game, dialog);
     }
     
     int xPos = 0;
@@ -198,9 +206,8 @@ public class NPC {
             beginDialog(gc, game);
             System.out.println("Showing Dialog");
         }
-        
-        if (Math.random() > 0.99)
-        	stepTo(8, 7);
+       
+        stepTo(8, 7);
     }
     
     public void render(GameContainer gc, Graphics graphics) throws SlickException
@@ -217,87 +224,36 @@ public class NPC {
         int mouseY = game.getInput().getMouseY();
         return (mouseX > 0 && mouseX < 32 && mouseY > 0 && mouseY < 64);
     }
-    
-    public void dialogReplyClicked(GameContainer gc, GameState game, int i) throws SlickException {
-        // i = reply clicked
-        
-        DialogReply reply = dialog[curDialog].getReplyCM(game, i);
-        System.out.println(reply);
-        for (DialogAction action: reply.getActions())
-        {
-            System.out.println("ACTION: " + action);
-            // Check if action conditions are met
-            if (action.conditionsMet(game))
-            {
-                SaveData data = game.getCurrentGameData();
-                switch (action.getAction())
-                {
-                    case "changeNode":
-                    {
-                        curDialog = Integer.parseInt(action.getArg(0));
-                        dGUI.renderPrimaryContent(gc, dialog[curDialog].getPrompt(), dialog[curDialog].getReplyPrompts(game));
-                        break;
-                    }
-                    case "intdata_decrease":
-                    {
-                        int iData = Integer.parseInt(action.getArg(0));
-                        int modif = Integer.parseInt(action.getArg(1));
-                        data.setIntSaveData(iData, data.getIntSaveData(iData) - modif);
-                        break;
-                    }
-                    case "intdata_increase":
-                    {
-                        int iData = Integer.parseInt(action.getArg(0));
-                        int modif = Integer.parseInt(action.getArg(1));
-                        data.setIntSaveData(iData, data.getIntSaveData(iData) + modif);
-                        break;
-                    }
-                    case "intdata_set":
-                    {
-                        int iData = Integer.parseInt(action.getArg(0));
-                        int modif = Integer.parseInt(action.getArg(1));
-                        data.setIntSaveData(iData, modif);
-                        break;
-                    }
-                    case "endDialog":
-                    {
-                        endDialog();
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    
-    public void setupDialog(GameContainer gc, GameState game) throws SlickException
-    {
-        dGUI = new DialogGUI(gc, game, dialog, this);
-    }
-    
-    public void beginDialog(GameContainer gc, GameState game) throws SlickException
-    {
-        dialogShowing = true;
-        
-        curDialog = 0;
-        dGUI.renderPrimaryContent(gc, dialog[0].getPrompt(), dialog[0].getReplyPrompts(game));
-    }
-    
-    public void endDialog()
-    {
-        dialogShowing = false;
-    }
 
-    /**
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * @return the avatar
-     */
     public Image getAvatar() {
         return avatar;
     }
+    
+	public Rectangle getRenderPosition() {
+		return renderPosition;
+	}
+
+	public void setRenderPosition(Rectangle renderPosition) {
+		this.renderPosition = renderPosition;
+	}
+
+	public Rectangle getOccupiedPosition() {
+		return occupiedPosition;
+	}
+
+	public void setOccupiedPosition(Rectangle occupiedPosition) {
+		this.occupiedPosition = occupiedPosition;
+	}
+
+	public Rectangle getPreviousPosition() {
+		return previousPosition;
+	}
+
+	public void setPreviousPosition(Rectangle previousPosition) {
+		this.previousPosition = previousPosition;
+	}
 }

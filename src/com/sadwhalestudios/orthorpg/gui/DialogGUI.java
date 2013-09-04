@@ -2,7 +2,10 @@ package com.sadwhalestudios.orthorpg.gui;
 
 import com.sadwhalestudios.orthorpg.entities.NPC;
 import com.sadwhalestudios.orthorpg.gamestate.states.GameState;
+import com.sadwhalestudios.util.SaveData;
+import com.sadwhalestudios.util.dialog.DialogAction;
 import com.sadwhalestudios.util.dialog.DialogNode;
+import com.sadwhalestudios.util.dialog.DialogReply;
 
 import java.awt.Font;
 
@@ -24,11 +27,10 @@ public final class DialogGUI extends GUIWindow {
     static TrueTypeFont dialogFont;
     static TrueTypeFont dialogTitleFont;
     
-    
-    
-    NPC parent;
-    boolean[] replyAreasMouseDown;
-    MouseOverArea[] replyAreas;
+    private boolean[] replyAreasMouseDown;
+    private MouseOverArea[] replyAreas;
+    private DialogNode[] dialog;
+	private int currentDialog;
     
     static {
         try {
@@ -38,10 +40,8 @@ public final class DialogGUI extends GUIWindow {
         } catch (SlickException e) {}
     }
     
-    public DialogGUI(GameContainer gc, GameState game, DialogNode[] dialog, NPC parent) throws SlickException {
+    public DialogGUI(GameContainer gc, GameState game, DialogNode[] dialog) throws SlickException {
     	super(gc, game, 504, 624);
-    	
-        this.parent = parent;
         
         String content = dialog[0].getPrompt();
         String[] responses = dialog[0].getReplyPrompts(game);
@@ -58,12 +58,13 @@ public final class DialogGUI extends GUIWindow {
         
         Graphics graphics = gc.getGraphics();
         
+        /*
         graphics.clear();
         graphics.drawImage(parent.getAvatar(), 12, 12);
         
         graphics.setColor(Color.black);
         graphics.setFont(dialogTitleFont);
-        graphics.drawString(parent.getName(), 12 + 64, 12);
+        graphics.drawString(parent.getName(), 12 + 64, 12);*/
         
         int y = (int) (12 + 32);
         
@@ -139,7 +140,8 @@ public final class DialogGUI extends GUIWindow {
                 replyAreasMouseDown[i] = false;
                 
                 System.out.println("Clicked " + i);
-                parent.dialogReplyClicked(gc, game, i);
+                //parent.dialogReplyClicked(gc, game, i);
+                dialogReplyClicked(gc, game, i);
                 
                 renderDefaultContent(gc, game);
                 
@@ -156,5 +158,64 @@ public final class DialogGUI extends GUIWindow {
         graphics.drawImage(windowBg, windowRect.getX(), windowRect.getY());
         graphics.drawImage(windowDefaultContent, windowRect.getX(), windowRect.getY());
         graphics.drawImage(windowDynamicContent, windowRect.getX(), windowRect.getY());
+    }
+    
+    public void dialogReplyClicked(GameContainer gc, GameState game, int i) throws SlickException {
+        // i = reply clicked
+        
+        DialogReply reply = dialog[currentDialog].getReplyCM(game, i);
+        System.out.println(reply);
+        for (DialogAction action: reply.getActions()) {
+            System.out.println("ACTION: " + action);
+            
+            if (action.conditionsMet(game)) {
+                SaveData data = game.getCurrentGameData();
+                switch (action.getAction()) {
+                    case "changeNode":
+                    {
+                        currentDialog = Integer.parseInt(action.getArg(0));
+                        renderPrimaryContent(gc, dialog[currentDialog].getPrompt(), dialog[currentDialog].getReplyPrompts(game));
+                        break;
+                    }
+                    case "intdata_decrease":
+                    {
+                        int iData = Integer.parseInt(action.getArg(0));
+                        int modif = Integer.parseInt(action.getArg(1));
+                        data.setIntSaveData(iData, data.getIntSaveData(iData) - modif);
+                        break;
+                    }
+                    case "intdata_increase":
+                    {
+                        int iData = Integer.parseInt(action.getArg(0));
+                        int modif = Integer.parseInt(action.getArg(1));
+                        data.setIntSaveData(iData, data.getIntSaveData(iData) + modif);
+                        break;
+                    }
+                    case "intdata_set":
+                    {
+                        int iData = Integer.parseInt(action.getArg(0));
+                        int modif = Integer.parseInt(action.getArg(1));
+                        data.setIntSaveData(iData, modif);
+                        break;
+                    }
+                    case "endDialog":
+                    {
+                        endDialog();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+    public void beginDialog(GameContainer gc, GameState game) throws SlickException {
+        dialogShowing = true;
+        
+        curDialog = 0;
+        dGUI.renderPrimaryContent(gc, dialog[0].getPrompt(), dialog[0].getReplyPrompts(game));
+    }
+    
+    public void endDialog() {
+        dialogShowing = false;
     }
 }
