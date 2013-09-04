@@ -1,12 +1,5 @@
 package com.adavieslyons.orthorpg.gui;
 
-import com.adavieslyons.orthorpg.entities.NPC;
-import com.adavieslyons.orthorpg.gamestate.states.GameState;
-import com.adavieslyons.util.SaveData;
-import com.adavieslyons.util.dialog.DialogAction;
-import com.adavieslyons.util.dialog.DialogNode;
-import com.adavieslyons.util.dialog.DialogReply;
-
 import java.awt.Font;
 
 import org.lwjgl.input.Mouse;
@@ -17,6 +10,12 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.gui.MouseOverArea;
+
+import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.util.SaveData;
+import com.adavieslyons.util.dialog.DialogAction;
+import com.adavieslyons.util.dialog.DialogNode;
+import com.adavieslyons.util.dialog.DialogReply;
 
 /**
  *
