@@ -46,6 +46,9 @@ public final class DialogGUI extends GUIWindow {
         String content = dialog[0].getPrompt();
         String[] responses = dialog[0].getReplyPrompts(game);
         
+        this.dialog = dialog;
+        this.parent = parent;
+        
         renderPrimaryContent(gc, content, responses);
     }
     
@@ -57,9 +60,15 @@ public final class DialogGUI extends GUIWindow {
         replyAreasMouseDown = new boolean[responses.length];
         
         Graphics graphics = gc.getGraphics();
+        graphics.clear();
         
         int y = (int) (12 + 32);
         
+        graphics.setColor(Color.black);
+        graphics.setFont(dialogTitleFont);
+        graphics.drawString(parent.getDialogTitle(), 12 + 64, 16);
+        
+        graphics.setColor(Color.black);
         graphics.setFont(dialogFont);
         for (String line : content.split("\n"))
             graphics.drawString(line, 12 + 64, y += 18);
@@ -206,6 +215,6 @@ public final class DialogGUI extends GUIWindow {
     }
     
     public void endDialog() {
-        
+        parent.dialogCloseRequested();
     }
 }

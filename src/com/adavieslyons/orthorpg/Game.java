@@ -10,11 +10,14 @@ import com.adavieslyons.orthorpg.gamestate.states.GameState;
  * @author Ashley
  */
 public class Game extends BasicGame {
+	public static final int TILE_SIZE = 32;
+	
 	GameStateManager gsm;
 	
     public static void main(String[] args) throws SlickException {
         AppGameContainer app = new AppGameContainer(new Game());
         app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), true);
+        //app.setTargetFrameRate(100);
         app.start();
     }
     
