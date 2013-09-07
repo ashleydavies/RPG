@@ -54,6 +54,10 @@ public abstract class GUIWindow {
         
         graphics.clear();
         
+        for (int x = 0; x < (windowRect.getWidth() - BW * 2) / BW * 5; x++)
+            for (int y = 0; y < (windowRect.getHeight() - BW * 2) / BW * 5; y++)
+                graphics.drawImage(inner, BW * 5 * x + BW, BW * 5 * y + BW);
+        
         graphics.drawImage(border_tl, 0, 0);
         graphics.drawImage(border_tr, windowRect.getWidth() - BW, 0);
         graphics.drawImage(border_bl, 0, windowRect.getHeight() - BW);
@@ -68,10 +72,6 @@ public abstract class GUIWindow {
             graphics.drawImage(border_l, 0, BW * i);
             graphics.drawImage(border_r, windowRect.getWidth() - BW, BW * i);
         }
-        
-        for (int x = 0; x < (windowRect.getWidth() - BW * 2) / BW * 5; x++)
-            for (int y = 0; y < (windowRect.getHeight() - BW * 2) / BW * 5; y++)
-                graphics.drawImage(inner, BW * 5 * x + BW, BW * 5 * y + BW);
         
         graphics.copyArea(windowBg, 0, 0);
         graphics.clear();

@@ -201,7 +201,7 @@ public class NPC implements Dialogable {
 		
 		if (moving)
 		{
-			tileMoveCurrently += ((float)delta / 500);
+			tileMoveCurrently += ((float) delta / 500);
 			renderPosition = previousPosition.lerpTo(occupiedPosition, tileMoveCurrently);
 			
 			if (tileMoveCurrently >= 1) {
