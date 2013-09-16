@@ -15,7 +15,7 @@ public class GameStateManager {
 	}
 	
 	public void setState(GameContainer gc, State state) throws SlickException {
-		for (State i_state: gameStates) {
+		for (State i_state : gameStates) {
 			i_state.unload();
 		}
 		
@@ -37,7 +37,7 @@ public class GameStateManager {
 	}
 	
 	public void render(GameContainer gc, Graphics graphics) throws SlickException {
-		for (State i_state: gameStates)
+		for (State i_state : gameStates)
 			i_state.render(gc, graphics);
 	}
 	

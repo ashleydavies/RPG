@@ -5,11 +5,9 @@
 package com.adavieslyons.util.map;
 
 /**
- *
- * @author
- * Ashley
+ * 
+ * @author Ashley
  */
 public enum TextureType {
-    STATIC,
-    DYNAMIC
+	STATIC, DYNAMIC
 }

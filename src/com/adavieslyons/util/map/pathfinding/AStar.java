@@ -6,15 +6,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 /**
-*
-* @author
-* Ashley
-* 
-* 
-* "Path" method mostly credits to WhiteFang on StackOverflow; see http://stackoverflow.com/questions/5601889/
-*/
+ * 
+ * @author Ashley
+ * 
+ * 
+ *         "Path" method mostly credits to WhiteFang on StackOverflow; see
+ *         http://stackoverflow.com/questions/5601889/
+ */
 public class AStar {
 	public static class Node {
 		Node parent;
@@ -55,7 +54,7 @@ public class AStar {
 		
 		matrix = new Node[map.getRows()][map.getColumns()];
 		
-		for (int y = 0; y < map.getRows(); y++)		
+		for (int y = 0; y < map.getRows(); y++)
 			for (int x = 0; x < map.getColumns(); x++)
 				if (!map.getCollision(x, y)) {
 					matrix[y][x] = new Node();
@@ -63,7 +62,8 @@ public class AStar {
 					matrix[y][x].y = y;
 				}
 		
-		// Form neighbourly relations. More convenient [Only possible way with this system?] to do this in a second loop after all nodes made.
+		// Form neighbourly relations. More convenient [Only possible way with
+		// this system?] to do this in a second loop after all nodes made.
 		for (int y = 0; y < map.getRows(); y++)
 			for (int x = 0; x < map.getColumns(); x++)
 				if (matrix[y][x] != null) {
@@ -84,13 +84,13 @@ public class AStar {
 		
 		open.add(beginning);
 		
-		while (true) {			
+		while (true) {
 			Node current = null;
 			
 			if (open.size() == 0)
 				return null;
 			
-			for (Node node: open)
+			for (Node node : open)
 				if (current == null || node.f < current.f)
 					current = node;
 			
@@ -100,7 +100,7 @@ public class AStar {
 			open.remove(current);
 			closed.add(current);
 			
-			for (Node neighbor: current.neighbors) {
+			for (Node neighbor : current.neighbors) {
 				if (neighbor == null)
 					continue;
 				
@@ -129,13 +129,13 @@ public class AStar {
 			returnNodes.add(current);
 			current = current.parent;
 		}
-		//returnNodes.add(beginning);
+		// returnNodes.add(beginning);
 		Collections.reverse(returnNodes);
 		
 		return returnNodes;
 	}
-
+	
 	private static int heuristic(Node beginning, Node end) {
-		return (Math.abs(beginning.x - end.x) + Math.abs(beginning.y - end.y)); 
+		return (Math.abs(beginning.x - end.x) + Math.abs(beginning.y - end.y));
 	}
 }
