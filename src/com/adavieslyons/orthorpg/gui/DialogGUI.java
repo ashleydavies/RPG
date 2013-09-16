@@ -57,6 +57,7 @@ public final class DialogGUI extends GUIWindow {
 		content = prepareString(content);
 		responses = prepareStrings(responses);
 		
+		// TODO: This whole class needs to be redone but this part especially
 		replyAreas = new MouseOverArea[responses.length];
 		replyAreasMouseDown = new boolean[responses.length];
 		

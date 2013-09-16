@@ -11,6 +11,7 @@ import org.newdawn.slick.geom.Point;
 public class Player extends Entity {
 	Point position;
 	Image image;
+	com.adavieslyons.orthorpg.gui.InventoryGUI InventoryGUI;
 	
 	public Player() throws SlickException {
 		position = new Point(0, 0);
