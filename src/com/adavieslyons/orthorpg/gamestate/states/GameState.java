@@ -29,7 +29,7 @@ public class GameState extends State {
 		currentGameData.setIntSaveData(0, 50);
 		
 		input = new Input(gc.getHeight());
-		player = new Player();
+		player = new Player(gc, this);
 		map = new Map();
 		map.load(gc, this);
 	}
@@ -44,7 +44,7 @@ public class GameState extends State {
 		if (Keyboard.isKeyDown(Input.KEY_ESCAPE))
 			System.exit(0);
 		
-		player.update(gc, delta);
+		player.update(gc, this, delta);
 		map.update(gc, this, delta);
 	}
 	
