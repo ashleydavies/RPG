@@ -34,8 +34,8 @@ public class InventoryGUI extends GUIWindow {
 	
 	@Override
 	public void render(GameContainer gc, Graphics graphics) throws SlickException {
-		graphics.drawImage(windowBg, windowRect.getX(), windowRect.getY());
-		graphics.drawImage(windowDynamicContent, windowRect.getX(), windowRect.getY());
+		//graphics.drawImage(windowBg, windowRect.getX(), windowRect.getY());
+		//graphics.drawImage(windowDynamicContent, windowRect.getX(), windowRect.getY());
 		
 		// TODO: Change default content rendering to allow some sort of flexibility, i.e. enum with values like TextBased or NoContent
 		//graphics.drawImage(windowDefaultContent, windowRect.getX(), windowRect.getY()); We don't need the default content in this one

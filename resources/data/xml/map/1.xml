@@ -168,5 +168,10 @@
             <xPos>0</xPos>
             <yPos>0</yPos>
         </NPC>
+        <NPC id="1">
+            <id>2</id>
+            <xPos>0</xPos>
+            <yPos>0</yPos>
+        </NPC>
     </NPCs>
 </map>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<data>
+    <itemCount>1</itemCount>
+    
+    <itemInfo>
+        <item id="0">
+            <name>Generic Sword</name>
+            <texture id="0">
+                <spritesheet>1</spritesheet>
+                <xPos>0</xPos>
+                <yPos>0</yPos>
+            </texture>
+        </item>
+    </itemInfo>
+</data>
