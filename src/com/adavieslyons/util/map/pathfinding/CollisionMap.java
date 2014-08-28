@@ -18,7 +18,7 @@ public class CollisionMap {
 			for (int x = 0; x < column.length; x++) {
 				column[x] = false;
 				
-				if (map.getCollideable(y, x)) {
+				if (map.getCollideable(x, y)) {
 					column[x] = true;
 				}
 			}

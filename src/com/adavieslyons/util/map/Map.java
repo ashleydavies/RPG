@@ -34,7 +34,7 @@ public class Map {
 			npc.update(gc, game, delta);
 	}
 	
-	public boolean getCollideable(int y, int x) {
+	public boolean getCollideable(int x, int y) {
 		for (MapLayer layer : layers) {
 			if (layer.getCollideable(y, x)) {
 				return true;

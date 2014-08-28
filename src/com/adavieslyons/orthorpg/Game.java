@@ -16,13 +16,13 @@ public class Game extends BasicGame {
 	
 	public static void main(String[] args) throws SlickException {
 		AppGameContainer app = new AppGameContainer(new Game());
-		app.setDisplayMode(app.getScreenWidth(), app.getScreenHeight(), true);
+		app.setDisplayMode(1200, 800, false);
 		// app.setTargetFrameRate(100);
 		app.start();
 	}
 	
 	private Game() {
-		super("Slabrek RPG Test");
+		super("RPG");
 	}
 	
 	@Override
