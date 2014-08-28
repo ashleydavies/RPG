@@ -29,9 +29,9 @@ public class GameState extends State {
 		currentGameData.setIntSaveData(0, 50);
 		
 		input = new Input(gc.getHeight());
-		player = new Player(gc, this);
 		map = new Map();
 		map.load(gc, this);
+		player = new Player(gc, this, map);
 	}
 	
 	@Override
