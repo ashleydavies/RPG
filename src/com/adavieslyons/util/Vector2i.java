@@ -38,4 +38,13 @@ public class Vector2i {
 	public String toString() {
 		return "x: " + Integer.toString(x) + " y: " + Integer.toString(y);
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!obj.getClass().equals(getClass()))
+			return false;
+
+		Vector2i other = (Vector2i) obj;
+		return (other.getX() == getX() && other.getY() == getY());
+	}
 }

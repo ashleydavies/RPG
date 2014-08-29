@@ -212,7 +212,7 @@ public class NPC implements Dialogable {
 		
 		if (followPath && !moving)
 		{
-			if (occupiedPosition.getX() == path[currentPathPosition].getX())
+			if (occupiedPosition.equals(path[currentPathPosition]))
 			{
 				currentPathPosition++;
 				
