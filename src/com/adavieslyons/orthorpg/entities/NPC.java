@@ -45,6 +45,9 @@ public class NPC implements Dialogable {
 	private Image texture;
 	private boolean dialogShowing = false;
 	
+	private boolean followPath = false;
+	private int currentPathPosition = 0;
+	private Vector2i path[];
 	private Vector2i previousPosition;
 	private Vector2i occupiedPosition;
 	private Vector2f renderPosition;
@@ -61,29 +64,33 @@ public class NPC implements Dialogable {
 		}
 	}
 	
-	public NPC(GameContainer gc, GameState game, int npcID, Map mapA) throws SlickException {
-		map = mapA;
+	public NPC(GameContainer gc, GameState game, int npcID, Map map, Vector2i path[]) throws SlickException {
+		this.map = map;
 		
 		previousPosition = new Vector2i(0, 0);
 		occupiedPosition = new Vector2i(0, 0);
 		renderPosition = new Vector2f(0, 0);
 		
-		loadDataFromXML(gc, game);
+		if (path != null)
+		{
+			this.path = path;
+			this.followPath = true;
+		}
+		
+		loadDataFromXML(gc, npcID, game);
 	}
 	
-	public void loadDataFromXML(GameContainer gc, GameState game) throws SlickException {
-		info = XMLParser.instance.parseXML(this.getClass().getClassLoader().getResourceAsStream("data/xml/npc/1.xml"));
+	public void loadDataFromXML(GameContainer gc, int npcID, GameState game) throws SlickException {
+		info = XMLParser.instance.parseXML(this.getClass().getClassLoader().getResourceAsStream("data/xml/npc/" + npcID + ".xml"));
 		
 		name = info.getElementsByTagName("name").item(0).getTextContent();
 		avatar = new Image("img/ui/avatar/npc/" + info.getElementsByTagName("avatar").item(0).getTextContent());
-		
 		Element textureElem = (Element) info.getElementsByTagName("texture").item(0);
 		int spriteSheet = Integer.parseInt(textureElem.getElementsByTagName("spritesheet").item(0).getTextContent());
 		int xPos = Integer.parseInt(textureElem.getElementsByTagName("xPos").item(0).getTextContent());
 		int yPos = Integer.parseInt(textureElem.getElementsByTagName("yPos").item(0).getTextContent());
-		
 		texture = SpriteSheet.getSpriteSheet(spriteSheet).getSubImage(xPos, yPos, 32, 64);
-		
+
 		Element dialogRoot = (Element) info.getElementsByTagName("dialog").item(0);
 		NodeList dialogNodes = dialogRoot.getElementsByTagName("node");
 		
@@ -92,7 +99,7 @@ public class NPC implements Dialogable {
 		NodeList i_conditionNodes = dialogRoot.getElementsByTagName("condition");
 		
 		DialogCondition[] i_conditions = new DialogCondition[i_conditionNodes.getLength()];
-		
+
 		for (int l = 0; l < i_conditionNodes.getLength(); l++) {
 			Element i_conditionNode = (Element) i_conditionNodes.item(l);
 			
@@ -102,7 +109,7 @@ public class NPC implements Dialogable {
 			
 			i_conditions[i_conditionNodeID] = new DialogCondition(i_conditionNodeID, i_conditionNodeCondition, i_conditionNodeArguments);
 		}
-		
+
 		for (int i = 0; i < dialogNodes.getLength(); i++) {
 			Element i_dialogNode = (Element) dialogNodes.item(i);
 			
@@ -164,7 +171,7 @@ public class NPC implements Dialogable {
 			
 			dialog[i] = dNode1;
 		}
-		
+
 		setupDialog(gc, game, dialog);
 	}
 	
@@ -203,8 +210,18 @@ public class NPC implements Dialogable {
 			}
 		}
 		
-		if (!moving)
-			pathfind(8, 7);
+		if (followPath && !moving)
+		{
+			if (occupiedPosition.getX() == path[currentPathPosition].getX())
+			{
+				currentPathPosition++;
+				
+				if (currentPathPosition >= path.length)
+					currentPathPosition = 0;
+			}
+			
+			pathfind(path[currentPathPosition].getX(), path[currentPathPosition].getY());
+		}
 	}
 	
 	public void pathfind(int tileX, int tileY) {
@@ -222,7 +239,7 @@ public class NPC implements Dialogable {
 	
 	public void render(GameContainer gc, Graphics graphics) throws SlickException {
 		graphics.drawImage(texture, (int) (renderPosition.getX() * Game.TILE_SIZE), (int) (renderPosition.getY() * Game.TILE_SIZE - 32));
-		
+				
 		if (dialogShowing)
 			dGUI.render(gc, graphics);
 	}

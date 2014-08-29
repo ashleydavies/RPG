@@ -67,8 +67,6 @@ public class MapTile {
 		collision = Collision;
 		textureType = TextureType;
 		textures = Textures;
-		System.out.println(this.name);
-		System.out.println(this.collision);
 	}
 	
 	public boolean getCollision() {

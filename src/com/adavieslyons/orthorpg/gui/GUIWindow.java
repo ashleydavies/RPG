@@ -50,29 +50,30 @@ public abstract class GUIWindow {
 		Image border_r = ui.getSubImage(BW, BW * 3, BW, BW);
 		Image border_b = ui.getSubImage(0, BW * 3, BW, BW);
 		Image inner = ui.getSubImage(BW * 2, 0, BW * 5, BW * 5);
-		
+
 		Graphics graphics = gc.getGraphics();
 		
 		graphics.clear();
 		
-		for (int x = 0; x < (windowRect.getWidth() - BW * 2) / BW * 5; x++)
-			for (int y = 0; y < (windowRect.getHeight() - BW * 2) / BW * 5; y++)
-				graphics.drawImage(inner, BW * 5 * x + BW, BW * 5 * y + BW);
-		
 		graphics.drawImage(border_tl, 0, 0);
 		graphics.drawImage(border_tr, windowRect.getWidth() - BW, 0);
 		graphics.drawImage(border_bl, 0, windowRect.getHeight() - BW);
-		graphics.drawImage(border_br, windowRect.getWidth() - BW, windowRect.getHeight() - BW);
+		graphics.drawImage(border_br, windowRect.getWidth() - BW,windowRect.getHeight() - BW);
 		
-		for (int i = 1; i <= (windowRect.getWidth() - BW * 2) / BW; i++) {
-			graphics.drawImage(border_t, BW * i, 0);
-			graphics.drawImage(border_b, BW * i, windowRect.getHeight() - BW);
-		}
+		graphics.fillRect(BW, 0, windowRect.getWidth() - BW * 2,
+				BW, border_t, 0, 0);
 		
-		for (int i = 1; i <= (windowRect.getHeight() - BW * 2) / BW; i++) {
-			graphics.drawImage(border_l, 0, BW * i);
-			graphics.drawImage(border_r, windowRect.getWidth() - BW, BW * i);
-		}
+		graphics.fillRect(BW, windowRect.getHeight() - BW, windowRect.getWidth() - BW * 2,
+				BW, border_b, 0, 0);
+		
+		graphics.fillRect(0, BW, BW,
+				windowRect.getHeight() - BW * 2, border_l, 0, 0);
+		
+		graphics.fillRect(windowRect.getWidth() - BW, BW, BW, 
+				windowRect.getHeight() - BW * 2, border_r, 0, 0);
+
+		graphics.fillRect(BW, BW, windowRect.getWidth() - BW * 2,
+				windowRect.getHeight() - BW * 2, inner, 0, 0);
 		
 		graphics.copyArea(windowBg, 0, 0);
 		graphics.clear();

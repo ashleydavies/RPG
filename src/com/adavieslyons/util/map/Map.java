@@ -2,6 +2,7 @@ package com.adavieslyons.util.map;
 
 import com.adavieslyons.orthorpg.entities.NPC;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.util.Vector2i;
 import com.adavieslyons.util.XMLParser;
 import com.adavieslyons.util.map.pathfinding.AStar;
 import com.adavieslyons.util.map.pathfinding.CollisionMap;
@@ -68,44 +69,59 @@ public class Map {
 		for (int i = 0; i < layerNodes.getLength(); i++) {
 			Element i_layerNode = (Element) layerNodes.item(i);
 			
-			int i_layerNodeID = Integer.parseInt(i_layerNode.getAttribute("id"));
-			
 			NodeList i_rowNodes = i_layerNode.getElementsByTagName("row");
 			MapTileData[][] i_layerTiles = new MapTileData[height][width];
 			
 			for (int r = 0; r < i_rowNodes.getLength(); r++) {
 				Element i_rowNode = (Element) i_rowNodes.item(r);
 				
-				int i_rowNodeID = Integer.parseInt(i_rowNode.getAttribute("id"));
-				
 				NodeList i_colNodes = i_rowNode.getElementsByTagName("tile");
-				i_layerTiles[i_rowNodeID] = new MapTileData[width];
+				i_layerTiles[r] = new MapTileData[width];
 				
 				for (int c = 0; c < i_colNodes.getLength(); c++) {
 					Element i_tile = (Element) i_colNodes.item(c);
 					
-					int i_colID = Integer.parseInt(i_tile.getAttribute("col"));
 					int i_tileID = Integer.parseInt(i_tile.getAttribute("tileID"));
 					
-					i_layerTiles[i_rowNodeID][i_colID] = new MapTileData(i_tileID);
+					i_layerTiles[r][c] = new MapTileData(i_tileID);
 				}
 			}
 			
-			layers[i_layerNodeID] = new MapLayer(i_layerTiles);
+			layers[i] = new MapLayer(i_layerTiles);
 		}
 		
-		Element entityRoot = (Element) info.getElementsByTagName("NPCs").item(0);
+		Element npcRoot = (Element) info.getElementsByTagName("NPCs").item(0);
 		
-		NodeList npcNodes = entityRoot.getElementsByTagName("NPC");
+		NodeList npcNodes = npcRoot.getElementsByTagName("NPC");
 		npcs = new NPC[npcNodes.getLength()];
-		
+
 		for (int i = 0; i < npcNodes.getLength(); i++) {
 			Element i_npcNode = (Element) npcNodes.item(i);
 			
-			int i_npcID = Integer.parseInt(i_npcNode.getAttribute("id"));
 			int i_npcTypeID = Integer.parseInt(i_npcNode.getElementsByTagName("id").item(0).getTextContent());
 			
-			npcs[i_npcID] = new NPC(gc, game, i_npcTypeID, this);
+			NodeList pathContainer = i_npcNode.getElementsByTagName("path");
+			
+			Vector2i path[] = null;
+			
+			if (pathContainer.getLength() > 0) {
+				Element i_pathContainer = (Element) pathContainer.item(0);
+				
+				NodeList pathNodes = i_pathContainer.getElementsByTagName("node");
+				
+				path = new Vector2i[pathNodes.getLength()];
+				
+				for (int p = 0; p < pathNodes.getLength(); p++)
+				{
+					Element i_pathNode = (Element) pathNodes.item(p);
+					
+					int pX = Integer.parseInt(i_pathNode.getAttribute("xPos"));
+					int pY = Integer.parseInt(i_pathNode.getAttribute("yPos"));
+					path[p] = new Vector2i(pX, pY);
+				}
+			}
+			NPC npc = new NPC(gc, game, i_npcTypeID, this, path);
+			npcs[i] = npc;
 		}
 		
 		collisionMap = new CollisionMap(this);
