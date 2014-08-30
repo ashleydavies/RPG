@@ -17,7 +17,7 @@ public class Player extends MovingEntity {
 	
 	@Override
 	public void update(GameContainer gc, GameState game, int delta) throws SlickException {
-		if (game.getInput().isMouseButtonDown(0) && !moving)
+		if (game.getInput().isMouseButtonDown(0))
 		{
 			moveToTarget(map.screenCoordinatesToTileCoordinates(
 				game.getInput().getMouseX(), game.getInput().getMouseY()));

@@ -28,6 +28,7 @@ import com.adavieslyons.util.map.pathfinding.CollisionMap;
  */
 public class Map {
 	int id;
+	GameState game;
 	String name;
 	Document info;
 	int width;
@@ -142,6 +143,7 @@ public class Map {
 	}
 	
 	public void load(GameContainer gc, GameState game) throws SlickException {
+		this.game = game;
 		info = XMLParser.instance.parseXML(this.getClass().getClassLoader().getResourceAsStream("data/xml/map/1.xml"));
 		
 		name = info.getElementsByTagName("name").item(0).getTextContent();
@@ -244,16 +246,16 @@ public class Map {
 	}
 
 	public void setOffset(Vector2i offset) {
-		if (offset.getX() < -150)
-			offset.setX(-150);
-		if (offset.getY() < -150)
-			offset.setY(-150);
+		if (offset.getX() < 50)
+			offset.setX(50);
+		if (offset.getY() < 50)
+			offset.setY(50);
 		
-		if (offset.getX() > width * Game.TILE_SIZE + 150)
-			offset.setX(width * Game.TILE_SIZE + 150);
+		if (width * Game.TILE_SIZE + offset.getX() < game.WIDTH - 50)
+			offset.setX(game.WIDTH - 50 - width * Game.TILE_SIZE);
 
-		if (offset.getY() > height * Game.TILE_SIZE + 150)
-			offset.setY(height * Game.TILE_SIZE + 150);
+		if (offset.getY() > height * Game.TILE_SIZE + 50)
+			offset.setY(height * Game.TILE_SIZE + 50);
 		
 		this.offset = offset;
 	}

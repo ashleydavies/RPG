@@ -39,10 +39,9 @@ public abstract class MovingEntity extends Entity {
 	}
 	
 	public void moveToTarget(int tX, int tY) {
-		if (tX < map.getWidth() && tY < map.getHeight())
+		if (tX < map.getWidth() && tY < map.getHeight() && tX >= 0 && tY >= 0)
 			if (!map.getCollideable(tX, tY))
 			{
-				pathfind(tX, tY);
 				desiredPosition = new Vector2i(tX, tY);
 			}
 	}

@@ -20,6 +20,9 @@ public class GameState extends State {
 	private SaveData currentGameData;
 	private InventoryGUI inventoryGUI;
 
+	public int WIDTH;
+	public int HEIGHT;
+	
 	public GameState(GameStateManager gsm) {
 		super(gsm);
 	}
@@ -45,6 +48,9 @@ public class GameState extends State {
 	public void update(GameContainer gc, int delta) throws SlickException {
 		if (Keyboard.isKeyDown(Input.KEY_ESCAPE))
 			System.exit(0);
+		
+		WIDTH = gc.getWidth();
+		HEIGHT = gc.getHeight();
 		
 		player.update(gc, this, delta);
 		map.update(gc, this, delta);
