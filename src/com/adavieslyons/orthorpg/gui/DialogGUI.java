@@ -35,7 +35,7 @@ public final class DialogGUI extends GUIWindow {
 	static {
 		try {
 			ui = new Image("img/ui/ui.png");
-			dialogFont = new TrueTypeFont(new Font("Arial", Font.PLAIN, 16), true);
+			dialogFont = new TrueTypeFont(new Font("sans-serif", Font.PLAIN, 17), true);
 			dialogTitleFont = new TrueTypeFont(new Font("Arial", Font.BOLD, 36), true);
 		} catch (SlickException e) {
 		}
@@ -84,9 +84,9 @@ public final class DialogGUI extends GUIWindow {
 			int lineN = 0;
 			for (String line : reply.split("\n")) {
 				if (lineN == 0)
-					graphics.drawString(++replyN + ": " + line, 12 + 64 - dialogFont.getWidth(replyN + ": "), y += 18);
+					graphics.drawString(++replyN + ": " + line, 12 + 64 - dialogFont.getWidth(replyN + ": "), y += 22);
 				else
-					graphics.drawString(line, 12 + 64, y += 18);
+					graphics.drawString(line, 12 + 64, y += 22);
 				
 				lineN++;
 			}
@@ -95,7 +95,7 @@ public final class DialogGUI extends GUIWindow {
 					(int) (windowRect.getY() + y - ((lineN - 1) * 18)));
 			replyAreasMouseDown[replyN - 1] = false;
 		}
-		
+		graphics.drawImage(parent.getDialogImage(), BW + 8, BW + 8, BW + 8 + 56, BW + 8 + 120, 0, 0, 32, 64);
 		graphics.copyArea(windowDynamicContent, 0, 0);
 		graphics.clear();
 	}

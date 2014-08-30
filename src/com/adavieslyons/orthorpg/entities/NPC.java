@@ -219,6 +219,6 @@ public class NPC extends MovingPathEntity implements Dialogable {
 	
 	@Override
 	public Image getDialogImage() {
-		return avatar;
+		return texture;
 	}
 }
