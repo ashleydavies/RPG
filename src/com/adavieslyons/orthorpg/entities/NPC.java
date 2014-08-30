@@ -1,5 +1,21 @@
 package com.adavieslyons.orthorpg.entities;
 
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.lwjgl.input.Mouse;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.orthorpg.gui.DialogGUI;
@@ -12,24 +28,6 @@ import com.adavieslyons.util.dialog.DialogNode;
 import com.adavieslyons.util.dialog.DialogReply;
 import com.adavieslyons.util.dialog.Dialogable;
 import com.adavieslyons.util.map.Map;
-import com.adavieslyons.util.map.pathfinding.AStar;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Occurs;
-
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.lwjgl.input.Mouse;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Vector2f;
-import org.w3c.dom.*;
 
 /**
  * 

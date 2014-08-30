@@ -3,6 +3,8 @@ package com.adavieslyons.util.map;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
+import com.adavieslyons.util.Vector2i;
+
 /**
  * 
  * @author Ashley
@@ -28,7 +30,10 @@ public class MapLayer {
 			x = 0;
 			for (MapTileData tile : tileRow) {
 				if (!map.isFogOfWar(x, y))
-					MapTile.getTile(tile.getId()).render(gc, graphics, x * 32, y * 32);
+				{
+					Vector2i renderPosition = map.tileCoordinatesToGameCoordinates(x, y);
+					MapTile.getTile(tile.getId()).render(gc, graphics, renderPosition.getX(), renderPosition.getY());
+				}
 				x++;
 			}
 			y++;

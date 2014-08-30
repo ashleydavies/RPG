@@ -1,15 +1,56 @@
 package com.adavieslyons.orthorpg.entities;
 
-import org.newdawn.slick.*;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
+import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.util.Vector2i;
+import com.adavieslyons.util.map.Map;
 
 /**
  * 
  * @author Ashley
  */
 public abstract class Entity {
+	protected final Map map;
+	protected Image image;
+	private Vector2f renderPosition;
+	
+	public Entity(Map map) {
+		this.map = map;
+		
+		renderPosition = new Vector2f(0, 0);
+	}
+
 	public abstract void update(GameContainer gc, GameState game, int delta) throws SlickException;
 	
-	public abstract void render(GameContainer gc, Graphics graphics) throws SlickException;
+	public void render(GameContainer gc, Graphics graphics) throws SlickException {
+		Vector2i renderCoordinates = map.screenCoordinatesToGameCoordinates(renderPosition);
+		image.draw(renderCoordinates.getX(), renderCoordinates.getY());
+	}
+
+	public Image getImage() {
+		return image;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
+	}
+	
+	public Vector2f getRenderPosition() {
+		return renderPosition;
+	}
+	
+	public void setRenderPosition(Vector2f renderPosition) {
+		this.renderPosition = renderPosition;
+	}
+	
+	public Rectangle getRenderBounds() {
+		return new Rectangle(renderPosition.getX() * Game.TILE_SIZE, renderPosition.getY() * Game.TILE_SIZE, 32, 64);
+	}
 }

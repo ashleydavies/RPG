@@ -47,4 +47,12 @@ public class Vector2i {
 		Vector2i other = (Vector2i) obj;
 		return (other.getX() == getX() && other.getY() == getY());
 	}
+	
+	public Vector2i add(Vector2i other) {
+		return new Vector2i(getX() + other.getX(), getY() + other.getY());
+	}
+
+	public Vector2i subtract(Vector2i other) {
+		return new Vector2i(getX() - other.getX(), getY() - other.getY());
+	}
 }

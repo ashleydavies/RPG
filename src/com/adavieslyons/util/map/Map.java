@@ -2,22 +2,24 @@ package com.adavieslyons.util.map;
 
 import java.util.Arrays;
 
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Vector2f;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.orthorpg.entities.NPC;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.util.SpriteSheet;
 import com.adavieslyons.util.Vector2i;
 import com.adavieslyons.util.XMLParser;
 import com.adavieslyons.util.map.pathfinding.AStar;
-import com.adavieslyons.util.map.pathfinding.CollisionMap;
 import com.adavieslyons.util.map.pathfinding.AStar.Node;
-
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+import com.adavieslyons.util.map.pathfinding.CollisionMap;
 
 /**
  * 
@@ -35,6 +37,8 @@ public class Map {
 	CollisionMap collisionMap;
 	Node[][] nodeMatrix;
 	Image fogOfWarTexture;
+	
+	Vector2i offset = new Vector2i(32, 64);
 	
 	public void update(GameContainer gc, GameState game, int delta) throws SlickException {
 		for (NPC npc : npcs)
@@ -68,11 +72,49 @@ public class Map {
 			for (boolean fogOfWarTile : fogOfWarRow)
 			{
 				if (fogOfWarTile == true)
-					fogOfWarTexture.draw(tX * 32, tY * 32);
+				{
+					Vector2i position = tileCoordinatesToGameCoordinates(tX, tY);
+					fogOfWarTexture.draw(position.getX(), position.getY());
+				}
 				tY++;
 			}
 			tX++;
 		}
+	}
+	
+	// SCREEN => TILE
+	public Vector2i screenCoordinatesToTileCoordinates(int x, int y) {
+		return new Vector2i((int) Math.floor(x / Game.TILE_SIZE), (int) Math.floor(y / Game.TILE_SIZE));
+	}
+	
+	// SCREEN => TILE
+	public Vector2i screenCoordinatesToTileCoordinates(Vector2i coordinates) {
+		return screenCoordinatesToTileCoordinates(coordinates.getX(), coordinates.getY());
+	}
+	
+	// TILE => GAME
+	public Vector2i tileCoordinatesToGameCoordinates(int x, int y) {
+		return new Vector2i(x * Game.TILE_SIZE + offset.getX(), y * Game.TILE_SIZE + offset.getY());
+	}
+	
+	// TILE => GAME
+	public Vector2i tileCoordinatesToGameCoordinates(Vector2i tileCoordinates) {
+		return tileCoordinatesToGameCoordinates(tileCoordinates.getX(), tileCoordinates.getY());
+	}
+	
+	// SCREEN => GAME
+	public Vector2i screenCoordinatesToGameCoordinates(Vector2i screenCoordinates) {
+		return screenCoordinates.add(offset);
+	}
+	
+	// SCREEN => GAME
+	public Vector2i screenCoordinatesToGameCoordinates(Vector2f renderPosition) {
+		return screenCoordinatesToGameCoordinates(new Vector2i((int) renderPosition.getX(), (int) renderPosition.getY()));
+	}
+	
+	// GAME => SCREEN
+	public Vector2i gameCoordinatesToScreenCoordinates(Vector2i gameCoordinates) {
+		return gameCoordinates.subtract(offset);
 	}
 	
 	public void load(GameContainer gc, GameState game) throws SlickException {
@@ -145,7 +187,7 @@ public class Map {
 			npcs[i] = npc;
 		}
 		
-		fogOfWarTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 0, 32, 32);
+		fogOfWarTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 0, Game.TILE_SIZE, Game.TILE_SIZE);
 		fogOfWar = new boolean[getWidth()][getHeight()];
 		for (boolean row[] : fogOfWar)
 			Arrays.fill(row, true);
