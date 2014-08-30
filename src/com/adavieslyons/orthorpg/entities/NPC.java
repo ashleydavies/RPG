@@ -13,6 +13,7 @@ import com.adavieslyons.util.dialog.DialogReply;
 import com.adavieslyons.util.dialog.Dialogable;
 import com.adavieslyons.util.map.Map;
 import com.adavieslyons.util.map.pathfinding.AStar;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Occurs;
 
 import java.io.IOException;
 import java.util.Enumeration;
@@ -186,7 +187,7 @@ public class NPC extends MovingPathEntity implements Dialogable {
 	
 	public void render(GameContainer gc, Graphics graphics) throws SlickException {
 		graphics.drawImage(texture, (int) (getRenderPosition().getX() * Game.TILE_SIZE), (int) (getRenderPosition().getY() * Game.TILE_SIZE - 32));
-				
+		
 		if (dialogShowing)
 			dGUI.render(gc, graphics);
 	}

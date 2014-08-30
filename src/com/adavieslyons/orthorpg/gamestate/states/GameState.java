@@ -55,6 +55,7 @@ public class GameState extends State {
 	public void render(GameContainer gc, Graphics graphics) throws SlickException {
 		map.render(gc, graphics);
 		player.render(gc, graphics);
+		map.renderPostEntities(gc, graphics);
 		//inventoryGUI.render(gc, graphics);
 	}
 	

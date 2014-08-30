@@ -1,7 +1,10 @@
 package com.adavieslyons.util.map;
 
+import java.util.Arrays;
+
 import com.adavieslyons.orthorpg.entities.NPC;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.util.SpriteSheet;
 import com.adavieslyons.util.Vector2i;
 import com.adavieslyons.util.XMLParser;
 import com.adavieslyons.util.map.pathfinding.AStar;
@@ -10,6 +13,7 @@ import com.adavieslyons.util.map.pathfinding.AStar.Node;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -26,9 +30,11 @@ public class Map {
 	int width;
 	int height;
 	MapLayer layers[];
+	boolean fogOfWar[][];
 	NPC npcs[];
 	CollisionMap collisionMap;
 	Node[][] nodeMatrix;
+	Image fogOfWarTexture;
 	
 	public void update(GameContainer gc, GameState game, int delta) throws SlickException {
 		for (NPC npc : npcs)
@@ -52,6 +58,21 @@ public class Map {
 		
 		for (NPC npc : npcs)
 			npc.render(gc, graphics);
+	}
+	
+	public void renderPostEntities(GameContainer gc, Graphics graphics) throws SlickException {
+		int tX = 0;
+		for (boolean fogOfWarRow[] : fogOfWar)
+		{
+			int tY = 0;
+			for (boolean fogOfWarTile : fogOfWarRow)
+			{
+				if (fogOfWarTile == true)
+					fogOfWarTexture.draw(tX * 32, tY * 32);
+				tY++;
+			}
+			tX++;
+		}
 	}
 	
 	public void load(GameContainer gc, GameState game) throws SlickException {
@@ -87,7 +108,7 @@ public class Map {
 				}
 			}
 			
-			layers[i] = new MapLayer(i_layerTiles);
+			layers[i] = new MapLayer(i_layerTiles, this);
 		}
 		
 		Element npcRoot = (Element) info.getElementsByTagName("NPCs").item(0);
@@ -124,6 +145,10 @@ public class Map {
 			npcs[i] = npc;
 		}
 		
+		fogOfWarTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 0, 32, 32);
+		fogOfWar = new boolean[getWidth()][getHeight()];
+		for (boolean row[] : fogOfWar)
+			Arrays.fill(row, true);
 		collisionMap = new CollisionMap(this);
 		nodeMatrix = AStar.getNodeMatrix(collisionMap);
 	}
@@ -138,5 +163,13 @@ public class Map {
 	
 	public int getHeight() {
 		return height;
+	}
+	
+	public boolean isFogOfWar(int tX, int tY) {
+		return fogOfWar[tX][tY];
+	}
+
+	public void revealCoordinate(int tX, int tY) {
+		fogOfWar[tX][tY] = false;
 	}
 }

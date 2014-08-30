@@ -9,9 +9,11 @@ import org.newdawn.slick.Graphics;
  */
 public class MapLayer {
 	MapTileData tiles[][];
+	Map map;
 	
-	public MapLayer(MapTileData Tiles[][]) {
-		tiles = Tiles;
+	public MapLayer(MapTileData tiles[][], Map map) {
+		this.map = map;
+		this.tiles = tiles;
 	}
 	
 	public boolean getCollideable(int y, int x) {
@@ -25,7 +27,8 @@ public class MapLayer {
 		for (MapTileData[] tileRow : tiles) {
 			x = 0;
 			for (MapTileData tile : tileRow) {
-				MapTile.getTile(tile.getId()).render(gc, graphics, x * 32, y * 32);
+				if (!map.isFogOfWar(x, y))
+					MapTile.getTile(tile.getId()).render(gc, graphics, x * 32, y * 32);
 				x++;
 			}
 			y++;

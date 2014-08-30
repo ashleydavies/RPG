@@ -12,7 +12,7 @@
             <texture id="0">
                 <spritesheet>0</spritesheet>
                 <xPos>0</xPos>
-                <yPos>0</yPos>
+                <yPos>32</yPos>
             </texture>
         </tile>
         <tile id="1">
