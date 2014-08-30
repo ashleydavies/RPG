@@ -245,9 +245,7 @@ public class NPC implements Dialogable {
 	}
 	
 	public boolean mouseOverThis(GameState game) {
-		Rectangle rBounds = getRenderBounds(); // Used over actual bounds for a
-												// bit more seamless player
-												// interaction
+		Rectangle rBounds = getRenderBounds();
 		
 		int mouseX = game.getInput().getMouseX();
 		int mouseY = game.getInput().getMouseY();

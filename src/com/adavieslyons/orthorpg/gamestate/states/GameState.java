@@ -9,15 +9,17 @@ import org.newdawn.slick.SlickException;
 import com.adavieslyons.orthorpg.entities.Player;
 import com.adavieslyons.orthorpg.gamestate.GameStateManager;
 import com.adavieslyons.orthorpg.gamestate.State;
+import com.adavieslyons.orthorpg.gui.InventoryGUI;
 import com.adavieslyons.util.SaveData;
 import com.adavieslyons.util.map.Map;
 
 public class GameState extends State {
 	Map map;
 	private Input input;
-	Player player;
+	private Player player;
 	private SaveData currentGameData;
-	
+	private InventoryGUI inventoryGUI;
+
 	public GameState(GameStateManager gsm) {
 		super(gsm);
 		
@@ -32,6 +34,7 @@ public class GameState extends State {
 		map = new Map();
 		map.load(gc, this);
 		player = new Player(gc, this, map);
+		inventoryGUI = new InventoryGUI(gc, this);
 	}
 	
 	@Override
@@ -46,12 +49,14 @@ public class GameState extends State {
 		
 		player.update(gc, this, delta);
 		map.update(gc, this, delta);
+		inventoryGUI.update(gc, this, delta);
 	}
 	
 	@Override
 	public void render(GameContainer gc, Graphics graphics) throws SlickException {
 		map.render(gc, graphics);
 		player.render(gc, graphics);
+		inventoryGUI.render(gc, graphics);
 	}
 	
 	/**
@@ -66,5 +71,13 @@ public class GameState extends State {
 	 */
 	public Input getInput() {
 		return input;
+	}
+	
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 }

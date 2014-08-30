@@ -15,6 +15,12 @@ public class Game extends BasicGame {
 	GameStateManager gsm;
 	
 	public static void main(String[] args) throws SlickException {
+		try {
+			Thread.sleep(15000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		AppGameContainer app = new AppGameContainer(new Game());
 		app.setDisplayMode(1200, 800, false);
 		// app.setTargetFrameRate(100);

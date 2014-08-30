@@ -19,9 +19,8 @@ import com.adavieslyons.util.map.pathfinding.AStar;
  * @author Ashley
  */
 public class Player extends Entity {
-	Image image;
-	InventoryGUI inventoryGUI;
-	
+	Image avatar;
+
 	private Vector2i previousPosition;
 	private Vector2i occupiedPosition;
 	private Vector2f renderPosition;
@@ -36,8 +35,7 @@ public class Player extends Entity {
 		occupiedPosition = new Vector2i(0, 0);
 		desiredPosition = new Vector2i(0, 0);
 		renderPosition = new Vector2f(0, 0);
-		image = new Image("img/player.png");
-		inventoryGUI = new InventoryGUI(gc, game);
+		avatar = new Image("img/player.png");
 		this.map = map;
 	}
 	
@@ -68,14 +66,11 @@ public class Player extends Entity {
 		
 		if (!moving && desiredPosition != occupiedPosition)
 			pathfind(desiredPosition.getX(), desiredPosition.getY());
-		
-		inventoryGUI.update(gc, game, delta);
 	}
 	
 	@Override
 	public void render(GameContainer gc, Graphics graphics) throws SlickException {
-		graphics.drawImage(image, (int) (renderPosition.getX() * Game.TILE_SIZE), (int) (renderPosition.getY() * Game.TILE_SIZE - 32));
-		inventoryGUI.render(gc, graphics);
+		graphics.drawImage(avatar, (int) (renderPosition.getX() * Game.TILE_SIZE), (int) (renderPosition.getY() * Game.TILE_SIZE - 32));
 	}
 	
 	public void pathfind(int tileX, int tileY) {
@@ -121,5 +116,9 @@ public class Player extends Entity {
 
 	public void setDesiredPosition(Vector2i desiredPosition) {
 		this.desiredPosition = desiredPosition;
+	}
+
+	public Image getAvatar() {
+		return avatar;
 	}
 }
