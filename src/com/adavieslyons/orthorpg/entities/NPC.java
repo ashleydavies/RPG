@@ -16,7 +16,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.orthorpg.gui.DialogGUI;
 import com.adavieslyons.util.SpriteSheet;
@@ -40,7 +39,6 @@ public class NPC extends MovingPathEntity implements Dialogable {
 	DialogGUI dGUI;
 	private String name;
 	private Image avatar;
-	private Image texture;
 	private boolean dialogShowing = false;
 	
 	static {
@@ -69,7 +67,7 @@ public class NPC extends MovingPathEntity implements Dialogable {
 		int spriteSheet = Integer.parseInt(textureElem.getElementsByTagName("spritesheet").item(0).getTextContent());
 		int xPos = Integer.parseInt(textureElem.getElementsByTagName("xPos").item(0).getTextContent());
 		int yPos = Integer.parseInt(textureElem.getElementsByTagName("yPos").item(0).getTextContent());
-		texture = SpriteSheet.getSpriteSheet(spriteSheet).getSubImage(xPos, yPos, 32, 64);
+		image = SpriteSheet.getSpriteSheet(spriteSheet).getSubImage(xPos, yPos, 32, 64);
 
 		Element dialogRoot = (Element) info.getElementsByTagName("dialog").item(0);
 		NodeList dialogNodes = dialogRoot.getElementsByTagName("node");
@@ -184,7 +182,7 @@ public class NPC extends MovingPathEntity implements Dialogable {
 	}
 	
 	public void render(GameContainer gc, Graphics graphics) throws SlickException {
-		graphics.drawImage(texture, (int) (getRenderPosition().getX() * Game.TILE_SIZE), (int) (getRenderPosition().getY() * Game.TILE_SIZE - 32));
+		super.render(gc, graphics);
 		
 		if (dialogShowing)
 			dGUI.render(gc, graphics);
@@ -218,6 +216,6 @@ public class NPC extends MovingPathEntity implements Dialogable {
 	
 	@Override
 	public Image getDialogImage() {
-		return texture;
+		return avatar;
 	}
 }

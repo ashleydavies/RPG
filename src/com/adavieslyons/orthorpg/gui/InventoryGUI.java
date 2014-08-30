@@ -37,7 +37,7 @@ public class InventoryGUI extends GUIWindow {
 			for (int x = 0; x < 2; x++)
 				graphics.drawImage(itemSlot, windowRect.getWidth() - BW * 2 - 18 - 49 * x - 38, BW + 18 + y * 49);
 		
-		graphics.drawImage(game.getPlayer().getAvatar(), 130, 80, 260, 300, 0, 0, game.getPlayer().getAvatar().getWidth(), game.getPlayer().getAvatar().getHeight(), Color.white);
+		graphics.drawImage(game.getPlayer().getImage(), 130, 80, 260, 300, 0, 0, game.getPlayer().getImage().getWidth(), game.getPlayer().getImage().getHeight(), Color.white);
 		graphics.copyArea(windowDynamicContent, 0, 0);
 		graphics.clear();
 	}

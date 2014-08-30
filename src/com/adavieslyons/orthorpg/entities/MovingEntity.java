@@ -24,7 +24,6 @@ public abstract class MovingEntity extends Entity {
 		occupiedPosition = new Vector2i(0, 0);
 		desiredPosition = new Vector2i(0, 0);
 	}
-
 	
 	private void pathfind(int tileX, int tileY) {
 		if (tileX == occupiedPosition.getX() && tileY == occupiedPosition.getY())
@@ -46,6 +45,10 @@ public abstract class MovingEntity extends Entity {
 				pathfind(tX, tY);
 				desiredPosition = new Vector2i(tX, tY);
 			}
+	}
+	
+	public void moveToTarget(Vector2i target) {
+		moveToTarget(target.getX(), target.getY());
 	}
 	
 	protected void updateMove(int delta) {

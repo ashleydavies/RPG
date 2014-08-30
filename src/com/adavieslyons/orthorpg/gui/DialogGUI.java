@@ -95,7 +95,7 @@ public final class DialogGUI extends GUIWindow {
 					(int) (windowRect.getY() + y - ((lineN - 1) * 18)));
 			replyAreasMouseDown[replyN - 1] = false;
 		}
-		graphics.drawImage(parent.getDialogImage(), BW + 8, BW + 8, BW + 8 + 56, BW + 8 + 120, 0, 0, 32, 64);
+		graphics.drawImage(parent.getDialogImage(), BW + 8, BW + 8, BW + 8 + 56, BW + 8 + 120, 0, 0, 64, 128);
 		graphics.copyArea(windowDynamicContent, 0, 0);
 		graphics.clear();
 	}

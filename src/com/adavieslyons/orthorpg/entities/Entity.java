@@ -30,14 +30,15 @@ public abstract class Entity {
 	public abstract void update(GameContainer gc, GameState game, int delta) throws SlickException;
 	
 	public void render(GameContainer gc, Graphics graphics) throws SlickException {
-		Vector2i renderCoordinates = map.screenCoordinatesToGameCoordinates(renderPosition);
-		image.draw(renderCoordinates.getX(), renderCoordinates.getY());
+		Vector2f renderCoordinatesF = new Vector2f(renderPosition.getX() * Game.TILE_SIZE, renderPosition.getY() * Game.TILE_SIZE);
+		Vector2i renderCoordinates = map.screenCoordinatesToGameCoordinates(renderCoordinatesF);
+		graphics.drawImage(image, renderCoordinates.getX(), renderCoordinates.getY() - Game.TILE_SIZE);
 	}
-
+	
 	public Image getImage() {
 		return image;
 	}
-
+	
 	public void setImage(Image image) {
 		this.image = image;
 	}

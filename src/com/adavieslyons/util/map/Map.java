@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Vector2f;
 import org.w3c.dom.Document;
@@ -38,11 +39,32 @@ public class Map {
 	Node[][] nodeMatrix;
 	Image fogOfWarTexture;
 	
-	Vector2i offset = new Vector2i(32, 64);
+	Vector2i offset = new Vector2i(128, 128);
 	
 	public void update(GameContainer gc, GameState game, int delta) throws SlickException {
 		for (NPC npc : npcs)
 			npc.update(gc, game, delta);
+		
+		// Move with arrow keys
+		if (game.getInput().isKeyDown(Input.KEY_LEFT))
+			addOffset(1, 0);
+		if (game.getInput().isKeyDown(Input.KEY_RIGHT))
+			addOffset(-1, 0);
+		
+		if (game.getInput().isKeyDown(Input.KEY_UP))
+			addOffset(0, 1);
+		if (game.getInput().isKeyDown(Input.KEY_DOWN))
+			addOffset(0, -1);
+	}
+	
+	public void addOffset(int x, int y)
+	{
+		addOffset(new Vector2i(x, y));
+	}
+	
+	public void addOffset(Vector2i offset)
+	{
+		setOffset(this.offset.add(offset));
 	}
 	
 	public boolean getCollideable(int x, int y) {
@@ -84,7 +106,9 @@ public class Map {
 	
 	// SCREEN => TILE
 	public Vector2i screenCoordinatesToTileCoordinates(int x, int y) {
-		return new Vector2i((int) Math.floor(x / Game.TILE_SIZE), (int) Math.floor(y / Game.TILE_SIZE));
+		return new Vector2i(
+				(int) Math.floor((x - offset.getX()) / Game.TILE_SIZE),
+				(int) Math.floor((y - offset.getY()) / Game.TILE_SIZE));
 	}
 	
 	// SCREEN => TILE
@@ -213,5 +237,24 @@ public class Map {
 
 	public void revealCoordinate(int tX, int tY) {
 		fogOfWar[tX][tY] = false;
+	}
+	
+	public Vector2i getOffset() {
+		return offset;
+	}
+
+	public void setOffset(Vector2i offset) {
+		if (offset.getX() < -150)
+			offset.setX(-150);
+		if (offset.getY() < -150)
+			offset.setY(-150);
+		
+		if (offset.getX() > width * Game.TILE_SIZE + 150)
+			offset.setX(width * Game.TILE_SIZE + 150);
+
+		if (offset.getY() > height * Game.TILE_SIZE + 150)
+			offset.setY(height * Game.TILE_SIZE + 150);
+		
+		this.offset = offset;
 	}
 }
