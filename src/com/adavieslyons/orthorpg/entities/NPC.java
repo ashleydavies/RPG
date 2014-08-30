@@ -34,26 +34,15 @@ import org.w3c.dom.*;
  * 
  * @author Ashley
  */
-public class NPC implements Dialogable {
+public class NPC extends MovingPathEntity implements Dialogable {
 	static final Properties NPCSubstitution;
 	
 	Document info;
 	DialogGUI dGUI;
-	private final Map map;
 	private String name;
 	private Image avatar;
 	private Image texture;
 	private boolean dialogShowing = false;
-	
-	private boolean followPath = false;
-	private int currentPathPosition = 0;
-	private Vector2i path[];
-	private Vector2i previousPosition;
-	private Vector2i occupiedPosition;
-	private Vector2f renderPosition;
-	private boolean moving = false;
-	float tileMoveTimer = 1;
-	float tileMoveCurrently = 0;
 	
 	static {
 		NPCSubstitution = new Properties();
@@ -65,17 +54,9 @@ public class NPC implements Dialogable {
 	}
 	
 	public NPC(GameContainer gc, GameState game, int npcID, Map map, Vector2i path[]) throws SlickException {
-		this.map = map;
+		super(map);
 		
-		previousPosition = new Vector2i(0, 0);
-		occupiedPosition = new Vector2i(0, 0);
-		renderPosition = new Vector2f(0, 0);
-		
-		if (path != null)
-		{
-			this.path = path;
-			this.followPath = true;
-		}
+		setPath(path);
 		
 		loadDataFromXML(gc, npcID, game);
 	}
@@ -199,46 +180,12 @@ public class NPC implements Dialogable {
 			dialogShowing = true;
 		}
 		
-		if (moving) {
-			tileMoveCurrently += ((float) delta / 250);
-			renderPosition = previousPosition.lerpTo(occupiedPosition, tileMoveCurrently);
-			
-			if (tileMoveCurrently >= 1) {
-				tileMoveCurrently = 0;
-				moving = false;
-				renderPosition = new Vector2f(occupiedPosition.getX(), occupiedPosition.getY());
-			}
-		}
-		
-		if (followPath && !moving)
-		{
-			if (occupiedPosition.equals(path[currentPathPosition]))
-			{
-				currentPathPosition++;
-				
-				if (currentPathPosition >= path.length)
-					currentPathPosition = 0;
-			}
-			
-			pathfind(path[currentPathPosition].getX(), path[currentPathPosition].getY());
-		}
-	}
-	
-	public void pathfind(int tileX, int tileY) {
-		if (tileX == occupiedPosition.getX() && tileY == occupiedPosition.getY())
-			return;
-		
-		List<AStar.Node> path = AStar.path(map.getNodeMatrix()[occupiedPosition.getY()][occupiedPosition.getX()], map.getNodeMatrix()[tileY][tileX]);
-		
-		if (!path.isEmpty()) {
-			previousPosition = occupiedPosition;
-			occupiedPosition = new Vector2i(path.get(0).getX(), path.get(0).getY());
-			moving = true;
-		}
+		updateMove(delta);
+		updatePath();
 	}
 	
 	public void render(GameContainer gc, Graphics graphics) throws SlickException {
-		graphics.drawImage(texture, (int) (renderPosition.getX() * Game.TILE_SIZE), (int) (renderPosition.getY() * Game.TILE_SIZE - 32));
+		graphics.drawImage(texture, (int) (getRenderPosition().getX() * Game.TILE_SIZE), (int) (getRenderPosition().getY() * Game.TILE_SIZE - 32));
 				
 		if (dialogShowing)
 			dGUI.render(gc, graphics);
@@ -258,34 +205,6 @@ public class NPC implements Dialogable {
 	
 	public Image getAvatar() {
 		return avatar;
-	}
-	
-	public Vector2f getRenderPosition() {
-		return renderPosition;
-	}
-	
-	public void setRenderPosition(Vector2f renderPosition) {
-		this.renderPosition = renderPosition;
-	}
-	
-	public Vector2i getOccupiedPosition() {
-		return occupiedPosition;
-	}
-	
-	public void setOccupiedPosition(Vector2i occupiedPosition) {
-		this.occupiedPosition = occupiedPosition;
-	}
-	
-	public Vector2i getPreviousPosition() {
-		return previousPosition;
-	}
-	
-	public void setPreviousPosition(Vector2i previousPosition) {
-		this.previousPosition = previousPosition;
-	}
-	
-	public Rectangle getRenderBounds() {
-		return new Rectangle(renderPosition.getX() * Game.TILE_SIZE, renderPosition.getY() * Game.TILE_SIZE, 32, 64);
 	}
 	
 	@Override

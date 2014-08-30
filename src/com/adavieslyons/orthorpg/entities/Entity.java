@@ -8,12 +8,8 @@ import com.adavieslyons.orthorpg.gamestate.states.GameState;
  * 
  * @author Ashley
  */
-public class Entity {
-	public void update(GameContainer gc, GameState game, int delta) throws SlickException {
-		
-	}
+public abstract class Entity {
+	public abstract void update(GameContainer gc, GameState game, int delta) throws SlickException;
 	
-	public void render(GameContainer gc, Graphics graphics) throws SlickException {
-		
-	}
+	public abstract void render(GameContainer gc, Graphics graphics) throws SlickException;
 }

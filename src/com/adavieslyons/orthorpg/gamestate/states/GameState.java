@@ -22,7 +22,6 @@ public class GameState extends State {
 
 	public GameState(GameStateManager gsm) {
 		super(gsm);
-		
 	}
 	
 	@Override
@@ -56,7 +55,7 @@ public class GameState extends State {
 	public void render(GameContainer gc, Graphics graphics) throws SlickException {
 		map.render(gc, graphics);
 		player.render(gc, graphics);
-		inventoryGUI.render(gc, graphics);
+		//inventoryGUI.render(gc, graphics);
 	}
 	
 	/**
