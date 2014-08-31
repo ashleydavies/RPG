@@ -9,7 +9,7 @@ public class ItemStack {
 		this.quantity = quantity;
 	}
 	
-	public Item getItem(int id) {
+	public Item getItem() {
 		return Item.getItem(id);
 	}
 	

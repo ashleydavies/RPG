@@ -6,7 +6,10 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import com.adavieslyons.orthorpg.entities.Player;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.util.inventory.Item;
+import com.adavieslyons.util.inventory.ItemStack;
 
 public class InventoryGUI extends GUIWindow {
 	GameState game;
@@ -14,7 +17,6 @@ public class InventoryGUI extends GUIWindow {
 	public InventoryGUI(GameContainer gc, GameState game) throws SlickException {
 		super(gc, game, 504, 624);
 		this.game = game;
-		
 		renderPrimaryContent(gc);
 	}
 	
@@ -47,8 +49,28 @@ public class InventoryGUI extends GUIWindow {
 		graphics.drawImage(windowBg, windowRect.getX(), windowRect.getY());
 		graphics.drawImage(windowDynamicContent, windowRect.getX(), windowRect.getY());
 		
-		// TODO: Change default content rendering to allow some sort of flexibility, i.e. enum with values like TextBased or NoContent
-		//graphics.drawImage(windowDefaultContent, windowRect.getX(), windowRect.getY()); We don't need the default content in this one
+		// Render player items (this'll be a PITA)
+		float itemOriginX = windowRect.getX() + windowRect.getWidth() / 2 - (48 * 9 + 9) / 2 + 8;
+		float itemOriginY = windowRect.getY() + windowRect.getHeight() - 147 - BW - 18 + 8;
+		
+		ItemStack items[] = game.getPlayer().getItems();
+		int iX = 0;
+		int iY = 0;
+		for (ItemStack itemStack : items) {
+			if (itemStack != null) {
+				float rX = itemOriginX + iX * 49;
+				float rY = itemOriginY + iY * 49;
+				
+				Image itemImage = itemStack.getItem().getImage();
+				graphics.drawImage(itemImage, rX, rY);
+			}
+			
+			iX++;
+			if (iX == 9) {
+				iX = 0;
+				iY++;
+			}
+		}
 	}
 	
 	@Override

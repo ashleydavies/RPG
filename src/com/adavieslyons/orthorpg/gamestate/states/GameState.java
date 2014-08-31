@@ -17,6 +17,7 @@ import com.adavieslyons.util.map.Map;
 public class GameState extends State {
 	Map map;
 	private Input input;
+	private Input previousInput;
 	private Player player;
 	private SaveData currentGameData;
 	private InventoryGUI inventoryGUI;
@@ -24,8 +25,17 @@ public class GameState extends State {
 	public int WIDTH;
 	public int HEIGHT;
 	
+	private enum InnerState {
+		PLAYING,
+		INVENTORY
+	}
+	
+	private InnerState state;
+	
 	public GameState(GameStateManager gsm) {
 		super(gsm);
+		
+		state = InnerState.PLAYING;
 	}
 	
 	@Override
@@ -34,6 +44,7 @@ public class GameState extends State {
 		currentGameData.setIntSaveData(0, 50);
 		
 		input = new Input(gc.getHeight());
+		previousInput = new Input(gc.getHeight());
 		map = new Map();
 		map.load(gc, this);
 		player = new Player(gc, this, map);
@@ -49,15 +60,30 @@ public class GameState extends State {
 	
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException {
-		if (Keyboard.isKeyDown(Input.KEY_ESCAPE))
-			System.exit(0);
-		
-		WIDTH = gc.getWidth();
-		HEIGHT = gc.getHeight();
-		
-		player.update(gc, this, delta);
-		map.update(gc, this, delta);
-		inventoryGUI.update(gc, this, delta);
+		switch (state) {
+		case PLAYING:
+			if (Keyboard.isKeyDown(Input.KEY_ESCAPE))
+				System.exit(0);
+			
+			if (Keyboard.isKeyDown(Input.KEY_E))
+			{
+				state = InnerState.INVENTORY;
+				break;
+			}
+			
+			WIDTH = gc.getWidth();
+			HEIGHT = gc.getHeight();
+			
+			player.update(gc, this, delta);
+			map.update(gc, this, delta);
+			break;
+		case INVENTORY:
+			
+			
+			inventoryGUI.update(gc, this, delta);
+		default:
+			break;
+		}
 	}
 	
 	@Override
@@ -65,21 +91,21 @@ public class GameState extends State {
 		map.render(gc, graphics);
 		player.render(gc, graphics);
 		map.renderPostEntities(gc, graphics);
-		//inventoryGUI.render(gc, graphics);
+		
+		if (state == InnerState.INVENTORY)
+			inventoryGUI.render(gc, graphics);
 	}
 	
-	/**
-	 * @return the currentGameData
-	 */
 	public SaveData getCurrentGameData() {
 		return currentGameData;
 	}
 	
-	/**
-	 * @return the input
-	 */
 	public Input getInput() {
 		return input;
+	}
+	
+	public Input getPreviousInput() {
+		return previousInput;
 	}
 	
 	public Player getPlayer() {
