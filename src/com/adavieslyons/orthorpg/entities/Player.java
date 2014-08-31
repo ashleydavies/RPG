@@ -1,7 +1,10 @@
 package com.adavieslyons.orthorpg.entities;
 
-import org.newdawn.slick.*;
-import com.adavieslyons.orthorpg.Game;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.util.map.Map;
 

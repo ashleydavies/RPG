@@ -246,16 +246,16 @@ public class Map {
 	}
 
 	public void setOffset(Vector2i offset) {
-		if (offset.getX() < 50)
-			offset.setX(50);
-		if (offset.getY() < 50)
-			offset.setY(50);
+		if (offset.getX() > 150)
+			offset.setX(150);
+		if (offset.getY() > 150)
+			offset.setY(150);
 		
-		if (width * Game.TILE_SIZE + offset.getX() < game.WIDTH - 50)
-			offset.setX(game.WIDTH - 50 - width * Game.TILE_SIZE);
+		if (width * Game.TILE_SIZE + offset.getX() < game.WIDTH - 150)
+			offset.setX(game.WIDTH - 150 - width * Game.TILE_SIZE);
 
-		if (offset.getY() > height * Game.TILE_SIZE + 50)
-			offset.setY(height * Game.TILE_SIZE + 50);
+		if (height * Game.TILE_SIZE + offset.getY() < game.HEIGHT - 150)
+			offset.setY(game.HEIGHT - 150 - height * Game.TILE_SIZE);
 		
 		this.offset = offset;
 	}

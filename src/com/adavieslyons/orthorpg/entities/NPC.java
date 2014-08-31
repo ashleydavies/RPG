@@ -25,14 +25,14 @@ import com.adavieslyons.util.dialog.DialogAction;
 import com.adavieslyons.util.dialog.DialogCondition;
 import com.adavieslyons.util.dialog.DialogNode;
 import com.adavieslyons.util.dialog.DialogReply;
-import com.adavieslyons.util.dialog.Dialogable;
+import com.adavieslyons.util.dialog.IDialogable;
 import com.adavieslyons.util.map.Map;
 
 /**
  * 
  * @author Ashley
  */
-public class NPC extends MovingPathEntity implements Dialogable {
+public class NPC extends MovingPathEntity implements IDialogable {
 	static final Properties NPCSubstitution;
 	
 	Document info;

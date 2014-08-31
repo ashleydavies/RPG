@@ -16,7 +16,7 @@ import com.adavieslyons.util.SaveData;
 import com.adavieslyons.util.dialog.DialogAction;
 import com.adavieslyons.util.dialog.DialogNode;
 import com.adavieslyons.util.dialog.DialogReply;
-import com.adavieslyons.util.dialog.Dialogable;
+import com.adavieslyons.util.dialog.IDialogable;
 
 /**
  * 
@@ -30,7 +30,7 @@ public final class DialogGUI extends GUIWindow {
 	private MouseOverArea[] replyAreas;
 	private DialogNode[] dialog;
 	private int currentDialog;
-	private Dialogable parent;
+	private IDialogable parent;
 	
 	static {
 		try {
@@ -41,7 +41,7 @@ public final class DialogGUI extends GUIWindow {
 		}
 	}
 	
-	public DialogGUI(GameContainer gc, GameState game, DialogNode[] dialog, Dialogable parent) throws SlickException {
+	public DialogGUI(GameContainer gc, GameState game, DialogNode[] dialog, IDialogable parent) throws SlickException {
 		super(gc, game, 504, 624);
 		
 		String content = dialog[0].getPrompt();

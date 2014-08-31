@@ -2,8 +2,10 @@ package com.adavieslyons.orthorpg;
 
 import org.newdawn.slick.*;
 
+import com.adavieslyons.orthorpg.entities.NPC;
 import com.adavieslyons.orthorpg.gamestate.GameStateManager;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.util.dialog.IDialogable;
 
 /**
  * 
@@ -16,7 +18,7 @@ public class Game extends BasicGame {
 	
 	public static void main(String[] args) throws SlickException {
 		AppGameContainer app = new AppGameContainer(new Game());
-		app.setDisplayMode(1200, 800, false);
+		app.setDisplayMode(800, 600, false);
 		// app.setTargetFrameRate(100);
 		app.start();
 	}
