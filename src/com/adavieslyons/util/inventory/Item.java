@@ -51,4 +51,20 @@ public class Item {
 		this.type = type;
 		this.image = image;
 	}
+	
+	public int getID() {
+		return id;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public Image getImage() {
+		return image;
+	}
+	
+	public ItemType getType() {
+		return type;
+	}
 }
