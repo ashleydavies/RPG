@@ -11,6 +11,7 @@ import com.adavieslyons.orthorpg.gamestate.GameStateManager;
 import com.adavieslyons.orthorpg.gamestate.State;
 import com.adavieslyons.orthorpg.gui.InventoryGUI;
 import com.adavieslyons.util.SaveData;
+import com.adavieslyons.util.inventory.Item;
 import com.adavieslyons.util.map.Map;
 
 public class GameState extends State {
@@ -37,6 +38,8 @@ public class GameState extends State {
 		map.load(gc, this);
 		player = new Player(gc, this, map);
 		inventoryGUI = new InventoryGUI(gc, this);
+
+		Item.LoadItems(this);
 	}
 	
 	@Override

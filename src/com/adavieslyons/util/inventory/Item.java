@@ -7,37 +7,63 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.util.SpriteSheet;
 import com.adavieslyons.util.XMLParser;
 
 public class Item {
-	private int id;
-	private String name;
-	private ItemType type;
-	private Image image;
+	private final int id;
+	private final String name;
+	private final String description;
+	private final ItemType type;
+	private final Image image;
+	private final Modifier[] modifiers;
 	
 	private static ArrayList<Item> items;
 	
-	static {
+	public static void LoadItems(GameState game) {
 		// Load item data from the XML file
-		Document document = XMLParser.instance.parseXML(Item.class.getClassLoader().getResourceAsStream("xml/itemData.xml"));
-		// TODO: Finish loading
 		items = new ArrayList<Item>();
-		
+
+		Document document = XMLParser.instance.parseXML(Item.class.getClassLoader().getResourceAsStream("data/xml/itemData.xml"));
 		NodeList itemNodes = document.getElementsByTagName("item");
-		for (int i = 0; i < itemNodes.getLength(); i++)
-		{
+		
+		for (int i = 0; i < itemNodes.getLength(); i++)	{
 			Element i_itemNode = (Element) itemNodes.item(i);
 			String name = i_itemNode.getAttribute("name");
 			ItemType type = ItemType.valueOf(i_itemNode.getAttribute("type").toUpperCase());
 			
-			Element textureElem = (Element) i_itemNode.getElementsByTagName("texture");
-			int spriteSheet = Integer.parseInt(textureElem.getElementsByTagName("spritesheet").item(0).getTextContent());
-			int xPos = Integer.parseInt(textureElem.getElementsByTagName("xPos").item(0).getTextContent());
-			int yPos = Integer.parseInt(textureElem.getElementsByTagName("yPos").item(0).getTextContent());
-			Image image = SpriteSheet.getSpriteSheet(spriteSheet).getSubImage(xPos, yPos, 32, 64);
+			// Description
+			String description = "";
+			if (i_itemNode.getElementsByTagName("description").getLength() > 0)
+				description = i_itemNode.getElementsByTagName("description").item(0).getTextContent();
 			
-			Item item = new Item(i, name, type, image);
+			// Image
+			Element textureElem = (Element) i_itemNode.getElementsByTagName("texture").item(0);
+			int spriteSheet = Integer.parseInt(textureElem.getAttribute("spritesheet"));
+			int xPos = Integer.parseInt(textureElem.getAttribute("xPos"));
+			int yPos = Integer.parseInt(textureElem.getAttribute("yPos"));
+			Image image = SpriteSheet.getSpriteSheet(spriteSheet).getSubImage(xPos, yPos, 32, 32);
+			
+			// Modifiers
+			Modifier modifiers[] = null;
+			if (i_itemNode.getElementsByTagName("modifiers").getLength() > 0) {
+				NodeList modifierNodes = (NodeList) ((Element) i_itemNode.getElementsByTagName("modifiers").item(0)).getElementsByTagName("modifier");
+				
+				modifiers = new Modifier[modifierNodes.getLength()];
+				
+				for (int m = 0; m < modifierNodes.getLength(); m++)
+				{
+					Element modifierNode = (Element) modifierNodes.item(m);
+					int index = Integer.parseInt(modifierNode.getAttribute("index"));
+					int value = Integer.parseInt(modifierNode.getAttribute("value"));
+					
+					modifiers[m] = new Modifier(game, index, value);
+				}
+			}
+			
+			Item item = new Item(i, name, description, type, image, modifiers);
+			items.add(item);
 		}
 	}
 	
@@ -45,11 +71,13 @@ public class Item {
 		return items.get(id);
 	}
 	
-	public Item(int id, String name, ItemType type, Image image) {
+	public Item(int id, String name, String description, ItemType type, Image image, Modifier modifiers[]) {
 		this.id = id;
 		this.name = name;
+		this.description = description;
 		this.type = type;
 		this.image = image;
+		this.modifiers = modifiers;
 	}
 	
 	public int getID() {
@@ -58,6 +86,10 @@ public class Item {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public String getDescription() {
+		return description;
 	}
 	
 	public Image getImage() {
