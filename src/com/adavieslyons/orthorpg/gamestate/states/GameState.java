@@ -24,25 +24,22 @@ public class GameState extends State {
 
 	public int WIDTH;
 	public int HEIGHT;
-	
+
 	private enum InnerState {
-		PLAYING,
-		INVENTORY
+		PLAYING, INVENTORY, MAP_EDITOR
 	}
-	
+
 	private InnerState state;
-	
+
 	public GameState(GameStateManager gsm) {
 		super(gsm);
-		
-		state = InnerState.PLAYING;
 	}
-	
+
 	@Override
 	public void load(GameContainer gc) throws SlickException {
 		currentGameData = new SaveData();
 		currentGameData.setIntSaveData(0, 50);
-		
+
 		input = new Input(gc.getHeight());
 		previousInput = new Input(gc.getHeight());
 		map = new Map();
@@ -51,67 +48,90 @@ public class GameState extends State {
 		inventoryGUI = new InventoryGUI(gc, this);
 
 		Item.LoadItems(this);
-		
+		loadState(InnerState.MAP_EDITOR);
+
 		for (int i = 0; i < 22; i++)
 			System.out.println(i + " " + SaveData.getFriendlyName(i));
 	}
-	
-	@Override
-	public void unload() {
-		
-	}
-	
-	@Override
-	public void update(GameContainer gc, int delta) throws SlickException {
+
+	public void loadState(InnerState state) {
+		this.state = state;
 		switch (state) {
-		case PLAYING:
-			if (Keyboard.isKeyDown(Input.KEY_ESCAPE))
-				System.exit(0);
-			
-			if (Keyboard.isKeyDown(Input.KEY_E))
-			{
-				state = InnerState.INVENTORY;
+			case PLAYING:
+			case INVENTORY:
+				map.setEditing(false);
 				break;
-			}
-			
-			WIDTH = gc.getWidth();
-			HEIGHT = gc.getHeight();
-			
-			player.update(gc, this, delta);
-			map.update(gc, this, delta);
-			break;
-		case INVENTORY:
-			if (input.isKeyPressed(Input.KEY_A))
-				System.out.println("Hello");
-			
-			inventoryGUI.update(gc, this, delta);
-		default:
-			break;
+			case MAP_EDITOR:
+				map.setEditing(true);
+				break;
 		}
 	}
-	
+
 	@Override
-	public void render(GameContainer gc, Graphics graphics) throws SlickException {
-		map.render(gc, graphics);
-		player.render(gc, graphics);
-		map.renderPostEntities(gc, graphics);
-		
-		if (state == InnerState.INVENTORY)
-			inventoryGUI.render(gc, graphics);
+	public void unload() {
+
 	}
-	
+
+	@Override
+	public void update(GameContainer gc, int delta) throws SlickException {
+		WIDTH = gc.getWidth();
+		HEIGHT = gc.getHeight();
+
+		switch (state) {
+			case PLAYING:
+				if (Keyboard.isKeyDown(Input.KEY_ESCAPE))
+					System.exit(0);
+
+				if (Keyboard.isKeyDown(Input.KEY_E)) {
+					state = InnerState.INVENTORY;
+					break;
+				}
+
+				player.update(gc, this, delta);
+				map.update(gc, this, delta);
+				break;
+			case INVENTORY:
+				if (input.isKeyPressed(Input.KEY_A))
+					System.out.println("Hello");
+
+				inventoryGUI.update(gc, this, delta);
+			case MAP_EDITOR:
+				map.update(gc, this, delta);
+			default:
+				break;
+		}
+	}
+
+	@Override
+	public void render(GameContainer gc, Graphics graphics)
+			throws SlickException {
+		switch (state) {
+			case PLAYING:
+			case INVENTORY:
+				map.render(gc, graphics);
+				player.render(gc, graphics);
+				map.renderPostEntities(gc, graphics);
+				if (state == InnerState.INVENTORY)
+					inventoryGUI.render(gc, graphics);
+				break;
+			case MAP_EDITOR:
+				map.render(gc, graphics);
+				break;
+		}
+	}
+
 	public SaveData getCurrentGameData() {
 		return currentGameData;
 	}
-	
+
 	public Input getInput() {
 		return input;
 	}
-	
+
 	public Input getPreviousInput() {
 		return previousInput;
 	}
-	
+
 	public Player getPlayer() {
 		return player;
 	}

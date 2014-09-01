@@ -11,24 +11,24 @@ public class MenuState extends State {
 		super(gsm);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	public void load(GameContainer gc) {
-		
+
 	}
-	
+
 	@Override
 	public void unload() {
-		
+
 	}
-	
+
 	@Override
 	public void update(GameContainer gc, int delta) {
-		
+
 	}
-	
+
 	@Override
 	public void render(GameContainer gc, Graphics graphics) {
-		
+
 	}
 }

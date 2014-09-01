@@ -20,38 +20,44 @@ public abstract class Entity {
 	protected final Map map;
 	protected Image image;
 	private Vector2f renderPosition;
-	
+
 	public Entity(Map map) {
 		this.map = map;
-		
+
 		renderPosition = new Vector2f(0, 0);
 	}
 
-	public abstract void update(GameContainer gc, GameState game, int delta) throws SlickException;
-	
-	public void render(GameContainer gc, Graphics graphics) throws SlickException {
-		Vector2f renderCoordinatesF = new Vector2f(renderPosition.getX() * Game.TILE_SIZE, renderPosition.getY() * Game.TILE_SIZE);
-		Vector2i renderCoordinates = map.screenCoordinatesToGameCoordinates(renderCoordinatesF);
-		graphics.drawImage(image, renderCoordinates.getX(), renderCoordinates.getY() - Game.TILE_SIZE);
+	public abstract void update(GameContainer gc, GameState game, int delta)
+			throws SlickException;
+
+	public void render(GameContainer gc, Graphics graphics)
+			throws SlickException {
+		Vector2f renderCoordinatesF = new Vector2f(renderPosition.getX()
+				* Game.TILE_SIZE, renderPosition.getY() * Game.TILE_SIZE);
+		Vector2i renderCoordinates = map
+				.screenCoordinatesToGameCoordinates(renderCoordinatesF);
+		graphics.drawImage(image, renderCoordinates.getX(),
+				renderCoordinates.getY() - Game.TILE_SIZE);
 	}
-	
+
 	public Image getImage() {
 		return image;
 	}
-	
+
 	public void setImage(Image image) {
 		this.image = image;
 	}
-	
+
 	public Vector2f getRenderPosition() {
 		return renderPosition;
 	}
-	
+
 	public void setRenderPosition(Vector2f renderPosition) {
 		this.renderPosition = renderPosition;
 	}
-	
+
 	public Rectangle getRenderBounds() {
-		return new Rectangle(renderPosition.getX() * Game.TILE_SIZE, renderPosition.getY() * Game.TILE_SIZE, 32, 64);
+		return new Rectangle(renderPosition.getX() * Game.TILE_SIZE,
+				renderPosition.getY() * Game.TILE_SIZE, 32, 64);
 	}
 }

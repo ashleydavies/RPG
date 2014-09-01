@@ -11,8 +11,9 @@ public class DialogAction {
 	private final String action;
 	private final String[] args;
 	private final DialogCondition[] conditions;
-	
-	public DialogAction(int id, String action, String args, DialogCondition[] conditions) {
+
+	public DialogAction(int id, String action, String args,
+			DialogCondition[] conditions) {
 		this.id = id;
 		this.action = action;
 		if (!"".equals(args))
@@ -21,55 +22,55 @@ public class DialogAction {
 			this.args = new String[0];
 		this.conditions = conditions;
 	}
-	
+
 	@Override
 	public String toString() {
 		String retString = getAction() + " ARGS: (";
-		
+
 		for (String arg : getArgs())
 			retString += arg + ",";
-		
+
 		retString += ") CONDITIONS: (";
-		
+
 		for (DialogCondition cond : conditions)
 			retString += cond + ",";
-		
+
 		retString += ")";
-		
+
 		return retString;
 	}
-	
+
 	public boolean conditionsMet(GameState game) {
 		for (DialogCondition condition : conditions) {
 			if (!condition.conditionMet(game)) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * @return the action
 	 */
 	public String getAction() {
 		return action;
 	}
-	
+
 	/**
 	 * @return the args
 	 */
 	public String[] getArgs() {
 		return args;
 	}
-	
+
 	/**
 	 * @return an arg
 	 */
 	public String getArg(int i) {
 		return args[i];
 	}
-	
+
 	/**
 	 * @return the conditions
 	 */

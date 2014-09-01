@@ -13,35 +13,41 @@ public class SpriteSheet {
 	static final Properties spriteSheetProperties;
 	static final SpriteSheet[] spriteSheets;
 	Image spriteSheet;
-	
+
 	static {
 		spriteSheetProperties = new Properties();
 		try {
-			spriteSheetProperties.load(SpriteSheet.class.getClassLoader().getResourceAsStream("data/properties/Spritesheets.properties"));
+			spriteSheetProperties.load(SpriteSheet.class.getClassLoader()
+					.getResourceAsStream(
+							"data/properties/Spritesheets.properties"));
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		
-		int count = Integer.parseInt(spriteSheetProperties.getProperty("totalCount"));
+
+		int count = Integer.parseInt(spriteSheetProperties
+				.getProperty("totalCount"));
 		spriteSheets = new SpriteSheet[count];
-		
+
 		for (int i = 0; i < count; i++) {
 			try {
-				spriteSheets[i] = new SpriteSheet(new Image("img/" + spriteSheetProperties.getProperty(Integer.toString(i))));
+				spriteSheets[i] = new SpriteSheet(new Image(
+						"img/"
+								+ spriteSheetProperties.getProperty(Integer
+										.toString(i))));
 			} catch (SlickException ex) {
 				ex.printStackTrace();
 			}
 		}
 	}
-	
+
 	private SpriteSheet(Image image) {
 		spriteSheet = image;
 	}
-	
+
 	public Image getSubImage(int x, int y, int width, int height) {
 		return spriteSheet.getSubImage(x, y, width, height);
 	}
-	
+
 	public static SpriteSheet getSpriteSheet(int id) {
 		return spriteSheets[id];
 	}
