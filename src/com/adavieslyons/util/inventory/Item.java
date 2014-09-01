@@ -79,6 +79,16 @@ public class Item {
 		this.image = image;
 		this.modifiers = modifiers;
 	}
+
+	public void enableModifiers() {
+		for (Modifier modifier : modifiers)
+			modifier.applyModifier();
+	}
+	
+	public void disableModifiers() {
+		for (Modifier modifier : modifiers)
+			modifier.removeModifier();
+	}
 	
 	public int getID() {
 		return id;

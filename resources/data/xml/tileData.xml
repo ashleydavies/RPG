@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <data>
-    <tileCount>3</tileCount>
+    <tileCount>4</tileCount>
     
     <tileInfo>
         <tile id="0">
@@ -54,6 +54,17 @@
                 <spritesheet>0</spritesheet>
                 <xPos>64</xPos>
                 <yPos>96</yPos>
+            </texture>
+        </tile>
+        <tile id="3">
+            <name>stonepath</name>
+            <collision>0</collision>
+            
+            <textureType>static</textureType>
+            <texture id="0">
+                <spritesheet>0</spritesheet>
+                <xPos>96</xPos>
+                <yPos>0</yPos>
             </texture>
         </tile>
     </tileInfo>

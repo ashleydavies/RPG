@@ -15,16 +15,12 @@ public class Modifier {
 	}
 	
 	public void applyModifier() {
-		if (!applied) {
-			int modified = game.getCurrentGameData().getIntSaveData(index) + value;
-			game.getCurrentGameData().setIntSaveData(index, modified);
-		}
+		int modified = game.getCurrentGameData().getIntSaveData(index) + value;
+		game.getCurrentGameData().setIntSaveData(index, modified);
 	}
 	
 	public void removeModifier() {
-		if (applied) {
-			int modified = game.getCurrentGameData().getIntSaveData(index) - value;
-			game.getCurrentGameData().setIntSaveData(index, modified);
-		}
+		int modified = game.getCurrentGameData().getIntSaveData(index) - value;
+		game.getCurrentGameData().setIntSaveData(index, modified);
 	}
 }

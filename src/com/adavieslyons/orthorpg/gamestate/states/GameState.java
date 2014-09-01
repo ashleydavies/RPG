@@ -51,6 +51,9 @@ public class GameState extends State {
 		inventoryGUI = new InventoryGUI(gc, this);
 
 		Item.LoadItems(this);
+		
+		for (int i = 0; i < 22; i++)
+			System.out.println(i + " " + SaveData.getFriendlyName(i));
 	}
 	
 	@Override
@@ -78,7 +81,8 @@ public class GameState extends State {
 			map.update(gc, this, delta);
 			break;
 		case INVENTORY:
-			
+			if (input.isKeyPressed(Input.KEY_A))
+				System.out.println("Hello");
 			
 			inventoryGUI.update(gc, this, delta);
 		default:
