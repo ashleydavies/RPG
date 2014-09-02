@@ -20,6 +20,10 @@ public class MapTile {
 	public static MapTile getTile(int id) {
 		return tiles[id];
 	}
+	
+	public static MapTile[] getTiles() {
+		return tiles;
+	}
 
 	int id;
 	String name;
@@ -88,6 +92,10 @@ public class MapTile {
 
 	public boolean getCollision() {
 		return collision;
+	}
+	
+	public Image getBasicTexture() {
+		return textures[0];
 	}
 
 	public void render(GameContainer gc, Graphics graphics, int x, int y) {

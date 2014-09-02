@@ -15,6 +15,7 @@ import org.w3c.dom.NodeList;
 import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.orthorpg.entities.NPC;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.orthorpg.gui.TileSelectorGUI;
 import com.adavieslyons.util.SpriteSheet;
 import com.adavieslyons.util.Vector2i;
 import com.adavieslyons.util.XMLParser;
@@ -39,15 +40,43 @@ public class Map {
 	CollisionMap collisionMap;
 	Node[][] nodeMatrix;
 	Image fogOfWarTexture;
+	TileSelectorGUI tsGUI;
+	int tileEditingTile = 0;
+	boolean tsGUIOpen;
 	boolean editing;
 
 	Vector2i offset = new Vector2i(128, 128);
 
 	public void update(GameContainer gc, GameState game, int delta)
 			throws SlickException {
-		for (NPC npc : npcs)
-			npc.update(gc, game, delta);
-
+		if (getEditing())
+		{
+			// Process map editor logic
+			Vector2i mouseTile = screenCoordinatesToTileCoordinates(new Vector2i(game.getInput().getMouseX(), game.getInput().getMouseY()));
+			if (game.getInput().isKeyDown(game.getInput().KEY_S))
+				tsGUIOpen = true;
+			
+			if (tsGUIOpen && tsGUI.getTileSelected()) {
+				tileEditingTile = tsGUI.getSelectedTile();
+				tsGUIOpen = false;
+				tsGUI.reset();
+			}
+			else if (tsGUIOpen) {
+				tsGUI.update(gc, game, delta);
+			}
+			else
+			{
+				if (game.getInput().isMouseButtonDown(0) && mouseTile.getX() >= 0 && mouseTile.getY() >= 0)
+					setTile(mouseTile.getX(), mouseTile.getY(), tileEditingTile, 0);
+			}
+		}
+		else
+		{
+			// Game-only (Not editing) logic
+			for (NPC npc : npcs)
+				npc.update(gc, game, delta);
+		}
+		
 		// Move with arrow keys
 		if (game.getInput().isKeyDown(Input.KEY_LEFT))
 			addOffset(1, 0);
@@ -83,9 +112,12 @@ public class Map {
 		// TODO: Don't render every individual tile every frame; clip & combine
 		for (MapLayer layer : layers)
 			layer.render(gc, graphics);
-
-		for (NPC npc : npcs)
-			npc.render(gc, graphics);
+		// Only render NPCs if not editing
+		if (!getEditing())
+			for (NPC npc : npcs)
+				npc.render(gc, graphics);
+		if (getEditing() && tsGUIOpen)
+			tsGUI.render(gc, graphics);
 	}
 
 	public void renderPostEntities(GameContainer gc, Graphics graphics)
@@ -233,6 +265,7 @@ public class Map {
 			Arrays.fill(row, true);
 		collisionMap = new CollisionMap(this);
 		nodeMatrix = AStar.getNodeMatrix(collisionMap);
+		tsGUI = new TileSelectorGUI(gc, game, this);
 	}
 
 	public Node[][] getNodeMatrix() {
@@ -258,19 +291,24 @@ public class Map {
 	public Vector2i getOffset() {
 		return offset;
 	}
+	
+	public void setTile(int tX, int tY, int tileID, int layer) {
+		layers[layer].setTile(tX, tY, tileID);
+	}
 
 	public void setOffset(Vector2i offset) {
-		if (offset.getX() > 150)
-			offset.setX(150);
-		if (offset.getY() > 150)
-			offset.setY(150);
-
-		if (width * Game.TILE_SIZE + offset.getX() < game.WIDTH - 150)
-			offset.setX(game.WIDTH - 150 - width * Game.TILE_SIZE);
-
-		if (height * Game.TILE_SIZE + offset.getY() < game.HEIGHT - 150)
-			offset.setY(game.HEIGHT - 150 - height * Game.TILE_SIZE);
-
+		if (!getEditing()) {
+			if (offset.getX() > 150)
+				offset.setX(150);
+			if (offset.getY() > 150)
+				offset.setY(150);
+	
+			if (width * Game.TILE_SIZE + offset.getX() < game.WIDTH - 150)
+				offset.setX(game.WIDTH - 150 - width * Game.TILE_SIZE);
+	
+			if (height * Game.TILE_SIZE + offset.getY() < game.HEIGHT - 150)
+				offset.setY(game.HEIGHT - 150 - height * Game.TILE_SIZE);
+		}
 		this.offset = offset;
 	}
 

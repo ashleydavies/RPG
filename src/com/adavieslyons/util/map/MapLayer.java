@@ -29,7 +29,7 @@ public class MapLayer {
 		for (MapTileData[] tileRow : tiles) {
 			x = 0;
 			for (MapTileData tile : tileRow) {
-				if (!map.isFogOfWar(x, y)) {
+				if (!map.isFogOfWar(x, y) || map.getEditing()) {
 					Vector2i renderPosition = map
 							.tileCoordinatesToGameCoordinates(x, y);
 					MapTile.getTile(tile.getId()).render(gc, graphics,
@@ -39,5 +39,9 @@ public class MapLayer {
 			}
 			y++;
 		}
+	}
+
+	public void setTile(int tX, int tY, int tileID) {
+		tiles[tY][tX] = new MapTileData(tileID);
 	}
 }

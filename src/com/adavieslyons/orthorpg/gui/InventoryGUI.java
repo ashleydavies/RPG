@@ -6,9 +6,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-import com.adavieslyons.orthorpg.entities.Player;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
-import com.adavieslyons.util.inventory.Item;
 import com.adavieslyons.util.inventory.ItemStack;
 
 public class InventoryGUI extends GUIWindow {
