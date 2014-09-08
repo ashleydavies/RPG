@@ -6,22 +6,19 @@ import org.newdawn.slick.SlickException;
 
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.util.Vector2i;
-import com.adavieslyons.util.map.Map;
 import com.adavieslyons.util.map.MapTile;
 
 public class TileSelectorGUI extends GUIWindow {
 	private int selectedTile;
 	private boolean tileSelected;
-	private Map map;
 	
 	public void reset() {
 		selectedTile = -1;
 		tileSelected = false;
 	}
 	
-	public TileSelectorGUI(GameContainer gc, GameState game, Map map) throws SlickException {
+	public TileSelectorGUI(GameContainer gc, GameState game) throws SlickException {
 		super(gc, game, 504, 624);
-		this.map = map;
 		renderPrimaryContent(gc);
 	}
 	
@@ -57,10 +54,8 @@ public class TileSelectorGUI extends GUIWindow {
 			
 			if (mouseCoords.getY() > windowRect.getY() + BW + 8 && mouseCoords.getY() < windowRect.getY() + BW + 8 + 32)
 			{
-				System.out.println("Within Y range");
 				if (mouseCoords.getX() > windowRect.getX() + BW + 8 && mouseCoords.getX() < windowRect.getX() + BW + 8 + 32 * MapTile.getTiles().length)
 				{
-					System.out.println("Within X range");
 					// Inside a tile
 					int tile = (int) Math.floor(mouseCoords.getX() - windowRect.getX() - BW - 8) / 32;
 					selectedTile = tile;
@@ -74,7 +69,7 @@ public class TileSelectorGUI extends GUIWindow {
 		return tileSelected;
 	}
 	
-	public int getSelectedTile () {
+	public int getSelectedTile() {
 		return selectedTile;
 	}
 }

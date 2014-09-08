@@ -1,6 +1,14 @@
 package com.adavieslyons.util.map;
 
+import java.io.File;
 import java.util.Arrays;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -11,7 +19,6 @@ import org.newdawn.slick.geom.Vector2f;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
 import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.orthorpg.entities.NPC;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
@@ -30,7 +37,6 @@ import com.adavieslyons.util.map.pathfinding.CollisionMap;
 public class Map {
 	int id;
 	GameState game;
-	String name;
 	Document info;
 	int width;
 	int height;
@@ -53,7 +59,8 @@ public class Map {
 		{
 			// Process map editor logic
 			Vector2i mouseTile = screenCoordinatesToTileCoordinates(new Vector2i(game.getInput().getMouseX(), game.getInput().getMouseY()));
-			if (game.getInput().isKeyDown(game.getInput().KEY_S))
+			game.getInput();
+			if (game.getInput().isKeyDown(Input.KEY_S))
 				tsGUIOpen = true;
 			
 			if (tsGUIOpen && tsGUI.getTileSelected()) {
@@ -64,9 +71,8 @@ public class Map {
 			else if (tsGUIOpen) {
 				tsGUI.update(gc, game, delta);
 			}
-			else
-			{
-				if (game.getInput().isMouseButtonDown(0) && mouseTile.getX() >= 0 && mouseTile.getY() >= 0)
+			else {
+				if (game.getInput().isMouseButtonDown(0) && mouseTile.getX() >= 0 && mouseTile.getY() >= 0 && mouseTile.getX() < width && mouseTile.getY() < height)
 					setTile(mouseTile.getX(), mouseTile.getY(), tileEditingTile, 0);
 			}
 		}
@@ -186,7 +192,6 @@ public class Map {
 		info = XMLParser.instance.parseXML(this.getClass().getClassLoader()
 				.getResourceAsStream("data/xml/map/1.xml"));
 
-		name = info.getElementsByTagName("name").item(0).getTextContent();
 		width = Integer.parseInt(info.getElementsByTagName("mapWidth").item(0)
 				.getTextContent());
 		height = Integer.parseInt(info.getElementsByTagName("mapHeight")
@@ -265,7 +270,7 @@ public class Map {
 			Arrays.fill(row, true);
 		collisionMap = new CollisionMap(this);
 		nodeMatrix = AStar.getNodeMatrix(collisionMap);
-		tsGUI = new TileSelectorGUI(gc, game, this);
+		tsGUI = new TileSelectorGUI(gc, game);
 	}
 
 	public Node[][] getNodeMatrix() {
@@ -318,5 +323,43 @@ public class Map {
 
 	public void setEditing(boolean editing) {
 		this.editing = editing;
+	}
+	
+	public void exportXML() {
+		try {
+			// Export map to XML format
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+			Document document = docBuilder.newDocument();
+			
+			Element rootElement = document.createElement("map");
+			document.appendChild(rootElement);
+			rootElement.appendChild(document.createElement("name"));
+			rootElement.appendChild(document.createElement("icon"));
+			Element mapWidth = document.createElement("mapWidth");
+			mapWidth.appendChild(document.createTextNode(Integer.toString(width)));
+			rootElement.appendChild(mapWidth);
+			Element mapHeight = document.createElement("mapHeight");
+			mapHeight.appendChild(document.createTextNode(Integer.toString(height)));
+			rootElement.appendChild(mapHeight);
+			Element mapRoot = document.createElement("tileData");
+			rootElement.appendChild(mapRoot);
+			Element npcRoot = document.createElement("NPCs");
+			rootElement.appendChild(npcRoot);
+			
+			for (MapLayer layer : layers) {
+				layer.exportXML(document, mapRoot);
+			}
+			
+			// Export XML to file
+			TransformerFactory tf = TransformerFactory.newInstance();
+			Transformer transformer = tf.newTransformer();
+			StreamResult result = new StreamResult(new File("mapExported.xml"));
+			transformer.transform(new DOMSource(document), result);
+			System.out.println("Saved map to mapExported.xml!");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

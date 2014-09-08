@@ -2,10 +2,8 @@ package com.adavieslyons.orthorpg;
 
 import org.newdawn.slick.*;
 
-import com.adavieslyons.orthorpg.entities.NPC;
 import com.adavieslyons.orthorpg.gamestate.GameStateManager;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
-import com.adavieslyons.util.dialog.IDialogable;
 
 /**
  * 

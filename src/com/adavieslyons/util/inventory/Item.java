@@ -54,7 +54,7 @@ public class Item {
 			// Modifiers
 			Modifier modifiers[] = null;
 			if (i_itemNode.getElementsByTagName("modifiers").getLength() > 0) {
-				NodeList modifierNodes = (NodeList) ((Element) i_itemNode
+				NodeList modifierNodes = ((Element) i_itemNode
 						.getElementsByTagName("modifiers").item(0))
 						.getElementsByTagName("modifier");
 

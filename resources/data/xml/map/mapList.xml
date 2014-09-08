@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<maps>
+	<map name="Peaceful River" icon="River" mX="0" mY="0" />
+	<map name="Abandoned Forest" icon="Forest" mX="0" mY="120" />
+</maps>

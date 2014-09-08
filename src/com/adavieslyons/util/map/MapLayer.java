@@ -2,6 +2,8 @@ package com.adavieslyons.util.map;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.adavieslyons.util.Vector2i;
 
@@ -43,5 +45,19 @@ public class MapLayer {
 
 	public void setTile(int tX, int tY, int tileID) {
 		tiles[tY][tX] = new MapTileData(tileID);
+	}
+
+	public void exportXML(Document document, Element mapRoot) {
+		Element layerElement = document.createElement("layer");
+		mapRoot.appendChild(layerElement);
+		for (MapTileData[] tileRow : tiles) {
+			Element rowElement = document.createElement("row");
+			layerElement.appendChild(rowElement);
+			for (MapTileData tile : tileRow) {
+				Element tileElement = document.createElement("tile");
+				tileElement.setAttribute("tileID", Integer.toString(tile.getId()));
+				rowElement.appendChild(tileElement);
+			}
+		}
 	}
 }

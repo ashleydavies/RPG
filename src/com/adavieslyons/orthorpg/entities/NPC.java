@@ -216,6 +216,7 @@ public class NPC extends MovingPathEntity implements IDialogable {
 		return stringIn;
 	}
 
+	@Override
 	public void update(GameContainer gc, GameState game, int delta)
 			throws SlickException {
 		if (dialogShowing)
@@ -230,6 +231,7 @@ public class NPC extends MovingPathEntity implements IDialogable {
 		updatePath();
 	}
 
+	@Override
 	public void render(GameContainer gc, Graphics graphics)
 			throws SlickException {
 		super.render(gc, graphics);

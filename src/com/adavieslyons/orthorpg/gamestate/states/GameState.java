@@ -48,7 +48,7 @@ public class GameState extends State {
 		inventoryGUI = new InventoryGUI(gc, this);
 
 		Item.LoadItems(this);
-		loadState(InnerState.MAP_EDITOR);
+		loadState(InnerState.PLAYING);
 
 		for (int i = 0; i < 22; i++)
 			System.out.println(i + " " + SaveData.getFriendlyName(i));
@@ -97,6 +97,9 @@ public class GameState extends State {
 				inventoryGUI.update(gc, this, delta);
 			case MAP_EDITOR:
 				map.update(gc, this, delta);
+				
+				if (input.isKeyDown(Input.KEY_X))
+					map.exportXML();
 			default:
 				break;
 		}

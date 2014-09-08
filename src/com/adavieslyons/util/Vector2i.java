@@ -37,6 +37,7 @@ public class Vector2i {
 				* fraction));
 	}
 
+	@Override
 	public String toString() {
 		return "x: " + Integer.toString(x) + " y: " + Integer.toString(y);
 	}

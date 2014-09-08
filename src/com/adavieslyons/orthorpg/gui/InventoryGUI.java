@@ -20,7 +20,7 @@ public class InventoryGUI extends GUIWindow {
 
 	public void renderPrimaryContent(GameContainer gc) throws SlickException {
 		Image itemSlot = ui.getSubImage(84, 0, 48, 48);
-
+		
 		Graphics graphics = gc.getGraphics();
 		graphics.clear();
 

@@ -68,7 +68,7 @@ public final class DialogGUI extends GUIWindow {
 		Graphics graphics = gc.getGraphics();
 		graphics.clear();
 
-		int y = (int) (12 + 32);
+		int y = 12 + 32;
 
 		graphics.setColor(Color.black);
 		graphics.setFont(dialogTitleFont);
