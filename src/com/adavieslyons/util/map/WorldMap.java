@@ -18,12 +18,13 @@ public class WorldMap {
 	private Image iconHoverBackground;
 	private Image iconSelectedBackground;
 	private Image iconUnclearedBackground;
+	private Image iconMapApproach;
 	private Image[] icons;
 	private Image worldMap;
 	private MapIconData[] mapIconData;
 	private MapConnection[] mapConnectors;
 	private MapIconData selectedIcon;
-	private MapDirection selectApproachDirection;
+	private MapDirection selectedApproachDirection;
 
 	public WorldMap() throws SlickException {
 		Image icons = new Image("img/mapIcons.png");
@@ -38,6 +39,7 @@ public class WorldMap {
 		this.iconHoverBackground = icons.getSubImage(0, 32, 32, 32);
 		this.iconSelectedBackground = icons.getSubImage(0, 64, 32, 32);
 		this.iconUnclearedBackground = icons.getSubImage(0, 96, 32, 32);
+		this.iconMapApproach = icons.getSubImage(32, 96, 32, 32);
 		this.worldMap = new Image("img/worldmap.png");
 
 		// Now load the map icon data
@@ -71,6 +73,8 @@ public class WorldMap {
 							.toUpperCase()));
 			mapConnectors[i] = connection;
 		}
+		
+		leavingMapArea(1, MapDirection.NORTH);
 	}
 
 	// Fired when player leaves a map into the world map
@@ -83,7 +87,10 @@ public class WorldMap {
 		for (MapConnection connection : mapConnectors) {
 			if ((connection.map1 == map && connection.direction == leavingDirection)
 					|| (connection.map2 == map && connection.direction == oppositeDirection)) {
-				setSelectedIcon(connection.map1, oppositeDirection);
+				MapIconData mapNew = connection.map1;
+				if (connection.map1 == map)
+					mapNew = connection.map2;
+				setSelectedIcon(mapNew, oppositeDirection);
 			}
 		}
 	}
@@ -99,7 +106,10 @@ public class WorldMap {
 
 		// Render connections
 		for (MapConnection connection : mapConnectors) {
-			graphics.setColor(Color.green);
+			if (connection.map1.isCleared() || connection.map2.isCleared())
+				graphics.setColor(Color.green);
+			else
+				graphics.setColor(Color.red);
 			graphics.drawLine(connection.getMap1().getmX() + 16, connection
 					.getMap1().getmY() + 16, connection.getMap2().getmX() + 16,
 					connection.getMap2().getmY() + 16);
@@ -129,7 +139,7 @@ public class WorldMap {
 	private void setSelectedIcon(MapIconData icon, MapDirection approachDirection) {
 		System.out.println(approachDirection);
 		this.selectedIcon = icon;
-		this.selectApproachDirection = approachDirection;
+		this.selectedApproachDirection = approachDirection;
 	}
 
 	public enum MapDirection {
@@ -206,8 +216,29 @@ public class WorldMap {
 		}
 
 		public void render(GameContainer gc, Graphics graphics, Image icon) {
-			if (selectedIcon == this)
+			if (selectedIcon == this) {
 				graphics.drawImage(iconSelectedBackground, mX, mY);
+				switch (selectedApproachDirection) {
+					case NORTH:
+						graphics.rotate(mX + 16, mY - 32 + 16, 180);
+						graphics.drawImage(iconMapApproach, mX, mY - 32);
+						graphics.resetTransform();
+						break;
+					case EAST:
+						graphics.rotate(mX + 32 + 16, mY + 16, 270);
+						graphics.drawImage(iconMapApproach, mX + 32, mY);
+						graphics.resetTransform();
+						break;
+					case SOUTH:
+						graphics.drawImage(iconMapApproach, mX, mY + 32);
+						break;
+					case WEST:
+						graphics.rotate(mX - 32 + 16, mY + 16, 90);
+						graphics.drawImage(iconMapApproach, mX - 32, mY);
+						graphics.resetTransform();
+						break;
+				}
+			}
 			else if (!cleared) {
 				graphics.drawImage(iconUnclearedBackground, mX, mY);
 			} else if (hovered) {
