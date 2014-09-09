@@ -13,9 +13,11 @@ import com.adavieslyons.orthorpg.gui.InventoryGUI;
 import com.adavieslyons.util.SaveData;
 import com.adavieslyons.util.inventory.Item;
 import com.adavieslyons.util.map.Map;
+import com.adavieslyons.util.map.WorldMap;
 
 public class GameState extends State {
 	Map map;
+	private WorldMap worldMap;
 	private Input input;
 	private Input previousInput;
 	private Player player;
@@ -26,7 +28,7 @@ public class GameState extends State {
 	public int HEIGHT;
 
 	private enum InnerState {
-		PLAYING, INVENTORY, MAP_EDITOR
+		PLAYING, WORLD_MAP, INVENTORY, MAP_EDITOR
 	}
 
 	private InnerState state;
@@ -44,11 +46,12 @@ public class GameState extends State {
 		previousInput = new Input(gc.getHeight());
 		map = new Map();
 		map.load(gc, this);
+		worldMap = new WorldMap();
 		player = new Player(gc, this, map);
 		inventoryGUI = new InventoryGUI(gc, this);
 
 		Item.LoadItems(this);
-		loadState(InnerState.PLAYING);
+		loadState(InnerState.WORLD_MAP);
 
 		for (int i = 0; i < 22; i++)
 			System.out.println(i + " " + SaveData.getFriendlyName(i));
@@ -63,6 +66,8 @@ public class GameState extends State {
 				break;
 			case MAP_EDITOR:
 				map.setEditing(true);
+				break;
+			default:
 				break;
 		}
 	}
@@ -90,14 +95,15 @@ public class GameState extends State {
 				player.update(gc, this, delta);
 				map.update(gc, this, delta);
 				break;
+			case WORLD_MAP:
+				worldMap.update(gc, this, delta);
+				break;
 			case INVENTORY:
 				if (input.isKeyPressed(Input.KEY_A))
 					System.out.println("Hello");
-
 				inventoryGUI.update(gc, this, delta);
 			case MAP_EDITOR:
 				map.update(gc, this, delta);
-				
 				if (input.isKeyDown(Input.KEY_X))
 					map.exportXML();
 			default:
@@ -116,6 +122,9 @@ public class GameState extends State {
 				map.renderPostEntities(gc, graphics);
 				if (state == InnerState.INVENTORY)
 					inventoryGUI.render(gc, graphics);
+				break;
+			case WORLD_MAP:
+				worldMap.render(gc, graphics);
 				break;
 			case MAP_EDITOR:
 				map.render(gc, graphics);

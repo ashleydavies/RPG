@@ -205,10 +205,10 @@ public class Map {
 
 		for (int i = 0; i < layerNodes.getLength(); i++) {
 			Element i_layerNode = (Element) layerNodes.item(i);
-
+			
 			NodeList i_rowNodes = i_layerNode.getElementsByTagName("row");
 			MapTileData[][] i_layerTiles = new MapTileData[height][width];
-
+			
 			for (int r = 0; r < i_rowNodes.getLength(); r++) {
 				Element i_rowNode = (Element) i_rowNodes.item(r);
 
