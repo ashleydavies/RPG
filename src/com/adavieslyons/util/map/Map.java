@@ -90,14 +90,14 @@ public class Map {
 
 		// Move with arrow keys
 		if (game.getInput().isKeyDown(Input.KEY_LEFT))
-			addOffset(1, 0);
+			addOffset(1 * delta, 0);
 		if (game.getInput().isKeyDown(Input.KEY_RIGHT))
-			addOffset(-1, 0);
+			addOffset(-1 * delta, 0);
 
 		if (game.getInput().isKeyDown(Input.KEY_UP))
-			addOffset(0, 1);
+			addOffset(0, 1 * delta);
 		if (game.getInput().isKeyDown(Input.KEY_DOWN))
-			addOffset(0, -1);
+			addOffset(0, -1 * delta);
 	}
 
 	public void addOffset(int x, int y) {
@@ -134,18 +134,28 @@ public class Map {
 	public void renderPostEntities(GameContainer gc, Graphics graphics)
 			throws SlickException {
 		if (!editing) {
-			int tX = 0;
-			for (boolean fogOfWarRow[] : fogOfWar) {
-				int tY = 0;
-				for (boolean fogOfWarTile : fogOfWarRow) {
-					if (fogOfWarTile == true) {
-						Vector2i position = tileCoordinatesToGameCoordinates(
-								tX, tY);
-						fogOfWarTexture.draw(position.getX(), position.getY());
+			Vector2i screenTL = screenCoordinatesToTileCoordinates(0, 0);
+			Vector2i screenBR = screenCoordinatesToTileCoordinates(gc.getWidth(), gc.getHeight());
+
+			screenTL.add(new Vector2i(2, 2));
+			screenBR.add(new Vector2i(1, 1));
+			
+			if (screenTL.getX() < 0)
+				screenTL.setX(0);
+			if (screenTL.getY() < 0)
+				screenTL.setY(0);
+			if (screenBR.getX() > width)
+				screenBR.setX(width);
+			if (screenBR.getY() > height)
+				screenBR.setY(height);
+
+			for (int y = screenTL.getY(); y < screenBR.getY(); y++) {
+				for (int x = screenTL.getX(); x < screenBR.getX(); x++ ) {
+					if (fogOfWar[x][y]) {
+						Vector2i renderPosition = tileCoordinatesToGameCoordinates(x, y);
+						fogOfWarTexture.draw(renderPosition.getX(), renderPosition.getY());
 					}
-					tY++;
 				}
-				tX++;
 			}
 		}
 	}
@@ -398,16 +408,6 @@ public class Map {
 
 			Element rootElement = document.createElement("map");
 			document.appendChild(rootElement);
-			rootElement.appendChild(document.createElement("name"));
-			rootElement.appendChild(document.createElement("icon"));
-			Element mapWidth = document.createElement("mapWidth");
-			mapWidth.appendChild(document.createTextNode(Integer
-					.toString(width)));
-			rootElement.appendChild(mapWidth);
-			Element mapHeight = document.createElement("mapHeight");
-			mapHeight.appendChild(document.createTextNode(Integer
-					.toString(height)));
-			rootElement.appendChild(mapHeight);
 			Element mapRoot = document.createElement("tileData");
 			rootElement.appendChild(mapRoot);
 			Element npcRoot = document.createElement("NPCs");

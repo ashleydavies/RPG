@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <map>
-    <mapWidth>45</mapWidth>
-    <mapHeight>13</mapHeight>
     <tileData>
         <layer>
             <row>

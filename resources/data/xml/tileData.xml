@@ -1,90 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <data>
-    <tileCount>6</tileCount>
-    
     <tileInfo>
-        <tile id="0">
-            <name>grass</name>
-            <collision>0</collision>
-            
-            <textureType>static</textureType>
-            <texture id="0">
-                <spritesheet>0</spritesheet>
-                <xPos>32</xPos>
-                <yPos>32</yPos>
-            </texture>
+        <tile name="grass" collision="0">            
+            <texture spritesheet="0" xPos="32" yPos="32" />
         </tile>
-        <tile id="1">
-            <name>dirt</name>
-            <collision>0</collision>
-            
-            <textureType>static</textureType>
-            <texture id="0">
-                <spritesheet>0</spritesheet>
-                <xPos>32</xPos>
-                <yPos>0</yPos>
-            </texture>
+        <tile name="dirt" collision="0">            
+            <texture spritesheet="0" xPos="32" yPos="0" />
         </tile>
-        <tile id="2">
-            <name>water</name>
-            <collision>1</collision>
-            
-            <textureType>dynamic</textureType>
-            <textureData frameTime="500" />
-            <texture id="0">
-                <spritesheet>0</spritesheet>
-                <xPos>64</xPos>
-                <yPos>0</yPos>
-            </texture>
-            <texture id="1">
-                <spritesheet>0</spritesheet>
-                <xPos>64</xPos>
-                <yPos>32</yPos>
-            </texture>
-            <texture id="2">
-                <spritesheet>0</spritesheet>
-                <xPos>64</xPos>
-                <yPos>64</yPos>
-            </texture>
-            <texture id="3">
-                <spritesheet>0</spritesheet>
-                <xPos>64</xPos>
-                <yPos>96</yPos>
-            </texture>
+        <tile name="water" collision="1">            
+            <textureData type="dynamic" frameTime="500"/>
+            <texture spritesheet="0" xPos="64" yPos="0" />
+            <texture spritesheet="0" xPos="64" yPos="32" />
+            <texture spritesheet="0" xPos="64" yPos="64" />
+            <texture spritesheet="0" xPos="64" yPos="96" />
         </tile>
-        <tile id="3">
-            <name>stonepath</name>
-            <collision>0</collision>
-            
-            <textureType>static</textureType>
-            <texture id="0">
-                <spritesheet>0</spritesheet>
-                <xPos>96</xPos>
-                <yPos>0</yPos>
-            </texture>
+        <tile name="stonepath" collision="0">            
+            <texture spritesheet="0" xPos="96" yPos="0" />
         </tile>
-        <tile id="4">
-        	<name>tilleddirt</name>
-        	<collision>0</collision>
-        	
-        	<textureType>static</textureType>
-        	<texture id="0">
-        		<spritesheet>0</spritesheet>
-        		<xPos>96</xPos>
-        		<yPos>32</yPos>
-        	</texture>
+        <tile name="tilleddirt" collision="0">
+            <texture spritesheet="0" xPos="96" yPos="32" />
         </tile>
-        <tile id="5">
-        	<name>tree</name>
-        	<collision>1</collision>
-        	
-        	<textureType>static</textureType>
-        	<texture id="0" height="64">
-        		<spritesheet>0</spritesheet>
-        		<xPos>128</xPos>
-        		<yPos>0</yPos>
-        	</texture>
+        <tile name="tree" collision="1">
+            <texture spritesheet="0" xPos="128" yPos="0" />
+        </tile>
+        <tile name="greybrick" collision="1">
+            <texture spritesheet="0" xPos="96" yPos="64" />
+        </tile>
+        <tile name="redbrick" collision="1">
+            <texture spritesheet="0" xPos="96" yPos="96" />
+        </tile>
+        <tile name="woodfloor" collision="0">
+            <texture spritesheet="0" xPos="96" yPos="128" />
         </tile>
     </tileInfo>
 </data>
