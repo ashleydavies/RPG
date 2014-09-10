@@ -52,7 +52,7 @@ public class WorldMap {
 		for (int i = 0; i < mapNodes.getLength(); i++) {
 			Element mapNode = (Element) mapNodes.item(i);
 			MapIconData newIconData = new MapIconData(
-					mapNode.getAttribute("name"), Integer.parseInt(mapNode
+					mapNode.getAttribute("name"), i, Integer.parseInt(mapNode
 							.getAttribute("icon")), Integer.parseInt(mapNode
 							.getAttribute("mX")), Integer.parseInt(mapNode
 							.getAttribute("mY")));
@@ -95,14 +95,17 @@ public class WorldMap {
 		}
 	}
 
-	public void update(GameContainer gc, GameState game, int delta) {
+	public void update(GameContainer gc, GameState game, int delta) throws SlickException {
 		for (MapIconData mapIcon : mapIconData) {
 			mapIcon.update(gc, game, delta);
 		}
+		
+		if (game.getInput().isKeyDown(Input.KEY_ENTER) && selectedIcon != null)
+			game.loadMap(gc, selectedIcon.getMapID(), selectedApproachDirection);
 	}
 
 	public void render(GameContainer gc, Graphics graphics) {
-		graphics.drawImage(worldMap, 0, 0);
+		graphics.drawImage(worldMap, 3, 3);
 
 		// Render connections
 		for (MapConnection connection : mapConnectors) {
@@ -137,7 +140,6 @@ public class WorldMap {
 	}
 
 	private void setSelectedIcon(MapIconData icon, MapDirection approachDirection) {
-		System.out.println(approachDirection);
 		this.selectedIcon = icon;
 		this.selectedApproachDirection = approachDirection;
 	}
@@ -186,6 +188,7 @@ public class WorldMap {
 	}
 
 	private class MapIconData {
+		private int mapID;
 		private int iconID;
 		private String name;
 		private int mX, mY;
@@ -193,8 +196,9 @@ public class WorldMap {
 		private boolean hovered;
 		private boolean cleared;
 
-		public MapIconData(String name, int iconID, int mX, int mY) {
+		public MapIconData(String name, int mapID, int iconID, int mX, int mY) {
 			this.name = name;
+			this.mapID = mapID;
 			this.iconID = iconID;
 			this.mX = mX;
 			this.mY = mY;
@@ -260,6 +264,10 @@ public class WorldMap {
 			this.iconID = iconID;
 		}
 
+		public int getMapID() {
+			return mapID;
+		}
+		
 		public boolean isCleared() {
 			return cleared;
 		}

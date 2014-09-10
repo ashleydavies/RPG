@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <maps>
-	<map name="Peaceful River" icon="1" mX="1100" mY="620" />
-	<map name="Abandoned Forest" icon="0" mX="1000" mY="650" />
+	<map name="Entry Peninsula" icon="1" mX="1060" mY="670" />
+	<map name="Abandoned Forest" icon="0" mX="1050" mY="620" />
 	<map name="Derelict Fields" icon="0" mX="980" mY="600" />
 	<map name="Kran" icon="2" mX="330" mY="650" />
 		
 	<connections>
-		<connection map1="0" map2="1" dir="west" />
-		<connection map1="1" map2="2" dir="north" />
+		<connection map1="0" map2="1" dir="north" />
+		<connection map1="1" map2="2" dir="west" />
 		<connection map1="2" map2="3" dir="west" />
 	</connections>
 </maps>

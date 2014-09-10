@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.newdawn.slick.geom.Vector2f;
 
+import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.util.Vector2i;
 import com.adavieslyons.util.map.Map;
 import com.adavieslyons.util.map.pathfinding.AStar;
@@ -69,6 +70,13 @@ public abstract class MovingEntity extends Entity {
 
 		if (!moving && desiredPosition != occupiedPosition)
 			pathfind(desiredPosition.getX(), desiredPosition.getY());
+	}
+	
+	protected void setPosition(Vector2i newPosition) {
+		setOccupiedPosition(newPosition);
+		setPreviousPosition(newPosition);
+		setDesiredPosition(newPosition);
+		setRenderPosition(new Vector2f(newPosition.getX(), newPosition.getY()));
 	}
 
 	public Vector2i getOccupiedPosition() {

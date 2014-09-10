@@ -28,6 +28,7 @@ public class MapTile {
 	int id;
 	String name;
 	private boolean collision;
+	private int frameLength;
 	TextureType textureType;
 	Image[] textures;
 
@@ -42,6 +43,9 @@ public class MapTile {
 		Element tileRoot = (Element) info.getElementsByTagName("tileInfo")
 				.item(0);
 		NodeList tileNodes = tileRoot.getElementsByTagName("tile");
+		
+		// Optionals
+		int frameLength = 0;
 
 		for (int i = 0; i < tileCount; i++) {
 			Element i_tileNode = (Element) tileNodes.item(i);
@@ -56,6 +60,15 @@ public class MapTile {
 					.getElementsByTagName("textureType").item(0)
 					.getTextContent().toUpperCase());
 
+			NodeList textureDataNodeList = i_tileNode.getElementsByTagName("textureData");
+			if (textureDataNodeList.getLength() > 0)
+			{
+				Element textureData = (Element) textureDataNodeList.item(0);
+				
+				if (textureData.hasAttribute("frameTime"))
+					frameLength = Integer.parseInt(textureData.getAttribute("frameTime"));
+			}
+			
 			NodeList textureNodes = i_tileNode.getElementsByTagName("texture");
 
 			Image[] textures = new Image[textureNodes.getLength()];
@@ -77,17 +90,18 @@ public class MapTile {
 			}
 
 			tiles[i_tileNodeID] = new MapTile(i_tileNodeID, i_tileName,
-					i_tileCollision, i_textureType, textures);
+					i_tileCollision, i_textureType, textures, frameLength);
 		}
 	}
 
 	private MapTile(int tileID, String Name, boolean Collision,
-			TextureType TextureType, Image[] Textures) {
+			TextureType TextureType, Image[] Textures, int frameLength) {
 		id = tileID;
 		name = Name;
 		collision = Collision;
 		textureType = TextureType;
 		textures = Textures;
+		this.frameLength = frameLength;
 	}
 
 	public boolean getCollision() {
@@ -98,9 +112,17 @@ public class MapTile {
 		return textures[0];
 	}
 
-	public void render(GameContainer gc, Graphics graphics, int x, int y) {
-		graphics.drawImage(textures[0], x, y); // TODO: Support different
-												// TextureTypes other than
-												// static!
+	public void render(GameContainer gc, Graphics graphics, int x, int y, int totalDelta) {
+		if (textureType == TextureType.STATIC)
+			graphics.drawImage(textures[0], x, y);
+		else if (textureType == TextureType.DYNAMIC) {
+			int totalFrameLength = frameLength * textures.length;
+			int frameDelta = totalDelta % totalFrameLength;
+			
+			for (int i = 0; i < textures.length; i++) {
+				if (frameDelta >= i * frameLength && frameDelta < (i + 1) * frameLength)
+					graphics.drawImage(textures[i], x, y);
+			}
+		}
 	}
 }

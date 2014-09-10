@@ -1,6 +1,7 @@
 package com.adavieslyons.util.map;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -19,6 +20,7 @@ import org.newdawn.slick.geom.Vector2f;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
 import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.orthorpg.entities.NPC;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
@@ -38,7 +40,7 @@ public class Map {
 	int id;
 	GameState game;
 	Document info;
-	int width;
+	int width = -1;
 	int height;
 	MapLayer layers[];
 	boolean fogOfWar[][];
@@ -46,43 +48,46 @@ public class Map {
 	CollisionMap collisionMap;
 	Node[][] nodeMatrix;
 	Image fogOfWarTexture;
+	Image mapBorderTexture;
 	TileSelectorGUI tsGUI;
 	int tileEditingTile = 0;
 	boolean tsGUIOpen;
 	boolean editing;
+	int totalDelta;
 
 	Vector2i offset = new Vector2i(128, 128);
 
 	public void update(GameContainer gc, GameState game, int delta)
 			throws SlickException {
-		if (getEditing())
-		{
+		totalDelta += delta;
+		if (getEditing()) {
 			// Process map editor logic
-			Vector2i mouseTile = screenCoordinatesToTileCoordinates(new Vector2i(game.getInput().getMouseX(), game.getInput().getMouseY()));
+			Vector2i mouseTile = screenCoordinatesToTileCoordinates(new Vector2i(
+					game.getInput().getMouseX(), game.getInput().getMouseY()));
 			game.getInput();
 			if (game.getInput().isKeyDown(Input.KEY_S))
 				tsGUIOpen = true;
-			
+
 			if (tsGUIOpen && tsGUI.getTileSelected()) {
 				tileEditingTile = tsGUI.getSelectedTile();
 				tsGUIOpen = false;
 				tsGUI.reset();
-			}
-			else if (tsGUIOpen) {
+			} else if (tsGUIOpen) {
 				tsGUI.update(gc, game, delta);
+			} else {
+				if (game.getInput().isMouseButtonDown(0)
+						&& mouseTile.getX() >= 0 && mouseTile.getY() >= 0
+						&& mouseTile.getX() < width
+						&& mouseTile.getY() < height)
+					setTile(mouseTile.getX(), mouseTile.getY(),
+							tileEditingTile, 0);
 			}
-			else {
-				if (game.getInput().isMouseButtonDown(0) && mouseTile.getX() >= 0 && mouseTile.getY() >= 0 && mouseTile.getX() < width && mouseTile.getY() < height)
-					setTile(mouseTile.getX(), mouseTile.getY(), tileEditingTile, 0);
-			}
-		}
-		else
-		{
+		} else {
 			// Game-only (Not editing) logic
 			for (NPC npc : npcs)
 				npc.update(gc, game, delta);
 		}
-		
+
 		// Move with arrow keys
 		if (game.getInput().isKeyDown(Input.KEY_LEFT))
 			addOffset(1, 0);
@@ -117,7 +122,7 @@ public class Map {
 			throws SlickException {
 		// TODO: Don't render every individual tile every frame; clip & combine
 		for (MapLayer layer : layers)
-			layer.render(gc, graphics);
+			layer.render(gc, graphics, totalDelta);
 		// Only render NPCs if not editing
 		if (!getEditing())
 			for (NPC npc : npcs)
@@ -187,15 +192,12 @@ public class Map {
 		return gameCoordinates.subtract(offset);
 	}
 
-	public void load(GameContainer gc, GameState game) throws SlickException {
+	public void load(GameContainer gc, GameState game, int mapID)
+			throws SlickException {
 		this.game = game;
+		this.id = mapID;
 		info = XMLParser.instance.parseXML(this.getClass().getClassLoader()
-				.getResourceAsStream("data/xml/map/1.xml"));
-
-		width = Integer.parseInt(info.getElementsByTagName("mapWidth").item(0)
-				.getTextContent());
-		height = Integer.parseInt(info.getElementsByTagName("mapHeight")
-				.item(0).getTextContent());
+				.getResourceAsStream("data/xml/map/" + mapID + ".xml"));
 
 		Element layerRoot = (Element) info.getElementsByTagName("tileData")
 				.item(0);
@@ -205,17 +207,25 @@ public class Map {
 
 		for (int i = 0; i < layerNodes.getLength(); i++) {
 			Element i_layerNode = (Element) layerNodes.item(i);
-			
+
 			NodeList i_rowNodes = i_layerNode.getElementsByTagName("row");
-			MapTileData[][] i_layerTiles = new MapTileData[height][width];
+
+			height = i_rowNodes.getLength();
+
+			if (width == -1) {
+				Element rowNode0 = (Element) i_rowNodes.item(0);
+				width = rowNode0.getElementsByTagName("tile").getLength();
+			}
 			
-			for (int r = 0; r < i_rowNodes.getLength(); r++) {
+			MapTileData[][] i_layerTiles = new MapTileData[height][width];
+
+			for (int r = 0; r < height; r++) {
 				Element i_rowNode = (Element) i_rowNodes.item(r);
 
 				NodeList i_colNodes = i_rowNode.getElementsByTagName("tile");
 				i_layerTiles[r] = new MapTileData[width];
-
-				for (int c = 0; c < i_colNodes.getLength(); c++) {
+				
+				for (int c = 0; c < width; c++) {
 					Element i_tile = (Element) i_colNodes.item(c);
 
 					int i_tileID = Integer.parseInt(i_tile
@@ -265,6 +275,8 @@ public class Map {
 
 		fogOfWarTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 0,
 				Game.TILE_SIZE, Game.TILE_SIZE);
+		mapBorderTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 32,
+				Game.TILE_SIZE, Game.TILE_SIZE);
 		fogOfWar = new boolean[getWidth()][getHeight()];
 		for (boolean row[] : fogOfWar)
 			Arrays.fill(row, true);
@@ -296,9 +308,16 @@ public class Map {
 	public Vector2i getOffset() {
 		return offset;
 	}
-	
+
 	public void setTile(int tX, int tY, int tileID, int layer) {
 		layers[layer].setTile(tX, tY, tileID);
+	}
+
+	public void focusTile(Vector2i tile) {
+		// Take tile position, convert to screen position, and set it as offset
+		setOffset(new Vector2i(
+				-(tile.getX() * Game.TILE_SIZE - game.WIDTH / 2), (tile.getY()
+						* Game.TILE_SIZE - game.HEIGHT / 2)));
 	}
 
 	public void setOffset(Vector2i offset) {
@@ -307,14 +326,54 @@ public class Map {
 				offset.setX(150);
 			if (offset.getY() > 150)
 				offset.setY(150);
-	
+
 			if (width * Game.TILE_SIZE + offset.getX() < game.WIDTH - 150)
 				offset.setX(game.WIDTH - 150 - width * Game.TILE_SIZE);
-	
+
 			if (height * Game.TILE_SIZE + offset.getY() < game.HEIGHT - 150)
 				offset.setY(game.HEIGHT - 150 - height * Game.TILE_SIZE);
 		}
 		this.offset = offset;
+	}
+
+	public Vector2i getSuitablePlayerLocation(WorldMap.MapDirection direction) {
+
+		// General algorithm
+		// Record positions for valid positions
+		// Take n/2nd position
+		ArrayList<Vector2i> validPositions = new ArrayList<Vector2i>();
+		switch (direction) {
+			case NORTH:
+				System.out.println("Calculating north positions");
+				for (int x = 1; x < width - 1; x++)
+					if (!getCollideable(x, 0) && !getCollideable(x, 1))
+						validPositions.add(new Vector2i(x, 1));
+				break;
+			case EAST:
+				System.out.println("Calculating east positions");
+				for (int y = 1; y < height - 1; y++)
+					if (!getCollideable(width - 1, y)
+							&& !getCollideable(width - 2, y))
+						validPositions.add(new Vector2i(width - 2, y));
+				break;
+			case SOUTH:
+				System.out.println("Calculating south positions");
+				for (int x = 1; x < width - 1; x++)
+					if (!getCollideable(x, height - 1)
+							&& !getCollideable(x, height - 2))
+						validPositions.add(new Vector2i(x, height - 2));
+				break;
+			case WEST:
+				System.out.println("Calculating west positions");
+				for (int y = 1; y < height - 1; y++)
+					if (!getCollideable(0, y) && !getCollideable(1, y))
+						validPositions.add(new Vector2i(1, y));
+				break;
+		}
+		if (validPositions.size() > 0)
+			return validPositions
+					.get((int) Math.floor(validPositions.size() / 2));
+		return new Vector2i(0, 0);
 	}
 
 	public boolean getEditing() {
@@ -324,41 +383,47 @@ public class Map {
 	public void setEditing(boolean editing) {
 		this.editing = editing;
 	}
-	
+
+	public int getID() {
+		return id;
+	}
+
 	public void exportXML() {
 		try {
 			// Export map to XML format
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory
+					.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 			Document document = docBuilder.newDocument();
-			
+
 			Element rootElement = document.createElement("map");
 			document.appendChild(rootElement);
 			rootElement.appendChild(document.createElement("name"));
 			rootElement.appendChild(document.createElement("icon"));
 			Element mapWidth = document.createElement("mapWidth");
-			mapWidth.appendChild(document.createTextNode(Integer.toString(width)));
+			mapWidth.appendChild(document.createTextNode(Integer
+					.toString(width)));
 			rootElement.appendChild(mapWidth);
 			Element mapHeight = document.createElement("mapHeight");
-			mapHeight.appendChild(document.createTextNode(Integer.toString(height)));
+			mapHeight.appendChild(document.createTextNode(Integer
+					.toString(height)));
 			rootElement.appendChild(mapHeight);
 			Element mapRoot = document.createElement("tileData");
 			rootElement.appendChild(mapRoot);
 			Element npcRoot = document.createElement("NPCs");
 			rootElement.appendChild(npcRoot);
-			
+
 			for (MapLayer layer : layers) {
 				layer.exportXML(document, mapRoot);
 			}
-			
+
 			// Export XML to file
 			TransformerFactory tf = TransformerFactory.newInstance();
 			Transformer transformer = tf.newTransformer();
 			StreamResult result = new StreamResult(new File("mapExported.xml"));
 			transformer.transform(new DOMSource(document), result);
 			System.out.println("Saved map to mapExported.xml!");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -6,6 +6,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.util.Vector2i;
 import com.adavieslyons.util.inventory.ItemStack;
 import com.adavieslyons.util.map.Map;
 
@@ -16,9 +17,10 @@ import com.adavieslyons.util.map.Map;
 public class Player extends MovingEntity {
 	private ItemStack[] items = new ItemStack[27];
 
-	public Player(GameContainer gc, GameState game, Map map)
+	public Player(GameContainer gc, GameState game, Map map, Vector2i position)
 			throws SlickException {
 		super(map);
+		this.setPosition(position);
 		image = new Image("img/player.png");
 
 		items[0] = new ItemStack(0, 1);
@@ -55,6 +57,11 @@ public class Player extends MovingEntity {
 	public void render(GameContainer gc, Graphics graphics)
 			throws SlickException {
 		super.render(gc, graphics);
+	}
+	
+	public void onNewMapLoad(Map map, Vector2i newPosition) {
+		setPosition(newPosition);
+		this.map = map;
 	}
 
 	public ItemStack[] getItems() {

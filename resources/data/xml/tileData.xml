@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <data>
-    <tileCount>4</tileCount>
+    <tileCount>6</tileCount>
     
     <tileInfo>
         <tile id="0">
@@ -11,7 +11,7 @@
             <textureType>static</textureType>
             <texture id="0">
                 <spritesheet>0</spritesheet>
-                <xPos>0</xPos>
+                <xPos>32</xPos>
                 <yPos>32</yPos>
             </texture>
         </tile>
@@ -31,10 +31,7 @@
             <collision>1</collision>
             
             <textureType>dynamic</textureType>
-            <textureData>
-                <frameTime>0.1</frameTime>
-                <frameCount>4</frameCount>
-            </textureData>
+            <textureData frameTime="500" />
             <texture id="0">
                 <spritesheet>0</spritesheet>
                 <xPos>64</xPos>
@@ -66,6 +63,28 @@
                 <xPos>96</xPos>
                 <yPos>0</yPos>
             </texture>
+        </tile>
+        <tile id="4">
+        	<name>tilleddirt</name>
+        	<collision>0</collision>
+        	
+        	<textureType>static</textureType>
+        	<texture id="0">
+        		<spritesheet>0</spritesheet>
+        		<xPos>96</xPos>
+        		<yPos>32</yPos>
+        	</texture>
+        </tile>
+        <tile id="5">
+        	<name>tree</name>
+        	<collision>1</collision>
+        	
+        	<textureType>static</textureType>
+        	<texture id="0" height="64">
+        		<spritesheet>0</spritesheet>
+        		<xPos>128</xPos>
+        		<yPos>0</yPos>
+        	</texture>
         </tile>
     </tileInfo>
 </data>

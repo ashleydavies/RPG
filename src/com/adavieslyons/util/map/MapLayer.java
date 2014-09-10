@@ -24,7 +24,7 @@ public class MapLayer {
 		return MapTile.getTile(tiles[y][x].getId()).getCollision();
 	}
 
-	void render(GameContainer gc, Graphics graphics) {
+	void render(GameContainer gc, Graphics graphics, int totalDelta) {
 		int y = 0;
 		int x = 0;
 
@@ -35,7 +35,10 @@ public class MapLayer {
 					Vector2i renderPosition = map
 							.tileCoordinatesToGameCoordinates(x, y);
 					MapTile.getTile(tile.getId()).render(gc, graphics,
-							renderPosition.getX(), renderPosition.getY());
+							renderPosition.getX(), renderPosition.getY(), totalDelta);
+					
+					if (((y == 0 || y == tiles.length - 1) || (x == 0 || x == tileRow.length - 1)) && !MapTile.getTile(tile.getId()).getCollision())
+						map.mapBorderTexture.draw(renderPosition.getX(), renderPosition.getY());
 				}
 				x++;
 			}

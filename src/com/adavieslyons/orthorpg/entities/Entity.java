@@ -17,7 +17,7 @@ import com.adavieslyons.util.map.Map;
  * @author Ashley
  */
 public abstract class Entity {
-	protected final Map map;
+	protected Map map;
 	protected Image image;
 	private Vector2f renderPosition;
 
