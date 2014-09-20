@@ -22,7 +22,9 @@
             <texture spritesheet="0" xPos="96" yPos="32" />
         </tile>
         <tile name="tree" collision="1">
-            <texture spritesheet="0" xPos="128" yPos="0" />
+        	<!-- Render above where it would be rendered as it's a taller than usual sprite -->
+        	<textureData yOffset="-32"/>
+            <texture spritesheet="0" xPos="128" yPos="0" height="64" />
         </tile>
         <tile name="greybrick" collision="1">
             <texture spritesheet="0" xPos="96" yPos="64" />
@@ -32,6 +34,14 @@
         </tile>
         <tile name="woodfloor" collision="0">
             <texture spritesheet="0" xPos="96" yPos="128" />
+        </tile>
+        <tile name="tree2" collision="1">
+        	<!-- Render above where it would be rendered as it's a taller than usual sprite -->
+        	<textureData yOffset="-32"/>
+            <texture spritesheet="0" xPos="160" yPos="0" height="64" />
+        </tile>
+        <tile name="null" collision="1">
+        	<texture spritesheet="0" xPos="0" yPos="0" />
         </tile>
     </tileInfo>
 </data>

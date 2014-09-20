@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <maps>
-	<map name="Entry Peninsula" icon="1" mX="1060" mY="670" />
+	<map name="Entry Peninsula" icon="1" mX="1080" mY="690" />
 	<map name="Abandoned Forest" icon="0" mX="1050" mY="620" />
-	<map name="Derelict Fields" icon="0" mX="980" mY="600" />
-	<map name="Kran" icon="2" mX="330" mY="650" />
-		
+	<map name="Derelict Fields" icon="0" mX="830" mY="550" />
+	<map name="Kran" icon="2" mX="360" mY="550" />
+	
 	<connections>
 		<connection map1="0" map2="1" dir="north" />
 		<connection map1="1" map2="2" dir="west" />

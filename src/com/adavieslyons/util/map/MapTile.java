@@ -1,5 +1,6 @@
 package com.adavieslyons.util.map;
 
+import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.util.SpriteSheet;
 import com.adavieslyons.util.XMLParser;
 
@@ -24,11 +25,13 @@ public class MapTile {
 	public static MapTile[] getTiles() {
 		return tiles;
 	}
-
+	
 	int id;
 	String name;
 	private boolean collision;
 	private int frameLength;
+	private int xOffset;
+	private int yOffset;
 	TextureType textureType;
 	Image[] textures;
 
@@ -49,6 +52,8 @@ public class MapTile {
 					.getAttribute("collision")) == 1 ? true : false);
 			TextureType textureType = TextureType.STATIC;
 			int frameLength = 0;
+			int xOffset = 0;
+			int yOffset = 0;
 
 			NodeList textureDataNodeList = i_tileNode
 					.getElementsByTagName("textureData");
@@ -61,6 +66,10 @@ public class MapTile {
 				if (textureData.hasAttribute("frameTime"))
 					frameLength = Integer.parseInt(textureData
 							.getAttribute("frameTime"));
+				if (textureData.hasAttribute("xOffset"))
+					xOffset = Integer.parseInt(textureData.getAttribute("xOffset"));
+				if (textureData.hasAttribute("yOffset"))
+					yOffset = Integer.parseInt(textureData.getAttribute("yOffset"));
 			}
 
 			NodeList textureNodes = i_tileNode.getElementsByTagName("texture");
@@ -74,18 +83,24 @@ public class MapTile {
 						.getAttribute("spritesheet"));
 				int xPos = Integer.parseInt(i_textureNode.getAttribute("xPos"));
 				int yPos = Integer.parseInt(i_textureNode.getAttribute("yPos"));
-
+				int width = Game.TILE_SIZE;
+				int height = Game.TILE_SIZE;
+				if (i_textureNode.hasAttribute("width"))
+					width = Integer.parseInt(i_textureNode.getAttribute("width"));
+				if (i_textureNode.hasAttribute("height"))
+					height = Integer.parseInt(i_textureNode.getAttribute("height"));
+				
 				textures[t] = SpriteSheet.getSpriteSheet(spritesheet)
-						.getSubImage(xPos, yPos, 32, 32);
+						.getSubImage(xPos, yPos, width, height);
 			}
 
 			tiles[i] = new MapTile(i, name, collision, textureType, textures,
-					frameLength);
+					frameLength, xOffset, yOffset);
 		}
 	}
 
 	private MapTile(int tileID, String Name, boolean Collision,
-			TextureType TextureType, Image[] Textures, int frameLength) {
+			TextureType TextureType, Image[] Textures, int frameLength, int xOffset, int yOffset) {
 		System.out.println(Name);
 		id = tileID;
 		name = Name;
@@ -93,6 +108,8 @@ public class MapTile {
 		textureType = TextureType;
 		textures = Textures;
 		this.frameLength = frameLength;
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
 	}
 
 	public boolean getCollision() {
@@ -106,7 +123,7 @@ public class MapTile {
 	public void render(GameContainer gc, Graphics graphics, int x, int y,
 			int totalDelta) {
 		if (textureType == TextureType.STATIC)
-			graphics.drawImage(textures[0], x, y);
+			graphics.drawImage(textures[0], x + xOffset, y + yOffset);
 		else if (textureType == TextureType.DYNAMIC) {
 			int totalFrameLength = frameLength * textures.length;
 			int frameDelta = totalDelta % totalFrameLength;
@@ -114,7 +131,7 @@ public class MapTile {
 			for (int i = 0; i < textures.length; i++) {
 				if (frameDelta >= i * frameLength
 						&& frameDelta < (i + 1) * frameLength)
-					graphics.drawImage(textures[i], x, y);
+					graphics.drawImage(textures[i], x + xOffset, y + yOffset);
 			}
 		}
 	}
