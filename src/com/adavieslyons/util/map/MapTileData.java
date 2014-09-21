@@ -20,10 +20,7 @@ public class MapTileData {
 	public int getData(int dataID) {
 		return data[dataID];
 	}
-
-	/**
-	 * @return the id
-	 */
+	
 	public int getId() {
 		return id;
 	}

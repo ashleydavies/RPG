@@ -60,4 +60,9 @@ public abstract class Entity {
 		return new Rectangle(renderPosition.getX() * Game.TILE_SIZE,
 				renderPosition.getY() * Game.TILE_SIZE, 32, 64);
 	}
+	
+	public boolean mouseOverThis(GameState game) {
+		Rectangle rBounds = getRenderBounds();
+		return rBounds.contains(game.getInput().getMouseX(), game.getInput().getMouseY());
+	}
 }

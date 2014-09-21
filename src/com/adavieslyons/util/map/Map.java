@@ -22,7 +22,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.adavieslyons.orthorpg.Game;
-import com.adavieslyons.orthorpg.entities.NPC;
+import com.adavieslyons.orthorpg.entities.Mob;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.orthorpg.gui.TileSelectorGUI;
 import com.adavieslyons.util.SpriteSheet;
@@ -44,7 +44,8 @@ public class Map {
 	int height;
 	MapLayer layers[];
 	boolean fogOfWar[][];
-	NPC npcs[];
+	boolean occupiedTiles[][];
+	Mob mobs[];
 	CollisionMap collisionMap;
 	Node[][] nodeMatrix;
 	Image fogOfWarTexture;
@@ -84,8 +85,8 @@ public class Map {
 			}
 		} else {
 			// Game-only (Not editing) logic
-			for (NPC npc : npcs)
-				npc.update(gc, game, delta);
+			for (Mob mob : mobs)
+				mob.update(gc, game, delta);
 		}
 
 		// Move with arrow keys
@@ -123,10 +124,10 @@ public class Map {
 		// TODO: Don't render every individual tile every frame; clip & combine
 		for (MapLayer layer : layers)
 			layer.render(gc, graphics, totalDelta);
-		// Only render NPCs if not editing
+		// Only render mobs if not editing
 		if (!getEditing())
-			for (NPC npc : npcs)
-				npc.render(gc, graphics);
+			for (Mob mob : mobs)
+				mob.render(gc, graphics);
 		if (getEditing() && tsGUIOpen)
 			tsGUI.render(gc, graphics);
 	}
@@ -135,11 +136,12 @@ public class Map {
 			throws SlickException {
 		if (!editing) {
 			Vector2i screenTL = screenCoordinatesToTileCoordinates(0, 0);
-			Vector2i screenBR = screenCoordinatesToTileCoordinates(gc.getWidth(), gc.getHeight());
+			Vector2i screenBR = screenCoordinatesToTileCoordinates(
+					gc.getWidth(), gc.getHeight());
 
 			screenTL.add(new Vector2i(2, 2));
 			screenBR.add(new Vector2i(1, 1));
-			
+
 			if (screenTL.getX() < 0)
 				screenTL.setX(0);
 			if (screenTL.getY() < 0)
@@ -150,10 +152,12 @@ public class Map {
 				screenBR.setY(height);
 
 			for (int y = screenTL.getY(); y < screenBR.getY(); y++) {
-				for (int x = screenTL.getX(); x < screenBR.getX(); x++ ) {
+				for (int x = screenTL.getX(); x < screenBR.getX(); x++) {
 					if (fogOfWar[x][y]) {
-						Vector2i renderPosition = tileCoordinatesToGameCoordinates(x, y);
-						fogOfWarTexture.draw(renderPosition.getX(), renderPosition.getY());
+						Vector2i renderPosition = tileCoordinatesToGameCoordinates(
+								x, y);
+						fogOfWarTexture.draw(renderPosition.getX(),
+								renderPosition.getY());
 					}
 				}
 			}
@@ -216,71 +220,69 @@ public class Map {
 		layers = new MapLayer[layerNodes.getLength()];
 
 		for (int i = 0; i < layerNodes.getLength(); i++) {
-			Element i_layerNode = (Element) layerNodes.item(i);
+			Element layerNode = (Element) layerNodes.item(i);
 
-			NodeList i_rowNodes = i_layerNode.getElementsByTagName("row");
+			NodeList rowNodes = layerNode.getElementsByTagName("row");
 
-			height = i_rowNodes.getLength();
+			height = rowNodes.getLength();
 
 			if (width == -1) {
-				Element rowNode0 = (Element) i_rowNodes.item(0);
+				Element rowNode0 = (Element) rowNodes.item(0);
 				width = rowNode0.getElementsByTagName("tile").getLength();
 			}
-			
-			MapTileData[][] i_layerTiles = new MapTileData[height][width];
+
+			MapTileData[][] layerTiles = new MapTileData[height][width];
 
 			for (int r = 0; r < height; r++) {
-				Element i_rowNode = (Element) i_rowNodes.item(r);
+				Element rowNode = (Element) rowNodes.item(r);
 
-				NodeList i_colNodes = i_rowNode.getElementsByTagName("tile");
-				i_layerTiles[r] = new MapTileData[width];
-				
+				NodeList colNodes = rowNode.getElementsByTagName("tile");
+				layerTiles[r] = new MapTileData[width];
+
 				for (int c = 0; c < width; c++) {
-					Element i_tile = (Element) i_colNodes.item(c);
+					Element tile = (Element) colNodes.item(c);
 
-					int i_tileID = Integer.parseInt(i_tile
-							.getAttribute("tileID"));
+					int tileID = Integer.parseInt(tile.getAttribute("tileID"));
 
-					i_layerTiles[r][c] = new MapTileData(i_tileID);
+					layerTiles[r][c] = new MapTileData(tileID);
 				}
 			}
 
-			layers[i] = new MapLayer(i_layerTiles, this);
+			layers[i] = new MapLayer(layerTiles, this);
 		}
 
-		Element npcRoot = (Element) info.getElementsByTagName("NPCs").item(0);
+		Element mobRoot = (Element) info.getElementsByTagName("mobs").item(0);
 
-		NodeList npcNodes = npcRoot.getElementsByTagName("NPC");
-		npcs = new NPC[npcNodes.getLength()];
+		NodeList mobNodes = mobRoot.getElementsByTagName("mob");
+		mobs = new Mob[mobNodes.getLength()];
 
-		for (int i = 0; i < npcNodes.getLength(); i++) {
-			Element i_npcNode = (Element) npcNodes.item(i);
+		for (int i = 0; i < mobNodes.getLength(); i++) {
+			Element mobNode = (Element) mobNodes.item(i);
 
-			int i_npcTypeID = Integer.parseInt(i_npcNode
-					.getElementsByTagName("id").item(0).getTextContent());
+			int mobTypeID = Integer.parseInt(mobNode.getElementsByTagName("id")
+					.item(0).getTextContent());
 
-			NodeList pathContainer = i_npcNode.getElementsByTagName("path");
+			NodeList pathContainerNodes = mobNode.getElementsByTagName("path");
 
 			Vector2i path[] = null;
 
-			if (pathContainer.getLength() > 0) {
-				Element i_pathContainer = (Element) pathContainer.item(0);
+			if (pathContainerNodes.getLength() > 0) {
+				Element pathContainer = (Element) pathContainerNodes.item(0);
 
-				NodeList pathNodes = i_pathContainer
-						.getElementsByTagName("node");
+				NodeList pathNodes = pathContainer.getElementsByTagName("node");
 
 				path = new Vector2i[pathNodes.getLength()];
 
 				for (int p = 0; p < pathNodes.getLength(); p++) {
-					Element i_pathNode = (Element) pathNodes.item(p);
+					Element pathNode = (Element) pathNodes.item(p);
 
-					int pX = Integer.parseInt(i_pathNode.getAttribute("xPos"));
-					int pY = Integer.parseInt(i_pathNode.getAttribute("yPos"));
+					int pX = Integer.parseInt(pathNode.getAttribute("xPos"));
+					int pY = Integer.parseInt(pathNode.getAttribute("yPos"));
 					path[p] = new Vector2i(pX, pY);
 				}
 			}
-			NPC npc = new NPC(gc, game, i_npcTypeID, this, path);
-			npcs[i] = npc;
+			Mob mob = new Mob(gc, game, mobTypeID, this, path);
+			mobs[i] = mob;
 		}
 
 		fogOfWarTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 0,
@@ -410,8 +412,8 @@ public class Map {
 			document.appendChild(rootElement);
 			Element mapRoot = document.createElement("tileData");
 			rootElement.appendChild(mapRoot);
-			Element npcRoot = document.createElement("NPCs");
-			rootElement.appendChild(npcRoot);
+			Element mobRoot = document.createElement("mobs");
+			rootElement.appendChild(mobRoot);
 
 			for (MapLayer layer : layers) {
 				layer.exportXML(document, mapRoot);
