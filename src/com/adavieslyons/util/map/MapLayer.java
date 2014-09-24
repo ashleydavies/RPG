@@ -2,9 +2,12 @@ package com.adavieslyons.util.map;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.adavieslyons.orthorpg.entities.Mob;
+import com.adavieslyons.orthorpg.entities.MovingEntity;
 import com.adavieslyons.util.Vector2i;
 
 /**
@@ -24,12 +27,7 @@ public class MapLayer {
 		return MapTile.getTile(tiles[y][x].getId()).getCollision();
 	}
 
-	void render(GameContainer gc, Graphics graphics, int totalDelta) {
-		//int y = 0;
-		//int x = 0;
-
-		// We can save a lot of rendering here if we calculate the screen tile
-		// coordinates
+	void render(GameContainer gc, Graphics graphics, int totalDelta) throws SlickException {
 		Vector2i screenTL = map.screenCoordinatesToTileCoordinates(0, 0);
 		Vector2i screenBR = map.screenCoordinatesToTileCoordinates(
 				gc.getWidth(), gc.getHeight());
@@ -60,41 +58,11 @@ public class MapLayer {
 							&& !MapTile.getTile(tile.getId()).getCollision())
 						map.mapBorderTexture.draw(renderPosition.getX(),
 								renderPosition.getY());
+					
+					tile.renderOccupant(gc, graphics);
 				}
 			}
 		}
-		
-		/*
-		for (MapTileData[] tileRow : tiles) {
-			x = 0;
-
-			if (y < screenTL.getY() || y > screenBR.getY()) {
-				y++;
-				continue;
-			}
-
-			for (MapTileData tile : tileRow) {
-				if (x < screenTL.getX() || x > screenBR.getX()) {
-					x++;
-					continue;
-				}
-
-				if (!map.isFogOfWar(x, y) || map.getEditing()) {
-					Vector2i renderPosition = map
-							.tileCoordinatesToGameCoordinates(x, y);
-					MapTile.getTile(tile.getId()).render(gc, graphics,
-							renderPosition.getX(), renderPosition.getY(),
-							totalDelta);
-
-					if (((y == 0 || y == tiles.length - 1) || (x == 0 || x == tileRow.length - 1))
-							&& !MapTile.getTile(tile.getId()).getCollision())
-						map.mapBorderTexture.draw(renderPosition.getX(),
-								renderPosition.getY());
-				}
-				x++;
-			}
-			y++;
-		}*/
 	}
 
 	public void setTile(int tX, int tY, int tileID) {
@@ -114,5 +82,14 @@ public class MapLayer {
 				rowElement.appendChild(tileElement);
 			}
 		}
+	}
+
+	public boolean getOccupied(int tX, int tY) {
+		return tiles[tY][tX].getOccupied();
+	}
+
+	public MapTileData setOccupied(int x, int y, MovingEntity entity) {
+		tiles[y][x].setOccupied(entity);
+		return tiles[y][x];
 	}
 }

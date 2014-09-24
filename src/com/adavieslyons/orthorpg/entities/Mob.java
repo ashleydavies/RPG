@@ -14,6 +14,7 @@ import com.adavieslyons.util.XMLParser;
 import com.adavieslyons.util.dialog.DialogNode;
 import com.adavieslyons.util.dialog.IDialogable;
 import com.adavieslyons.util.map.Map;
+import com.adavieslyons.util.map.MapTileData;
 
 /**
  * 
@@ -22,9 +23,9 @@ import com.adavieslyons.util.map.Map;
 public class Mob extends MovingPathEntity implements IDialogable, IAttackable {
 	private String name;
 	private DialogNode[] dialog;
+	private MapTileData tileOccupied;
 	private Image dialogImage;
-
-
+	
 	public Mob(GameContainer gc, GameState game, int mobID, Map map,
 			Vector2i path[]) throws SlickException {
 		super(map);
@@ -77,6 +78,16 @@ public class Mob extends MovingPathEntity implements IDialogable, IAttackable {
 	public void dialogCloseRequested() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	protected void occupiedTileStartChange(Vector2i newTile) {
+		tileOccupied = map.setOccupied(newTile.getX(), newTile.getY(), this);
+	}
+	
+	@Override
+	protected void occupiedTileEndChange(Vector2i oldTile) {
+		map.setOccupied(oldTile.getX(), oldTile.getY(), null);
 	}
 
 	public String getName() {

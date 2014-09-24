@@ -36,9 +36,11 @@ public abstract class MovingEntity extends Entity {
 				map.getNodeMatrix()[tileY][tileX]);
 
 		if (!path.isEmpty()) {
+			occupiedTileEndChange(previousPosition);
 			previousPosition = occupiedPosition;
 			occupiedPosition = new Vector2i(path.get(0).getX(), path.get(0)
 					.getY());
+			occupiedTileStartChange(occupiedPosition);
 			moving = true;
 		}
 	}
@@ -71,7 +73,7 @@ public abstract class MovingEntity extends Entity {
 		if (!moving && desiredPosition != occupiedPosition)
 			pathfind(desiredPosition.getX(), desiredPosition.getY());
 	}
-	
+		
 	protected void setPosition(Vector2i newPosition) {
 		setOccupiedPosition(newPosition);
 		setPreviousPosition(newPosition);
@@ -102,4 +104,7 @@ public abstract class MovingEntity extends Entity {
 	public void setDesiredPosition(Vector2i desiredPosition) {
 		this.desiredPosition = desiredPosition;
 	}
+	
+	protected abstract void occupiedTileStartChange(Vector2i newTile);
+	protected abstract void occupiedTileEndChange(Vector2i oldTile);
 }

@@ -22,7 +22,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.adavieslyons.orthorpg.Game;
+import com.adavieslyons.orthorpg.entities.EntityManager;
 import com.adavieslyons.orthorpg.entities.Mob;
+import com.adavieslyons.orthorpg.entities.MovingEntity;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.orthorpg.gui.TileSelectorGUI;
 import com.adavieslyons.util.SpriteSheet;
@@ -38,6 +40,7 @@ import com.adavieslyons.util.map.pathfinding.CollisionMap;
  */
 public class Map {
 	int id;
+	EntityManager entityManager;
 	GameState game;
 	Document info;
 	int width = -1;
@@ -45,7 +48,6 @@ public class Map {
 	MapLayer layers[];
 	boolean fogOfWar[][];
 	boolean occupiedTiles[][];
-	Mob mobs[];
 	CollisionMap collisionMap;
 	Node[][] nodeMatrix;
 	Image fogOfWarTexture;
@@ -60,7 +62,9 @@ public class Map {
 
 	public void update(GameContainer gc, GameState game, int delta)
 			throws SlickException {
+		
 		totalDelta += delta;
+		
 		if (getEditing()) {
 			// Process map editor logic
 			Vector2i mouseTile = screenCoordinatesToTileCoordinates(new Vector2i(
@@ -83,10 +87,6 @@ public class Map {
 					setTile(mouseTile.getX(), mouseTile.getY(),
 							tileEditingTile, 0);
 			}
-		} else {
-			// Game-only (Not editing) logic
-			for (Mob mob : mobs)
-				mob.update(gc, game, delta);
 		}
 
 		// Move with arrow keys
@@ -125,9 +125,6 @@ public class Map {
 		for (MapLayer layer : layers)
 			layer.render(gc, graphics, totalDelta);
 		// Only render mobs if not editing
-		if (!getEditing())
-			for (Mob mob : mobs)
-				mob.render(gc, graphics);
 		if (getEditing() && tsGUIOpen)
 			tsGUI.render(gc, graphics);
 	}
@@ -206,7 +203,7 @@ public class Map {
 		return gameCoordinates.subtract(offset);
 	}
 
-	public void load(GameContainer gc, GameState game, int mapID)
+	public void load(GameContainer gc, GameState game, int mapID, EntityManager entityManager)
 			throws SlickException {
 		this.game = game;
 		this.id = mapID;
@@ -252,39 +249,39 @@ public class Map {
 		}
 
 		Element mobRoot = (Element) info.getElementsByTagName("mobs").item(0);
-
-		NodeList mobNodes = mobRoot.getElementsByTagName("mob");
-		mobs = new Mob[mobNodes.getLength()];
-
-		for (int i = 0; i < mobNodes.getLength(); i++) {
-			Element mobNode = (Element) mobNodes.item(i);
-
-			int mobTypeID = Integer.parseInt(mobNode.getElementsByTagName("id")
-					.item(0).getTextContent());
-
-			NodeList pathContainerNodes = mobNode.getElementsByTagName("path");
-
-			Vector2i path[] = null;
-
-			if (pathContainerNodes.getLength() > 0) {
-				Element pathContainer = (Element) pathContainerNodes.item(0);
-
-				NodeList pathNodes = pathContainer.getElementsByTagName("node");
-
-				path = new Vector2i[pathNodes.getLength()];
-
-				for (int p = 0; p < pathNodes.getLength(); p++) {
-					Element pathNode = (Element) pathNodes.item(p);
-
-					int pX = Integer.parseInt(pathNode.getAttribute("xPos"));
-					int pY = Integer.parseInt(pathNode.getAttribute("yPos"));
-					path[p] = new Vector2i(pX, pY);
+		if (mobRoot != null) {
+			NodeList mobNodes = mobRoot.getElementsByTagName("mob");
+			
+			for (int i = 0; i < mobNodes.getLength(); i++) {
+				Element mobNode = (Element) mobNodes.item(i);
+	
+				int mobTypeID = Integer.parseInt(mobNode.getElementsByTagName("id")
+						.item(0).getTextContent());
+	
+				NodeList pathContainerNodes = mobNode.getElementsByTagName("path");
+	
+				Vector2i path[] = null;
+	
+				if (pathContainerNodes.getLength() > 0) {
+					Element pathContainer = (Element) pathContainerNodes.item(0);
+	
+					NodeList pathNodes = pathContainer.getElementsByTagName("node");
+	
+					path = new Vector2i[pathNodes.getLength()];
+	
+					for (int p = 0; p < pathNodes.getLength(); p++) {
+						Element pathNode = (Element) pathNodes.item(p);
+	
+						int pX = Integer.parseInt(pathNode.getAttribute("xPos"));
+						int pY = Integer.parseInt(pathNode.getAttribute("yPos"));
+						path[p] = new Vector2i(pX, pY);
+					}
 				}
+				Mob mob = new Mob(gc, game, mobTypeID, this, path);
+				entityManager.addMob(mob);
 			}
-			Mob mob = new Mob(gc, game, mobTypeID, this, path);
-			mobs[i] = mob;
 		}
-
+			
 		fogOfWarTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 0,
 				Game.TILE_SIZE, Game.TILE_SIZE);
 		mapBorderTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 32,
@@ -311,6 +308,14 @@ public class Map {
 
 	public boolean isFogOfWar(int tX, int tY) {
 		return fogOfWar[tX][tY];
+	}
+	
+	public boolean isOccupied(int tX, int tY) {
+		return layers[layers.length - 1].getOccupied(tX, tY);
+	}
+	
+	public MapTileData setOccupied(int x, int y, MovingEntity entity) {
+		return layers[layers.length - 1].setOccupied(x, y, entity);
 	}
 
 	public void revealCoordinate(int tX, int tY) {

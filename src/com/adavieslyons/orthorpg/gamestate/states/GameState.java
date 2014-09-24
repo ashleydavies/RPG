@@ -6,6 +6,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+import com.adavieslyons.orthorpg.entities.EntityManager;
 import com.adavieslyons.orthorpg.entities.Player;
 import com.adavieslyons.orthorpg.gamestate.GameStateManager;
 import com.adavieslyons.orthorpg.gamestate.State;
@@ -24,6 +25,7 @@ public class GameState extends State {
 	private Player player;
 	private SaveData currentGameData;
 	private InventoryGUI inventoryGUI;
+	private EntityManager entityManager;
 
 	public int WIDTH;
 	public int HEIGHT;
@@ -49,7 +51,9 @@ public class GameState extends State {
 		input = new Input(gc.getHeight());
 		previousInput = new Input(gc.getHeight());
 		map = new Map();
-		map.load(gc, this, 0);
+		entityManager = new EntityManager();
+		entityManager.setPlayer(player);
+		map.load(gc, this, 0, entityManager);
 		
 		worldMap = new WorldMap();
 		player = new Player(gc, this, map, new Vector2i(40, 7));
@@ -151,7 +155,7 @@ public class GameState extends State {
 			case PLAYING:
 			case INVENTORY:
 				map.render(gc, graphics);
-				player.render(gc, graphics);
+				//player.render(gc, graphics);
 				map.renderPostEntities(gc, graphics);
 				if (state == InnerState.INVENTORY)
 					inventoryGUI.render(gc, graphics);
@@ -168,7 +172,7 @@ public class GameState extends State {
 	public void loadMap(GameContainer gc, int mapID, WorldMap.MapDirection direction) throws SlickException {
 		map = new Map();
 		System.out.println("Loading Map " + mapID);
-		map.load(gc, this, mapID);
+		map.load(gc, this, mapID, entityManager);
 		Vector2i playerPosition = map.getSuitablePlayerLocation(direction);
 		player.onNewMapLoad(map, playerPosition);
 		map.focusTile(playerPosition);
