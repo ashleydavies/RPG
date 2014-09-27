@@ -9,9 +9,9 @@ import com.adavieslyons.orthorpg.gamestate.states.GameState;
 
 public class EntityManager {
 	// We maintain a list of mobs as they have varying actions if in battle
-	public ArrayList<Mob> mobs;
+	private ArrayList<Mob> mobs;
 	// And store the player separately too, for easier access
-	public Player player;
+	private Player player;
 	
 	public EntityManager() {
 		mobs = new ArrayList<Mob>();
@@ -22,9 +22,13 @@ public class EntityManager {
 			mob.update(gc, game, delta);
 		}
 	}
-	
+
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+	
+	public Player getPlayer() {
+		return player;
 	}
 	
 	public void addMob(Mob mob) {

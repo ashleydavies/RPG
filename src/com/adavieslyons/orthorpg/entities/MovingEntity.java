@@ -13,6 +13,7 @@ public abstract class MovingEntity extends Entity {
 	private Vector2i previousPosition;
 	private Vector2i occupiedPosition;
 	private Vector2i desiredPosition;
+	private int fieldOfView;
 	protected boolean moving;
 
 	float tileMoveTimer = 1;
@@ -103,6 +104,14 @@ public abstract class MovingEntity extends Entity {
 
 	public void setDesiredPosition(Vector2i desiredPosition) {
 		this.desiredPosition = desiredPosition;
+	}
+
+	public int getFieldOfView() {
+		return fieldOfView;
+	}
+
+	public void setFieldOfView(int fieldOfView) {
+		this.fieldOfView = fieldOfView;
 	}
 	
 	protected abstract void occupiedTileStartChange(Vector2i newTile);

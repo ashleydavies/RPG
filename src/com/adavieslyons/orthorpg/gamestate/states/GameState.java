@@ -52,11 +52,11 @@ public class GameState extends State {
 		previousInput = new Input(gc.getHeight());
 		map = new Map();
 		entityManager = new EntityManager();
-		entityManager.setPlayer(player);
 		map.load(gc, this, 0, entityManager);
+		player = new Player(gc, this, map, new Vector2i(40, 7));
+		entityManager.setPlayer(player);
 		
 		worldMap = new WorldMap();
-		player = new Player(gc, this, map, new Vector2i(40, 7));
 		map.focusTile(new Vector2i(40, 7));
 		inventoryGUI = new InventoryGUI(gc, this);
 

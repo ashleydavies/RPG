@@ -25,6 +25,7 @@ import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.orthorpg.entities.EntityManager;
 import com.adavieslyons.orthorpg.entities.Mob;
 import com.adavieslyons.orthorpg.entities.MovingEntity;
+import com.adavieslyons.orthorpg.entities.Player;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.orthorpg.gui.TileSelectorGUI;
 import com.adavieslyons.util.SpriteSheet;
@@ -51,6 +52,7 @@ public class Map {
 	CollisionMap collisionMap;
 	Node[][] nodeMatrix;
 	Image fogOfWarTexture;
+	Image fogOfWarRevealedTexture;
 	Image mapBorderTexture;
 	TileSelectorGUI tsGUI;
 	int tileEditingTile = 0;
@@ -62,9 +64,9 @@ public class Map {
 
 	public void update(GameContainer gc, GameState game, int delta)
 			throws SlickException {
-		
+
 		totalDelta += delta;
-		
+
 		if (getEditing()) {
 			// Process map editor logic
 			Vector2i mouseTile = screenCoordinatesToTileCoordinates(new Vector2i(
@@ -150,11 +152,17 @@ public class Map {
 
 			for (int y = screenTL.getY(); y < screenBR.getY(); y++) {
 				for (int x = screenTL.getX(); x < screenBR.getX(); x++) {
-					if (fogOfWar[x][y]) {
-						Vector2i renderPosition = tileCoordinatesToGameCoordinates(
-								x, y);
+					Vector2i center = entityManager.getPlayer().getOccupiedPosition();
+					Vector2i renderPosition = tileCoordinatesToGameCoordinates(
+							x, y);
+					if (center.distance(new Vector2i(x, y)) <= entityManager.getPlayer().getFieldOfView()) {
+						fogOfWar[x][y] = false;
+					} else if (fogOfWar[x][y]) {
 						fogOfWarTexture.draw(renderPosition.getX(),
 								renderPosition.getY());
+					} else {
+						fogOfWarRevealedTexture.draw(renderPosition.getX(),
+							renderPosition.getY());
 					}
 				}
 			}
@@ -203,10 +211,11 @@ public class Map {
 		return gameCoordinates.subtract(offset);
 	}
 
-	public void load(GameContainer gc, GameState game, int mapID, EntityManager entityManager)
-			throws SlickException {
+	public void load(GameContainer gc, GameState game, int mapID,
+			EntityManager entityManager) throws SlickException {
 		this.game = game;
 		this.id = mapID;
+		this.entityManager = entityManager;
 		info = XMLParser.instance.parseXML(this.getClass().getClassLoader()
 				.getResourceAsStream("data/xml/map/" + mapID + ".xml"));
 
@@ -251,29 +260,34 @@ public class Map {
 		Element mobRoot = (Element) info.getElementsByTagName("mobs").item(0);
 		if (mobRoot != null) {
 			NodeList mobNodes = mobRoot.getElementsByTagName("mob");
-			
+
 			for (int i = 0; i < mobNodes.getLength(); i++) {
 				Element mobNode = (Element) mobNodes.item(i);
-	
-				int mobTypeID = Integer.parseInt(mobNode.getElementsByTagName("id")
-						.item(0).getTextContent());
-	
-				NodeList pathContainerNodes = mobNode.getElementsByTagName("path");
-	
+
+				int mobTypeID = Integer.parseInt(mobNode
+						.getElementsByTagName("id").item(0).getTextContent());
+
+				NodeList pathContainerNodes = mobNode
+						.getElementsByTagName("path");
+
 				Vector2i path[] = null;
-	
+
 				if (pathContainerNodes.getLength() > 0) {
-					Element pathContainer = (Element) pathContainerNodes.item(0);
-	
-					NodeList pathNodes = pathContainer.getElementsByTagName("node");
-	
+					Element pathContainer = (Element) pathContainerNodes
+							.item(0);
+
+					NodeList pathNodes = pathContainer
+							.getElementsByTagName("node");
+
 					path = new Vector2i[pathNodes.getLength()];
-	
+
 					for (int p = 0; p < pathNodes.getLength(); p++) {
 						Element pathNode = (Element) pathNodes.item(p);
-	
-						int pX = Integer.parseInt(pathNode.getAttribute("xPos"));
-						int pY = Integer.parseInt(pathNode.getAttribute("yPos"));
+
+						int pX = Integer
+								.parseInt(pathNode.getAttribute("xPos"));
+						int pY = Integer
+								.parseInt(pathNode.getAttribute("yPos"));
 						path[p] = new Vector2i(pX, pY);
 					}
 				}
@@ -281,9 +295,11 @@ public class Map {
 				entityManager.addMob(mob);
 			}
 		}
-			
+
 		fogOfWarTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 0,
 				Game.TILE_SIZE, Game.TILE_SIZE);
+		fogOfWarRevealedTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0,
+				64, Game.TILE_SIZE, Game.TILE_SIZE);
 		mapBorderTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 32,
 				Game.TILE_SIZE, Game.TILE_SIZE);
 		fogOfWar = new boolean[getWidth()][getHeight()];
@@ -309,11 +325,11 @@ public class Map {
 	public boolean isFogOfWar(int tX, int tY) {
 		return fogOfWar[tX][tY];
 	}
-	
+
 	public boolean isOccupied(int tX, int tY) {
 		return layers[layers.length - 1].getOccupied(tX, tY);
 	}
-	
+
 	public MapTileData setOccupied(int x, int y, MovingEntity entity) {
 		return layers[layers.length - 1].setOccupied(x, y, entity);
 	}
@@ -333,7 +349,7 @@ public class Map {
 	public void focusTile(Vector2i tile) {
 		// Take tile position, convert to screen position, and set it as offset
 		setOffset(new Vector2i(
-				-(tile.getX() * Game.TILE_SIZE - game.WIDTH / 2), (tile.getY()
+				-(tile.getX() * Game.TILE_SIZE - game.WIDTH / 2), -(tile.getY()
 						* Game.TILE_SIZE - game.HEIGHT / 2)));
 	}
 

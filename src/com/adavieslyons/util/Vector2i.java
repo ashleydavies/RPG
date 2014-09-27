@@ -58,4 +58,11 @@ public class Vector2i {
 	public Vector2i subtract(Vector2i other) {
 		return new Vector2i(getX() - other.getX(), getY() - other.getY());
 	}
+
+	public int distance(Vector2i other) {
+		return (int) (Math.sqrt( 
+					Math.pow(getX() - other.getX(), 2.0)
+				  + Math.pow(getY() - other.getY(), 2.0)
+				));
+	}
 }

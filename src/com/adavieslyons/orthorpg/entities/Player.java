@@ -23,6 +23,7 @@ public class Player extends MovingEntity {
 			throws SlickException {
 		super(map);
 		this.setPosition(position);
+		this.setFieldOfView(6);
 		tileOccupied = map.setOccupied(position.getX(), position.getY(), this);
 		image = new Image("img/player.png");
 
@@ -43,17 +44,17 @@ public class Player extends MovingEntity {
 		}
 
 		updateMove(delta);
-
+/*
 		for (int x = -5; x <= 5; x++) {
 			for (int y = -5; y <= 5; y++) {
 				int tX = getOccupiedPosition().getX() + x;
 				int tY = getOccupiedPosition().getY() + y;
-
+				
 				if (tX >= 0 && tY >= 0)
 					if (tX < map.getWidth() && tY < map.getHeight())
 						map.revealCoordinate(tX, tY);
 			}
-		}
+		}*/
 	}
 
 	@Override
