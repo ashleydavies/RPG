@@ -125,7 +125,7 @@ public class Map {
 			throws SlickException {
 		// TODO: Don't render every individual tile every frame; clip & combine
 		for (MapLayer layer : layers)
-			layer.render(gc, graphics, totalDelta);
+			layer.render(gc, graphics, totalDelta, !this.getEditing());
 		// Only render mobs if not editing
 		if (getEditing() && tsGUIOpen)
 			tsGUI.render(gc, graphics);
@@ -152,17 +152,19 @@ public class Map {
 
 			for (int y = screenTL.getY(); y < screenBR.getY(); y++) {
 				for (int x = screenTL.getX(); x < screenBR.getX(); x++) {
-					Vector2i center = entityManager.getPlayer().getOccupiedPosition();
+					Vector2i center = entityManager.getPlayer()
+							.getOccupiedPosition();
 					Vector2i renderPosition = tileCoordinatesToGameCoordinates(
 							x, y);
-					if (center.distance(new Vector2i(x, y)) <= entityManager.getPlayer().getFieldOfView()) {
+					if (center.distance(new Vector2i(x, y)) <= entityManager
+							.getPlayer().getFieldOfView()) {
 						fogOfWar[x][y] = false;
 					} else if (fogOfWar[x][y]) {
 						fogOfWarTexture.draw(renderPosition.getX(),
 								renderPosition.getY());
 					} else {
 						fogOfWarRevealedTexture.draw(renderPosition.getX(),
-							renderPosition.getY());
+								renderPosition.getY());
 					}
 				}
 			}
@@ -209,6 +211,48 @@ public class Map {
 	// GAME => SCREEN
 	public Vector2i gameCoordinatesToScreenCoordinates(Vector2i gameCoordinates) {
 		return gameCoordinates.subtract(offset);
+	}
+
+	public void generateNewMap(GameContainer gc, GameState game, int mapID,
+			EntityManager entityManager) throws SlickException {
+		generateNewMap(gc, game, mapID, entityManager, 80, 80);
+	}
+
+	public void generateNewMap(GameContainer gc, GameState game, int mapID,
+			EntityManager entityManager, int width, int height) throws SlickException {
+		this.game = game;
+		this.id = mapID;
+		this.entityManager = entityManager;
+		this.width = width;
+		this.height = height;
+		
+		layers = new MapLayer[1];
+		MapTileData[][] mapTileData = new MapTileData[height][width];
+		
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				mapTileData[y][x] = new MapTileData(10);
+			}
+		}
+		
+		layers[0] = new MapLayer(mapTileData, this);
+		
+		// TODO: Duplicate code across this method & load - refactor to fix
+		fogOfWarTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 0,
+				Game.TILE_SIZE, Game.TILE_SIZE);
+		fogOfWarRevealedTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0,
+				64, Game.TILE_SIZE, Game.TILE_SIZE);
+		mapBorderTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 32,
+				Game.TILE_SIZE, Game.TILE_SIZE);
+		fogOfWar = new boolean[getWidth()][getHeight()];
+		for (boolean row[] : fogOfWar)
+			Arrays.fill(row, true);
+		collisionMap = new CollisionMap(this);
+		nodeMatrix = AStar.getNodeMatrix(collisionMap);
+		tsGUI = new TileSelectorGUI(gc, game);
+		
+		// If we generated a new map, chances are we want to edit it.
+		this.setEditing(true);
 	}
 
 	public void load(GameContainer gc, GameState game, int mapID,

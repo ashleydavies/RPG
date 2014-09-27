@@ -53,6 +53,7 @@ public class GameState extends State {
 		map = new Map();
 		entityManager = new EntityManager();
 		map.load(gc, this, 0, entityManager);
+		//map.generateNewMap(gc, this, 0, entityManager);
 		player = new Player(gc, this, map, new Vector2i(40, 7));
 		entityManager.setPlayer(player);
 		
@@ -62,6 +63,7 @@ public class GameState extends State {
 
 		Item.LoadItems(this);
 		loadState(InnerState.PLAYING);
+		//loadState(InnerState.MAP_EDITOR);
 
 		for (int i = 0; i < 22; i++)
 			System.out.println(i + " " + SaveData.getFriendlyName(i));
@@ -155,7 +157,6 @@ public class GameState extends State {
 			case PLAYING:
 			case INVENTORY:
 				map.render(gc, graphics);
-				//player.render(gc, graphics);
 				map.renderPostEntities(gc, graphics);
 				if (state == InnerState.INVENTORY)
 					inventoryGUI.render(gc, graphics);

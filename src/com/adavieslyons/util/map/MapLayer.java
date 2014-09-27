@@ -27,7 +27,7 @@ public class MapLayer {
 		return MapTile.getTile(tiles[y][x].getId()).getCollision();
 	}
 
-	void render(GameContainer gc, Graphics graphics, int totalDelta) throws SlickException {
+	void render(GameContainer gc, Graphics graphics, int totalDelta, boolean renderOccupants) throws SlickException {
 		Vector2i screenTL = map.screenCoordinatesToTileCoordinates(0, 0);
 		Vector2i screenBR = map.screenCoordinatesToTileCoordinates(
 				gc.getWidth(), gc.getHeight());
@@ -59,7 +59,8 @@ public class MapLayer {
 						map.mapBorderTexture.draw(renderPosition.getX(),
 								renderPosition.getY());
 					
-					tile.renderOccupant(gc, graphics);
+					if (renderOccupants)
+						tile.renderOccupant(gc, graphics);
 				}
 			}
 		}
