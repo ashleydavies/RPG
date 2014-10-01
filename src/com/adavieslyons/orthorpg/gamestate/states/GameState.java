@@ -64,7 +64,7 @@ public class GameState extends State {
 		Item.LoadItems(this);
 		loadState(InnerState.PLAYING);
 		//loadState(InnerState.MAP_EDITOR);
-
+		
 		for (int i = 0; i < 22; i++)
 			System.out.println(i + " " + SaveData.getFriendlyName(i));
 	}
@@ -109,7 +109,7 @@ public class GameState extends State {
 					loadState(InnerState.MAP_EDITOR);
 					break;
 				}
-
+				entityManager.update(gc, this, delta);
 				player.update(gc, this, delta);
 				map.update(gc, this, delta);
 				

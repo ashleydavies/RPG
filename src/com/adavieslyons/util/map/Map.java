@@ -27,6 +27,8 @@ import com.adavieslyons.orthorpg.entities.Mob;
 import com.adavieslyons.orthorpg.entities.MovingEntity;
 import com.adavieslyons.orthorpg.entities.Player;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.orthorpg.gui.ImageGUI;
+import com.adavieslyons.orthorpg.gui.GUIWindow;
 import com.adavieslyons.orthorpg.gui.TileSelectorGUI;
 import com.adavieslyons.util.SpriteSheet;
 import com.adavieslyons.util.Vector2i;
@@ -54,7 +56,9 @@ public class Map {
 	Image fogOfWarTexture;
 	Image fogOfWarRevealedTexture;
 	Image mapBorderTexture;
+	Image minimapImage;
 	TileSelectorGUI tsGUI;
+	ImageGUI minimapBackgroundGUI;
 	int tileEditingTile = 0;
 	boolean tsGUIOpen;
 	boolean editing;
@@ -169,6 +173,8 @@ public class Map {
 				}
 			}
 		}
+		
+		minimapBackgroundGUI.render(gc, graphics);
 	}
 
 	// SCREEN => TILE
@@ -219,24 +225,25 @@ public class Map {
 	}
 
 	public void generateNewMap(GameContainer gc, GameState game, int mapID,
-			EntityManager entityManager, int width, int height) throws SlickException {
+			EntityManager entityManager, int width, int height)
+			throws SlickException {
 		this.game = game;
 		this.id = mapID;
 		this.entityManager = entityManager;
 		this.width = width;
 		this.height = height;
-		
+
 		layers = new MapLayer[1];
 		MapTileData[][] mapTileData = new MapTileData[height][width];
-		
+
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				mapTileData[y][x] = new MapTileData(10);
 			}
 		}
-		
+
 		layers[0] = new MapLayer(mapTileData, this);
-		
+
 		// TODO: Duplicate code across this method & load - refactor to fix
 		fogOfWarTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 0,
 				Game.TILE_SIZE, Game.TILE_SIZE);
@@ -250,9 +257,11 @@ public class Map {
 		collisionMap = new CollisionMap(this);
 		nodeMatrix = AStar.getNodeMatrix(collisionMap);
 		tsGUI = new TileSelectorGUI(gc, game);
-		
 		// If we generated a new map, chances are we want to edit it.
 		this.setEditing(true);
+		
+		generateMinimapImage();
+		minimapBackgroundGUI = new ImageGUI(gc, game, 16, 16, minimapImage);
 	}
 
 	public void load(GameContainer gc, GameState game, int mapID,
@@ -352,6 +361,21 @@ public class Map {
 		collisionMap = new CollisionMap(this);
 		nodeMatrix = AStar.getNodeMatrix(collisionMap);
 		tsGUI = new TileSelectorGUI(gc, game);
+
+		generateMinimapImage();
+		minimapBackgroundGUI = new ImageGUI(gc, game, 16, 16, minimapImage);
+	}
+
+	public void generateMinimapImage() throws SlickException {
+		this.minimapImage = new Image(this.getWidth(), this.getHeight());
+		Graphics graphics = minimapImage.getGraphics();
+		for (int x = 0; x < this.getWidth(); x++) {
+			for (int y = 0; y < this.getHeight(); y++) {
+				graphics.setColor(layers[0].getTile(x, y).getMinimapColor());
+				graphics.drawRect(x, y, 1, 1);
+			}
+		}
+		graphics.flush();
 	}
 
 	public Node[][] getNodeMatrix() {

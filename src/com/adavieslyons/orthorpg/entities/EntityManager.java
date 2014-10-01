@@ -19,6 +19,7 @@ public class EntityManager {
 	
 	public void update(GameContainer gc, GameState game, int delta) throws SlickException {
 		for (Mob mob : mobs) {
+			System.out.println(mob);
 			mob.update(gc, game, delta);
 		}
 	}

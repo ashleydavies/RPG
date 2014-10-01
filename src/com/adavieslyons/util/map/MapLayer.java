@@ -26,6 +26,10 @@ public class MapLayer {
 	public boolean getCollideable(int y, int x) {
 		return MapTile.getTile(tiles[y][x].getId()).getCollision();
 	}
+	
+	public MapTile getTile(int x, int y) {
+		return MapTile.getTile(tiles[y][x].getId());
+	}
 
 	void render(GameContainer gc, Graphics graphics, int totalDelta, boolean renderOccupants) throws SlickException {
 		Vector2i screenTL = map.screenCoordinatesToTileCoordinates(0, 0);

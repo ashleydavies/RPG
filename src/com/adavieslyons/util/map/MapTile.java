@@ -4,6 +4,7 @@ import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.util.SpriteSheet;
 import com.adavieslyons.util.XMLParser;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -32,6 +33,7 @@ public class MapTile {
 	private int frameLength;
 	private int xOffset;
 	private int yOffset;
+	private Color minimapColor;
 	TextureType textureType;
 	Image[] textures;
 
@@ -110,6 +112,23 @@ public class MapTile {
 		this.frameLength = frameLength;
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
+		
+		// Calculate average pixel colour and set the minimap colour
+		Image image = textures[0];
+		float R = 0, G = 0, B = 0;
+		for (int x = 0; x < image.getWidth(); x++) {
+			for (int y = 0; y < image.getHeight(); y++) {
+				Color pixelColor = image.getColor(x, y);
+				R += pixelColor.r;
+				G += pixelColor.g;
+				B += pixelColor.b;
+			}
+		}
+		R /= image.getWidth() * image.getHeight();
+		G /= image.getWidth() * image.getHeight();
+		B /= image.getWidth() * image.getHeight();
+		
+		minimapColor = new Color(R, G, B);
 	}
 
 	public boolean getCollision() {
@@ -134,5 +153,12 @@ public class MapTile {
 					graphics.drawImage(textures[i], x + xOffset, y + yOffset);
 			}
 		}
+	}
+
+	public Color getMinimapColor() {
+		if (name != "null")
+			return minimapColor;
+		else
+			return new Color(0, 0, 0, 255);
 	}
 }

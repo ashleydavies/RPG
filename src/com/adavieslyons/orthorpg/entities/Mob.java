@@ -9,6 +9,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.orthorpg.gui.DialogGUI;
 import com.adavieslyons.util.Vector2i;
 import com.adavieslyons.util.XMLParser;
 import com.adavieslyons.util.dialog.DialogNode;
@@ -25,6 +26,8 @@ public class Mob extends MovingPathEntity implements IDialogable, IAttackable {
 	private DialogNode[] dialog;
 	private MapTileData tileOccupied;
 	private Image dialogImage;
+	
+	private DialogGUI dialogGUI;
 	
 	public Mob(GameContainer gc, GameState game, int mobID, Map map,
 			Vector2i path[]) throws SlickException {
@@ -44,7 +47,7 @@ public class Mob extends MovingPathEntity implements IDialogable, IAttackable {
 		Element mobInfo = (Element) mobDoc.getElementsByTagName("info").item(0);
 
 		String imageName = mobInfo.getAttribute("avatar");
-		Element textureElement = (Element) mobInfo.getElementsByTagName(
+		Element textureElement = (Element) mobDoc.getElementsByTagName(
 				"texture").item(0);
 
 		name = mobInfo.getAttribute("name");
@@ -52,11 +55,13 @@ public class Mob extends MovingPathEntity implements IDialogable, IAttackable {
 		image = XMLParser.loadTexture(textureElement);
 
 		// Parse dialog if they have any
-		NodeList dialogList = mobInfo.getElementsByTagName("dialog");
+		NodeList dialogList = mobDoc.getElementsByTagName("dialog");
 		
 		if (dialogList.getLength() > 0) {
 			dialog = XMLParser.loadDialog((Element) dialogList.item(0));
 		}
+
+		
 
 	}
 	
