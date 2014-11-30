@@ -10,7 +10,8 @@ import com.adavieslyons.orthorpg.gamestate.states.GameState;
  * @author Ashley
  */
 public class Game extends BasicGame {
-	public static final int TILE_SIZE = 32;
+	public static final int TILE_SIZE_X = 64;
+	public static final int TILE_SIZE_Y = 32;
 
 	GameStateManager gsm;
 

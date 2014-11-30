@@ -33,11 +33,11 @@ public abstract class Entity {
 	public void render(GameContainer gc, Graphics graphics)
 			throws SlickException {
 		Vector2f renderCoordinatesF = new Vector2f(renderPosition.getX()
-				* Game.TILE_SIZE, renderPosition.getY() * Game.TILE_SIZE);
+				* Game.TILE_SIZE_X, renderPosition.getY() * Game.TILE_SIZE_Y);
 		Vector2i renderCoordinates = map
 				.screenCoordinatesToGameCoordinates(renderCoordinatesF);
 		graphics.drawImage(image, renderCoordinates.getX(),
-				renderCoordinates.getY() - Game.TILE_SIZE);
+				renderCoordinates.getY() - Game.TILE_SIZE_Y);
 	}
 
 	public Image getImage() {
@@ -57,8 +57,8 @@ public abstract class Entity {
 	}
 
 	public Rectangle getRenderBounds() {
-		return new Rectangle(renderPosition.getX() * Game.TILE_SIZE,
-				renderPosition.getY() * Game.TILE_SIZE, 32, 64);
+		return new Rectangle(renderPosition.getX() * Game.TILE_SIZE_X,
+				renderPosition.getY() * Game.TILE_SIZE_Y, 32, 64);
 	}
 	
 	public boolean mouseOverThis(GameState game) {

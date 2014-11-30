@@ -3,10 +3,10 @@
 <data>
     <tileInfo>
         <tile name="grass" collision="0">            
-            <texture spritesheet="0" xPos="32" yPos="32" />
+            <texture spritesheet="0" xPos="0" yPos="32" />
         </tile>
         <tile name="dirt" collision="0">            
-            <texture spritesheet="0" xPos="32" yPos="0" />
+            <texture spritesheet="0" xPos="128" yPos="0" />
         </tile>
         <tile name="water" collision="1">            
             <textureData type="dynamic" frameTime="500"/>
@@ -16,7 +16,7 @@
             <texture spritesheet="0" xPos="64" yPos="96" />
         </tile>
         <tile name="stonepath" collision="0">            
-            <texture spritesheet="0" xPos="96" yPos="0" />
+            <texture spritesheet="0" xPos="0" yPos="64" />
         </tile>
         <tile name="tilleddirt" collision="0">
             <texture spritesheet="0" xPos="96" yPos="32" />
@@ -24,7 +24,7 @@
         <tile name="tree" collision="1">
         	<!-- Render above where it would be rendered as it's a taller than usual sprite -->
         	<textureData yOffset="-32"/>
-            <texture spritesheet="0" xPos="128" yPos="0" height="64" />
+            <texture spritesheet="0" xPos="192" yPos="0" height="64" />
         </tile>
         <tile name="greybrick" collision="1">
             <texture spritesheet="0" xPos="96" yPos="64" />

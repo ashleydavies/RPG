@@ -1,5 +1,6 @@
 package com.adavieslyons.util.map;
 
+import java.io.Console;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -164,11 +165,11 @@ public class Map {
 							.getPlayer().getFieldOfView()) {
 						fogOfWar[x][y] = false;
 					} else if (fogOfWar[x][y]) {
-						fogOfWarTexture.draw(renderPosition.getX(),
-								renderPosition.getY());
+						//fogOfWarTexture.draw(renderPosition.getX(),
+						//		renderPosition.getY());
 					} else {
-						fogOfWarRevealedTexture.draw(renderPosition.getX(),
-								renderPosition.getY());
+						//fogOfWarRevealedTexture.draw(renderPosition.getX(),
+						//		renderPosition.getY());
 					}
 				}
 			}
@@ -180,8 +181,8 @@ public class Map {
 	// SCREEN => TILE
 	public Vector2i screenCoordinatesToTileCoordinates(int x, int y) {
 		return new Vector2i((int) Math.floor((x - offset.getX())
-				/ Game.TILE_SIZE), (int) Math.floor((y - offset.getY())
-				/ Game.TILE_SIZE));
+				/ Game.TILE_SIZE_X), (int) Math.floor((y - offset.getY())
+				/ Game.TILE_SIZE_Y));
 	}
 
 	// SCREEN => TILE
@@ -192,8 +193,16 @@ public class Map {
 
 	// TILE => GAME
 	public Vector2i tileCoordinatesToGameCoordinates(int x, int y) {
-		return new Vector2i(x * Game.TILE_SIZE + offset.getX(), y
-				* Game.TILE_SIZE + offset.getY());
+		// Boring ortho
+		//return new Vector2i(x * Game.TILE_SIZE + offset.getX(), y
+		//		* Game.TILE_SIZE + offset.getY());
+		
+		// Weyy isometric
+		float xP = x;
+		float yP = y;
+		System.out.println((int) (xP * 0.5 - yP * 0.5) * Game.TILE_SIZE_X + " from " + xP + " " + yP);
+		return new Vector2i((int) ((xP * 0.5 - yP * 0.5) * Game.TILE_SIZE_X) + game.WIDTH / 2, 
+							(int) ((yP * 0.5 + xP * 0.5) * Game.TILE_SIZE_Y));
 	}
 
 	// TILE => GAME
@@ -246,11 +255,11 @@ public class Map {
 
 		// TODO: Duplicate code across this method & load - refactor to fix
 		fogOfWarTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 0,
-				Game.TILE_SIZE, Game.TILE_SIZE);
+				Game.TILE_SIZE_X, Game.TILE_SIZE_Y);
 		fogOfWarRevealedTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0,
-				64, Game.TILE_SIZE, Game.TILE_SIZE);
+				64, Game.TILE_SIZE_X, Game.TILE_SIZE_Y);
 		mapBorderTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 32,
-				Game.TILE_SIZE, Game.TILE_SIZE);
+				Game.TILE_SIZE_X, Game.TILE_SIZE_Y);
 		fogOfWar = new boolean[getWidth()][getHeight()];
 		for (boolean row[] : fogOfWar)
 			Arrays.fill(row, true);
@@ -350,11 +359,11 @@ public class Map {
 		}
 
 		fogOfWarTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 0,
-				Game.TILE_SIZE, Game.TILE_SIZE);
+				Game.TILE_SIZE_X, Game.TILE_SIZE_Y);
 		fogOfWarRevealedTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0,
-				64, Game.TILE_SIZE, Game.TILE_SIZE);
+				64, Game.TILE_SIZE_X, Game.TILE_SIZE_Y);
 		mapBorderTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 32,
-				Game.TILE_SIZE, Game.TILE_SIZE);
+				Game.TILE_SIZE_X, Game.TILE_SIZE_Y);
 		fogOfWar = new boolean[getWidth()][getHeight()];
 		for (boolean row[] : fogOfWar)
 			Arrays.fill(row, true);
@@ -417,8 +426,8 @@ public class Map {
 	public void focusTile(Vector2i tile) {
 		// Take tile position, convert to screen position, and set it as offset
 		setOffset(new Vector2i(
-				-(tile.getX() * Game.TILE_SIZE - game.WIDTH / 2), -(tile.getY()
-						* Game.TILE_SIZE - game.HEIGHT / 2)));
+				-(tile.getX() * Game.TILE_SIZE_X - game.WIDTH / 2), -(tile.getY()
+						* Game.TILE_SIZE_Y - game.HEIGHT / 2)));
 	}
 
 	public void setOffset(Vector2i offset) {
@@ -428,11 +437,11 @@ public class Map {
 			if (offset.getY() > 150)
 				offset.setY(150);
 
-			if (width * Game.TILE_SIZE + offset.getX() < game.WIDTH - 150)
-				offset.setX(game.WIDTH - 150 - width * Game.TILE_SIZE);
+			if (width * Game.TILE_SIZE_X + offset.getX() < game.WIDTH - 150)
+				offset.setX(game.WIDTH - 150 - width * Game.TILE_SIZE_Y);
 
-			if (height * Game.TILE_SIZE + offset.getY() < game.HEIGHT - 150)
-				offset.setY(game.HEIGHT - 150 - height * Game.TILE_SIZE);
+			if (height * Game.TILE_SIZE_X + offset.getY() < game.HEIGHT - 150)
+				offset.setY(game.HEIGHT - 150 - height * Game.TILE_SIZE_Y);
 		}
 		this.offset = offset;
 	}

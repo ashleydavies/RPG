@@ -47,6 +47,9 @@ public class MapLayer {
 			screenBR.setX(map.getWidth());
 		if (screenBR.getY() > map.getHeight())
 			screenBR.setY(map.getHeight());
+		
+		screenTL = new Vector2i(0, 0);
+		screenBR = new Vector2i(map.getWidth(), map.getHeight());
 
 		for (int y = screenTL.getY(); y < screenBR.getY(); y++) {
 			for (int x = screenTL.getX(); x < screenBR.getX(); x++ ) {
