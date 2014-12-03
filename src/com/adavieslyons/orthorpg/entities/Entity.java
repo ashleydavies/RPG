@@ -19,12 +19,16 @@ import com.adavieslyons.util.map.Map;
 public abstract class Entity {
 	protected Map map;
 	protected Image image;
-	private Vector2f renderPosition;
+	// In terms of tiles
+	protected Vector2i position;
+	protected Vector2i positionLerpFrom;
+	private float positionLerpFraction;
 
 	public Entity(Map map) {
 		this.map = map;
 
-		renderPosition = new Vector2f(0, 0);
+		position = new Vector2i(0, 0);
+		positionLerpFrom = new Vector2i(0, 0);
 	}
 
 	public abstract void update(GameContainer gc, GameState game, int delta)
@@ -32,16 +36,38 @@ public abstract class Entity {
 
 	public void render(GameContainer gc, Graphics graphics)
 			throws SlickException {
-		Vector2f renderCoordinatesF = new Vector2f(renderPosition.getX()
+		Vector2i positionCoordinates = map.tileCoordinatesToGameCoordinates(position);
+		Vector2i lerpFromCoordinates = map.tileCoordinatesToGameCoordinates(positionLerpFrom);
+		Vector2f drawCoordinates = lerpFromCoordinates.lerpTo(positionCoordinates, positionLerpFraction);
+		graphics.drawImage(image, (int)(drawCoordinates.getX() + Game.TILE_SIZE_X / 2 - image.getWidth() / 2), (int)(drawCoordinates.getY() - image.getHeight() / 2 - Game.TILE_SIZE_Y / 2));
+		/*Vector2f renderCoordinatesF = new Vector2f(renderPosition.getX()
 				* Game.TILE_SIZE_X, renderPosition.getY() * Game.TILE_SIZE_Y);
-		Vector2i renderCoordinates = map
-				.screenCoordinatesToGameCoordinates(renderCoordinatesF);
-		graphics.drawImage(image, renderCoordinates.getX(),
-				renderCoordinates.getY() - Game.TILE_SIZE_Y);
+		Vector2i tileCoordinates = new Vector2i((int) renderPosition.getX(), (int) renderPosition.getY());
+		Vector2i drawCoordinates = map.tileCoordinatesToGameCoordinates(tileCoordinates);
+		Vector2f offset = new Vector2f(renderCoordinatesF.getX() - drawCoordinates.getX(), renderCoordinatesF.getY() - drawCoordinates.getY());
+		System.out.println(offset);
+		graphics.drawImage(image, drawCoordinates.getX() + Game.TILE_SIZE_X / 2 - image.getWidth() / 2 + offset.getX() * 2,
+								  drawCoordinates.getY() - image.getHeight() / 2 - (Game.TILE_SIZE_Y / 2) + offset.getY());*/
 	}
 
 	public Image getImage() {
 		return image;
+	}
+	
+	public Vector2i getPositionLerpFrom() {
+		return positionLerpFrom;
+	}
+
+	public void setPositionLerpFrom(Vector2i positionLerpFrom) {
+		this.positionLerpFrom = positionLerpFrom;
+	}
+
+	public void setPosition(Vector2i position) {
+		this.position = position;
+	}
+
+	public Vector2i getPosition() {
+		return position;
 	}
 
 	public void setImage(Image image) {
@@ -49,16 +75,19 @@ public abstract class Entity {
 	}
 
 	public Vector2f getRenderPosition() {
-		return renderPosition;
+		Vector2i positionCoordinates = map.tileCoordinatesToGameCoordinates(position);
+		Vector2i lerpFromCoordinates = map.tileCoordinatesToGameCoordinates(positionLerpFrom);
+		Vector2f drawCoordinates = lerpFromCoordinates.lerpTo(positionCoordinates, positionLerpFraction);
+		return drawCoordinates;
 	}
-
-	public void setRenderPosition(Vector2f renderPosition) {
-		this.renderPosition = renderPosition;
+	
+	public void setPositionLerpFraction(float positionLerpFraction) {
+		this.positionLerpFraction = positionLerpFraction;
 	}
 
 	public Rectangle getRenderBounds() {
-		return new Rectangle(renderPosition.getX() * Game.TILE_SIZE_X,
-				renderPosition.getY() * Game.TILE_SIZE_Y, 32, 64);
+		return new Rectangle(getRenderPosition().getX(),
+				getRenderPosition().getY(), 32, 64);
 	}
 	
 	public boolean mouseOverThis(GameState game) {

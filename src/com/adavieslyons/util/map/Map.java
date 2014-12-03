@@ -158,18 +158,18 @@ public class Map {
 			for (int y = screenTL.getY(); y < screenBR.getY(); y++) {
 				for (int x = screenTL.getX(); x < screenBR.getX(); x++) {
 					Vector2i center = entityManager.getPlayer()
-							.getOccupiedPosition();
+							.getPosition();
 					Vector2i renderPosition = tileCoordinatesToGameCoordinates(
 							x, y);
 					if (center.distance(new Vector2i(x, y)) <= entityManager
 							.getPlayer().getFieldOfView()) {
 						fogOfWar[x][y] = false;
 					} else if (fogOfWar[x][y]) {
-						//fogOfWarTexture.draw(renderPosition.getX(),
-						//		renderPosition.getY());
+						fogOfWarTexture.draw(renderPosition.getX(),
+								renderPosition.getY());
 					} else {
-						//fogOfWarRevealedTexture.draw(renderPosition.getX(),
-						//		renderPosition.getY());
+						fogOfWarRevealedTexture.draw(renderPosition.getX(),
+								renderPosition.getY());
 					}
 				}
 			}
@@ -200,8 +200,7 @@ public class Map {
 		// Weyy isometric
 		float xP = x;
 		float yP = y;
-		System.out.println((int) (xP * 0.5 - yP * 0.5) * Game.TILE_SIZE_X + " from " + xP + " " + yP);
-		return new Vector2i((int) ((xP * 0.5 - yP * 0.5) * Game.TILE_SIZE_X) + game.WIDTH / 2, 
+		return new Vector2i((int) ((xP * 0.5 - yP * 0.5) * Game.TILE_SIZE_X), 
 							(int) ((yP * 0.5 + xP * 0.5) * Game.TILE_SIZE_Y));
 	}
 

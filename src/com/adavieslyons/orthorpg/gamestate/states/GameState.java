@@ -113,22 +113,22 @@ public class GameState extends State {
 				player.update(gc, this, delta);
 				map.update(gc, this, delta);
 				
-				if (player.getOccupiedPosition().getY() == 0) {
+				if (player.getPosition().getY() == 0) {
 					System.out.println("Player transferring map (Via North)");
 					loadState(InnerState.WORLD_MAP);
 					worldMap.leavingMapArea(map.getID(), WorldMap.MapDirection.NORTH);
 				}
-				else if (player.getOccupiedPosition().getX() == map.getWidth() - 1) {
+				else if (player.getPosition().getX() == map.getWidth() - 1) {
 					System.out.println("Player transferring map (Via East)");
 					loadState(InnerState.WORLD_MAP);
 					worldMap.leavingMapArea(map.getID(), WorldMap.MapDirection.EAST);
 				}
-				else if (player.getOccupiedPosition().getY() == map.getHeight() - 1) {
+				else if (player.getPosition().getY() == map.getHeight() - 1) {
 					System.out.println("Player transferring map (Via South)");
 					loadState(InnerState.WORLD_MAP);
 					worldMap.leavingMapArea(map.getID(), WorldMap.MapDirection.SOUTH);
 				}
-				else if (player.getOccupiedPosition().getX() == 0) {
+				else if (player.getPosition().getX() == 0) {
 					System.out.println("Player transferring map (Via West)");
 					loadState(InnerState.WORLD_MAP);
 					worldMap.leavingMapArea(map.getID(), WorldMap.MapDirection.WEST);

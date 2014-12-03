@@ -13,7 +13,7 @@ public abstract class MovingPathEntity extends MovingEntity {
 
 	protected void updatePath() {
 		if (!moving) {
-			if (getOccupiedPosition().equals(path[currentPathPosition])) {
+			if (getPosition().equals(path[currentPathPosition])) {
 				currentPathPosition++;
 
 				if (currentPathPosition >= path.length)

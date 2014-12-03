@@ -10,8 +10,6 @@ import com.adavieslyons.util.map.Map;
 import com.adavieslyons.util.map.pathfinding.AStar;
 
 public abstract class MovingEntity extends Entity {
-	private Vector2i previousPosition;
-	private Vector2i occupiedPosition;
 	private Vector2i desiredPosition;
 	private int fieldOfView;
 	protected boolean moving;
@@ -22,26 +20,24 @@ public abstract class MovingEntity extends Entity {
 	public MovingEntity(Map map) {
 		super(map);
 
-		previousPosition = new Vector2i(0, 0);
-		occupiedPosition = new Vector2i(0, 0);
 		desiredPosition = new Vector2i(0, 0);
 	}
 
 	private void pathfind(int tileX, int tileY) {
-		if (tileX == occupiedPosition.getX()
-				&& tileY == occupiedPosition.getY())
+		if (tileX == position.getX()
+				&& tileY == position.getY())
 			return;
 
-		List<AStar.Node> path = AStar.path(map.getNodeMatrix()[occupiedPosition
-				.getY()][occupiedPosition.getX()],
+		List<AStar.Node> path = AStar.path(map.getNodeMatrix()[position
+				.getY()][position.getX()],
 				map.getNodeMatrix()[tileY][tileX]);
 
 		if (!path.isEmpty()) {
-			occupiedTileEndChange(previousPosition);
-			previousPosition = occupiedPosition;
-			occupiedPosition = new Vector2i(path.get(0).getX(), path.get(0)
+			occupiedTileEndChange(positionLerpFrom);
+			positionLerpFrom = position;
+			position = new Vector2i(path.get(0).getX(), path.get(0)
 					.getY());
-			occupiedTileStartChange(occupiedPosition);
+			occupiedTileStartChange(position);
 			moving = true;
 		}
 	}
@@ -60,42 +56,24 @@ public abstract class MovingEntity extends Entity {
 	protected void updateMove(int delta) {
 		if (moving) {
 			tileMoveCurrently += ((float) delta / 250);
-			setRenderPosition(previousPosition.lerpTo(occupiedPosition,
-					tileMoveCurrently));
+			setPositionLerpFraction(tileMoveCurrently);
 
 			if (tileMoveCurrently >= 1) {
 				tileMoveCurrently = 0;
 				moving = false;
-				setRenderPosition(new Vector2f(occupiedPosition.getX(),
-						occupiedPosition.getY()));
+				setPositionLerpFraction(1);
 			}
 		}
 
-		if (!moving && desiredPosition != occupiedPosition)
+		if (!moving && desiredPosition != position)
 			pathfind(desiredPosition.getX(), desiredPosition.getY());
 	}
 		
-	protected void setPosition(Vector2i newPosition) {
-		setOccupiedPosition(newPosition);
-		setPreviousPosition(newPosition);
+	protected void setNewPosition(Vector2i newPosition) {
+		setPosition(newPosition);
+		setPositionLerpFrom(newPosition);
 		setDesiredPosition(newPosition);
-		setRenderPosition(new Vector2f(newPosition.getX(), newPosition.getY()));
-	}
-
-	public Vector2i getOccupiedPosition() {
-		return occupiedPosition;
-	}
-
-	public void setOccupiedPosition(Vector2i occupiedPosition) {
-		this.occupiedPosition = occupiedPosition;
-	}
-
-	public Vector2i getPreviousPosition() {
-		return previousPosition;
-	}
-
-	public void setPreviousPosition(Vector2i previousPosition) {
-		this.previousPosition = previousPosition;
+		setPositionLerpFraction(1);
 	}
 
 	public Vector2i getDesiredPosition() {
