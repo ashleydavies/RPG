@@ -85,8 +85,8 @@ public class MapTile {
 						.getAttribute("spritesheet"));
 				int xPos = Integer.parseInt(i_textureNode.getAttribute("xPos"));
 				int yPos = Integer.parseInt(i_textureNode.getAttribute("yPos"));
-				int width = Game.TILE_SIZE_X;
-				int height = Game.TILE_SIZE_Y;
+				int width = Game.TILE_SIZE_X + 1;
+				int height = Game.TILE_SIZE_Y + 1;
 				if (i_textureNode.hasAttribute("width"))
 					width = Integer.parseInt(i_textureNode.getAttribute("width"));
 				if (i_textureNode.hasAttribute("height"))

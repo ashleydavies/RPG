@@ -32,9 +32,8 @@ public class MapLayer {
 	}
 
 	void render(GameContainer gc, Graphics graphics, int totalDelta, boolean renderOccupants) throws SlickException {
-		Vector2i screenTL = map.screenCoordinatesToTileCoordinates(0, 0);
-		Vector2i screenBR = map.screenCoordinatesToTileCoordinates(
-				gc.getWidth(), gc.getHeight());
+		Vector2i screenTL = new Vector2i(0, 0);//screenCoordinatesToTileCoordinates(0, 0);
+		Vector2i screenBR = new Vector2i(map.getWidth(), map.getHeight());//screenCoordinatesToTileCoordinates(gc.getWidth(), gc.getHeight());
 
 		screenTL.add(new Vector2i(1, 1));
 		screenBR.add(new Vector2i(2, 2));
@@ -66,7 +65,7 @@ public class MapLayer {
 						map.mapBorderTexture.draw(renderPosition.getX(),
 								renderPosition.getY());
 					
-					if (renderOccupants)
+					if (renderOccupants && map.areEntitiesVisible(new Vector2i(x, y)))
 						tile.renderOccupant(gc, graphics);
 				}
 			}

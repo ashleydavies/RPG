@@ -57,6 +57,7 @@ public class Map {
 	Image fogOfWarTexture;
 	Image fogOfWarRevealedTexture;
 	Image mapBorderTexture;
+	Image isoDistinguishTexture;
 	Image minimapImage;
 	TileSelectorGUI tsGUI;
 	ImageGUI minimapBackgroundGUI;
@@ -139,9 +140,8 @@ public class Map {
 	public void renderPostEntities(GameContainer gc, Graphics graphics)
 			throws SlickException {
 		if (!editing) {
-			Vector2i screenTL = screenCoordinatesToTileCoordinates(0, 0);
-			Vector2i screenBR = screenCoordinatesToTileCoordinates(
-					gc.getWidth(), gc.getHeight());
+			Vector2i screenTL = new Vector2i(0, 0);//screenCoordinatesToTileCoordinates(0, 0);
+			Vector2i screenBR = new Vector2i(layers[0].tiles[0].length, layers[0].tiles.length);//screenCoordinatesToTileCoordinates(gc.getWidth(), gc.getHeight());
 
 			screenTL.add(new Vector2i(2, 2));
 			screenBR.add(new Vector2i(1, 1));
@@ -157,8 +157,7 @@ public class Map {
 
 			for (int y = screenTL.getY(); y < screenBR.getY(); y++) {
 				for (int x = screenTL.getX(); x < screenBR.getX(); x++) {
-					Vector2i center = entityManager.getPlayer()
-							.getPosition();
+					Vector2i center = entityManager.getPlayer().getPosition();
 					Vector2i renderPosition = tileCoordinatesToGameCoordinates(
 							x, y);
 					if (center.distance(new Vector2i(x, y)) <= entityManager
@@ -174,15 +173,43 @@ public class Map {
 				}
 			}
 		}
-		
+
 		minimapBackgroundGUI.render(gc, graphics);
+	}
+	
+	public boolean areEntitiesVisible(Vector2i position) {
+		return (position.distance(entityManager.getPlayer().getPosition()) <= entityManager
+				.getPlayer().getFieldOfView());
+
 	}
 
 	// SCREEN => TILE
 	public Vector2i screenCoordinatesToTileCoordinates(int x, int y) {
-		return new Vector2i((int) Math.floor((x - offset.getX())
-				/ Game.TILE_SIZE_X), (int) Math.floor((y - offset.getY())
-				/ Game.TILE_SIZE_Y));
+		Vector2i noOffset = new Vector2i(x, y);
+		
+		int tCoordX = noOffset.getX() / Game.TILE_SIZE_X + noOffset.getY()
+				/ Game.TILE_SIZE_Y;
+		int tCoordY = -(noOffset.getX() / Game.TILE_SIZE_X - noOffset.getY()
+				/ Game.TILE_SIZE_Y);
+
+		// Check if we need to move across depending on diagonal things
+		int xRel = x % Game.TILE_SIZE_X + 1;
+		int yRel = y % Game.TILE_SIZE_Y + 1;
+		System.out.println("ISO Distinguishing Colour (" + xRel + ", " + yRel + "): " + isoDistinguishTexture.getColor(xRel, yRel).getGreen());
+		switch (isoDistinguishTexture.getColor(xRel, yRel).getGreen()) {
+			case 0:
+				return new Vector2i(tCoordX, tCoordY);
+			case 20:
+				return new Vector2i(tCoordX - 1, tCoordY);
+			case 40:
+				return new Vector2i(tCoordX, tCoordY - 1);
+			case 60:
+				return new Vector2i(tCoordX, tCoordY + 1);
+			case 80:
+				return new Vector2i(tCoordX + 1, tCoordY);
+		}
+
+		return new Vector2i(tCoordX, tCoordY);
 	}
 
 	// SCREEN => TILE
@@ -193,15 +220,11 @@ public class Map {
 
 	// TILE => GAME
 	public Vector2i tileCoordinatesToGameCoordinates(int x, int y) {
-		// Boring ortho
-		//return new Vector2i(x * Game.TILE_SIZE + offset.getX(), y
-		//		* Game.TILE_SIZE + offset.getY());
-		
-		// Weyy isometric
 		float xP = x;
 		float yP = y;
-		return new Vector2i((int) ((xP * 0.5 - yP * 0.5) * Game.TILE_SIZE_X), 
-							(int) ((yP * 0.5 + xP * 0.5) * Game.TILE_SIZE_Y));
+
+		return new Vector2i((int) ((xP * 0.5 - yP * 0.5) * Game.TILE_SIZE_X),
+				(int) ((yP * 0.5 + xP * 0.5) * Game.TILE_SIZE_Y));
 	}
 
 	// TILE => GAME
@@ -253,12 +276,14 @@ public class Map {
 		layers[0] = new MapLayer(mapTileData, this);
 
 		// TODO: Duplicate code across this method & load - refactor to fix
-		fogOfWarTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 0,
-				Game.TILE_SIZE_X, Game.TILE_SIZE_Y);
-		fogOfWarRevealedTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0,
-				64, Game.TILE_SIZE_X, Game.TILE_SIZE_Y);
-		mapBorderTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 32,
-				Game.TILE_SIZE_X, Game.TILE_SIZE_Y);
+		/*
+		 * fogOfWarTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 0,
+		 * Game.TILE_SIZE_X, Game.TILE_SIZE_Y); fogOfWarRevealedTexture =
+		 * SpriteSheet.getSpriteSheet(0).getSubImage(0, Game.TILE_SIZE_Y * 4,
+		 * Game.TILE_SIZE_X, Game.TILE_SIZE_Y); mapBorderTexture =
+		 * SpriteSheet.getSpriteSheet(0).getSubImage(0, Game.TILE_SIZE_Y * 4,
+		 * Game.TILE_SIZE_X, Game.TILE_SIZE_Y);
+		 */
 		fogOfWar = new boolean[getWidth()][getHeight()];
 		for (boolean row[] : fogOfWar)
 			Arrays.fill(row, true);
@@ -267,7 +292,7 @@ public class Map {
 		tsGUI = new TileSelectorGUI(gc, game);
 		// If we generated a new map, chances are we want to edit it.
 		this.setEditing(true);
-		
+
 		generateMinimapImage();
 		minimapBackgroundGUI = new ImageGUI(gc, game, 16, 16, minimapImage);
 	}
@@ -358,11 +383,17 @@ public class Map {
 		}
 
 		fogOfWarTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 0,
-				Game.TILE_SIZE_X, Game.TILE_SIZE_Y);
+				Game.TILE_SIZE_X + 1, Game.TILE_SIZE_Y + 1);
 		fogOfWarRevealedTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0,
-				64, Game.TILE_SIZE_X, Game.TILE_SIZE_Y);
-		mapBorderTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0, 32,
-				Game.TILE_SIZE_X, Game.TILE_SIZE_Y);
+				(Game.TILE_SIZE_Y + 1) * 4, Game.TILE_SIZE_X + 1,
+				Game.TILE_SIZE_Y + 1);
+		mapBorderTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0,
+				(Game.TILE_SIZE_Y + 1) * 4, Game.TILE_SIZE_X + 1,
+				Game.TILE_SIZE_Y + 1);
+		isoDistinguishTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0,
+				(Game.TILE_SIZE_Y + 1) * 5, Game.TILE_SIZE_X + 1,
+				Game.TILE_SIZE_Y + 1);
+
 		fogOfWar = new boolean[getWidth()][getHeight()];
 		for (boolean row[] : fogOfWar)
 			Arrays.fill(row, true);
@@ -425,8 +456,8 @@ public class Map {
 	public void focusTile(Vector2i tile) {
 		// Take tile position, convert to screen position, and set it as offset
 		setOffset(new Vector2i(
-				-(tile.getX() * Game.TILE_SIZE_X - game.WIDTH / 2), -(tile.getY()
-						* Game.TILE_SIZE_Y - game.HEIGHT / 2)));
+				-(tile.getX() * Game.TILE_SIZE_X - game.WIDTH / 2),
+				-(tile.getY() * Game.TILE_SIZE_Y - game.HEIGHT / 2)));
 	}
 
 	public void setOffset(Vector2i offset) {

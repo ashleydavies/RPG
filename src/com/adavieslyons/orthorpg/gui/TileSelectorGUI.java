@@ -4,6 +4,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
+import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.util.Vector2i;
 import com.adavieslyons.util.map.MapTile;
@@ -30,7 +31,7 @@ public class TileSelectorGUI extends GUIWindow {
 		for (MapTile tile : MapTile.getTiles())
 		{
 			graphics.drawImage(tile.getBasicTexture(), BW + 8 + x, BW + 8);
-			x += 32;
+			x += Game.TILE_SIZE_X;
 		}
 
 		graphics.copyArea(windowDynamicContent, 0, 0);
@@ -54,10 +55,10 @@ public class TileSelectorGUI extends GUIWindow {
 			
 			if (mouseCoords.getY() > windowRect.getY() + BW + 8 && mouseCoords.getY() < windowRect.getY() + BW + 8 + 32)
 			{
-				if (mouseCoords.getX() > windowRect.getX() + BW + 8 && mouseCoords.getX() < windowRect.getX() + BW + 8 + 32 * MapTile.getTiles().length)
+				if (mouseCoords.getX() > windowRect.getX() + BW + 8 && mouseCoords.getX() < windowRect.getX() + BW + 8 + Game.TILE_SIZE_X * MapTile.getTiles().length)
 				{
 					// Inside a tile
-					int tile = (int) Math.floor(mouseCoords.getX() - windowRect.getX() - BW - 8) / 32;
+					int tile = (int) Math.floor(mouseCoords.getX() - windowRect.getX() - BW - 8) / Game.TILE_SIZE_X;
 					selectedTile = tile;
 					tileSelected = true;
 				}
