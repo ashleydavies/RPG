@@ -38,7 +38,7 @@ public abstract class Entity {
 			throws SlickException {
 		Vector2i positionCoordinates = map.tileCoordinatesToGameCoordinates(position);
 		Vector2i lerpFromCoordinates = map.tileCoordinatesToGameCoordinates(positionLerpFrom);
-		Vector2f drawCoordinates = lerpFromCoordinates.lerpTo(positionCoordinates, positionLerpFraction);
+		Vector2f drawCoordinates = lerpFromCoordinates.lerpTo(positionCoordinates, positionLerpFraction).add(new Vector2f(map.getOffset().getX(), map.getOffset().getY()));
 		graphics.drawImage(image, (int)(drawCoordinates.getX() + Game.TILE_SIZE_X / 2 - image.getWidth() / 2), (int)(drawCoordinates.getY() - image.getHeight() / 2 - Game.TILE_SIZE_Y / 2));
 		/*Vector2f renderCoordinatesF = new Vector2f(renderPosition.getX()
 				* Game.TILE_SIZE_X, renderPosition.getY() * Game.TILE_SIZE_Y);

@@ -55,7 +55,7 @@ public class MapLayer {
 				MapTileData tile = tiles[y][x];
 				if (!map.isFogOfWar(x, y) || map.getEditing()) {
 					Vector2i renderPosition = map
-							.tileCoordinatesToGameCoordinates(x, y);
+							.tileCoordinatesToScreenCoordinates(x, y);
 					MapTile.getTile(tile.getId()).render(gc, graphics,
 							renderPosition.getX(), renderPosition.getY(),
 							totalDelta);

@@ -10,8 +10,8 @@ import com.adavieslyons.util.map.Map;
 import com.adavieslyons.util.map.pathfinding.AStar;
 
 public abstract class MovingEntity extends Entity {
-	private Vector2i desiredPosition;
-	private int fieldOfView;
+	protected Vector2i desiredPosition;
+	protected int fieldOfView;
 	protected boolean moving;
 
 	float tileMoveTimer = 1;
@@ -28,17 +28,22 @@ public abstract class MovingEntity extends Entity {
 				&& tileY == position.getY())
 			return;
 
-		List<AStar.Node> path = AStar.path(map.getNodeMatrix()[position
-				.getY()][position.getX()],
-				map.getNodeMatrix()[tileY][tileX]);
-
-		if (!path.isEmpty()) {
-			occupiedTileEndChange(positionLerpFrom);
-			positionLerpFrom = position;
-			position = new Vector2i(path.get(0).getX(), path.get(0)
-					.getY());
-			occupiedTileStartChange(position);
-			moving = true;
+		try {
+			List<AStar.Node> path = AStar.path(map.getNodeMatrix()[position
+					.getY()][position.getX()],
+					map.getNodeMatrix()[tileY][tileX]);
+	
+			if (!path.isEmpty()) {
+				occupiedTileEndChange(positionLerpFrom);
+				positionLerpFrom = position;
+				position = new Vector2i(path.get(0).getX(), path.get(0)
+						.getY());
+				occupiedTileStartChange(position);
+				moving = true;
+			}
+		}
+		catch (Exception e) {
+			System.out.println("ENTITY HAS ISSUES PATHFINDING");
 		}
 	}
 
@@ -64,6 +69,9 @@ public abstract class MovingEntity extends Entity {
 				setPositionLerpFraction(1);
 			}
 		}
+		
+		if (!moving)
+			setPositionLerpFraction(0);
 
 		if (!moving && desiredPosition != position)
 			pathfind(desiredPosition.getX(), desiredPosition.getY());

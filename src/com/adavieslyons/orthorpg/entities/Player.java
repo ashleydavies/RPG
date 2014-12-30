@@ -44,17 +44,6 @@ public class Player extends MovingEntity {
 		}
 
 		updateMove(delta);
-/*
-		for (int x = -5; x <= 5; x++) {
-			for (int y = -5; y <= 5; y++) {
-				int tX = getOccupiedPosition().getX() + x;
-				int tY = getOccupiedPosition().getY() + y;
-				
-				if (tX >= 0 && tY >= 0)
-					if (tX < map.getWidth() && tY < map.getHeight())
-						map.revealCoordinate(tX, tY);
-			}
-		}*/
 	}
 
 	@Override
@@ -74,7 +63,11 @@ public class Player extends MovingEntity {
 	}
 	
 	public void onNewMapLoad(Map map, Vector2i newPosition) {
-		setPosition(newPosition);
+		setNewPosition(newPosition);
+		moving = false;
+		System.out.println(newPosition);
+		System.out.println(desiredPosition);
+		tileOccupied = map.setOccupied(position.getX(), position.getY(), this);
 		this.map = map;
 	}
 

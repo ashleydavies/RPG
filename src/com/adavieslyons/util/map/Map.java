@@ -12,6 +12,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.lwjgl.input.Mouse;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -66,7 +68,7 @@ public class Map {
 	boolean editing;
 	int totalDelta;
 
-	Vector2i offset = new Vector2i(128, 128);
+	Vector2i offset = new Vector2i(0, 0);
 
 	public void update(GameContainer gc, GameState game, int delta)
 			throws SlickException {
@@ -99,14 +101,14 @@ public class Map {
 
 		// Move with arrow keys
 		if (game.getInput().isKeyDown(Input.KEY_LEFT))
-			addOffset(1 * delta, 0);
-		if (game.getInput().isKeyDown(Input.KEY_RIGHT))
 			addOffset(-1 * delta, 0);
+		if (game.getInput().isKeyDown(Input.KEY_RIGHT))
+			addOffset(1 * delta, 0);
 
 		if (game.getInput().isKeyDown(Input.KEY_UP))
-			addOffset(0, 1 * delta);
-		if (game.getInput().isKeyDown(Input.KEY_DOWN))
 			addOffset(0, -1 * delta);
+		if (game.getInput().isKeyDown(Input.KEY_DOWN))
+			addOffset(0, 1 * delta);
 	}
 
 	public void addOffset(int x, int y) {
@@ -140,7 +142,7 @@ public class Map {
 	public void renderPostEntities(GameContainer gc, Graphics graphics)
 			throws SlickException {
 		if (!editing) {
-			Vector2i screenTL = new Vector2i(0, 0);//screenCoordinatesToTileCoordinates(0, 0);
+			Vector2i screenTL = screenCoordinatesToTileCoordinates(0, 0);
 			Vector2i screenBR = new Vector2i(layers[0].tiles[0].length, layers[0].tiles.length);//screenCoordinatesToTileCoordinates(gc.getWidth(), gc.getHeight());
 
 			screenTL.add(new Vector2i(2, 2));
@@ -158,7 +160,7 @@ public class Map {
 			for (int y = screenTL.getY(); y < screenBR.getY(); y++) {
 				for (int x = screenTL.getX(); x < screenBR.getX(); x++) {
 					Vector2i center = entityManager.getPlayer().getPosition();
-					Vector2i renderPosition = tileCoordinatesToGameCoordinates(
+					Vector2i renderPosition = tileCoordinatesToScreenCoordinates(
 							x, y);
 					if (center.distance(new Vector2i(x, y)) <= entityManager
 							.getPlayer().getFieldOfView()) {
@@ -185,17 +187,16 @@ public class Map {
 
 	// SCREEN => TILE
 	public Vector2i screenCoordinatesToTileCoordinates(int x, int y) {
-		Vector2i noOffset = new Vector2i(x, y);
+		Vector2i noOffset = screenCoordinatesToGameCoordinates(new Vector2i(x, y));
 		
 		int tCoordX = noOffset.getX() / Game.TILE_SIZE_X + noOffset.getY()
 				/ Game.TILE_SIZE_Y;
 		int tCoordY = -(noOffset.getX() / Game.TILE_SIZE_X - noOffset.getY()
 				/ Game.TILE_SIZE_Y);
-
-		// Check if we need to move across depending on diagonal things
-		int xRel = x % Game.TILE_SIZE_X + 1;
-		int yRel = y % Game.TILE_SIZE_Y + 1;
-		System.out.println("ISO Distinguishing Colour (" + xRel + ", " + yRel + "): " + isoDistinguishTexture.getColor(xRel, yRel).getGreen());
+		System.out.println("X: " + tCoordX + " Y: " + tCoordY + " OFFSET X: " + noOffset.getX() + " Y: " + noOffset.getY());
+		// Check if we need to move across depending on image map
+		int xRel = noOffset.getX() % Game.TILE_SIZE_X + 1;
+		int yRel = noOffset.getY() % Game.TILE_SIZE_Y + 1;
 		switch (isoDistinguishTexture.getColor(xRel, yRel).getGreen()) {
 			case 0:
 				return new Vector2i(tCoordX, tCoordY);
@@ -226,6 +227,14 @@ public class Map {
 		return new Vector2i((int) ((xP * 0.5 - yP * 0.5) * Game.TILE_SIZE_X),
 				(int) ((yP * 0.5 + xP * 0.5) * Game.TILE_SIZE_Y));
 	}
+	
+	public Vector2i tileCoordinatesToScreenCoordinates(int x, int y) {
+		float xP = x;
+		float yP = y;
+
+		return new Vector2i((int) ((xP * 0.5 - yP * 0.5) * Game.TILE_SIZE_X),
+				(int) ((yP * 0.5 + xP * 0.5) * Game.TILE_SIZE_Y)).add(offset);
+	}
 
 	// TILE => GAME
 	public Vector2i tileCoordinatesToGameCoordinates(Vector2i tileCoordinates) {
@@ -236,7 +245,7 @@ public class Map {
 	// SCREEN => GAME
 	public Vector2i screenCoordinatesToGameCoordinates(
 			Vector2i screenCoordinates) {
-		return screenCoordinates.add(offset);
+		return screenCoordinates.subtract(offset);
 	}
 
 	// SCREEN => GAME
@@ -247,7 +256,7 @@ public class Map {
 
 	// GAME => SCREEN
 	public Vector2i gameCoordinatesToScreenCoordinates(Vector2i gameCoordinates) {
-		return gameCoordinates.subtract(offset);
+		return gameCoordinates.add(offset);
 	}
 
 	public void generateNewMap(GameContainer gc, GameState game, int mapID,
@@ -455,23 +464,33 @@ public class Map {
 
 	public void focusTile(Vector2i tile) {
 		// Take tile position, convert to screen position, and set it as offset
-		setOffset(new Vector2i(
-				-(tile.getX() * Game.TILE_SIZE_X - game.WIDTH / 2),
-				-(tile.getY() * Game.TILE_SIZE_Y - game.HEIGHT / 2)));
+		//setOffset(new Vector2i(
+		//		-(tile.getX() * Game.TILE_SIZE_X - game.WIDTH / 2),
+		//		-(tile.getY() * Game.TILE_SIZE_Y - game.HEIGHT / 2)));
 	}
 
 	public void setOffset(Vector2i offset) {
 		if (!getEditing()) {
-			if (offset.getX() > 150)
-				offset.setX(150);
-			if (offset.getY() > 150)
-				offset.setY(150);
-
-			if (width * Game.TILE_SIZE_X + offset.getX() < game.WIDTH - 150)
-				offset.setX(game.WIDTH - 150 - width * Game.TILE_SIZE_Y);
-
-			if (height * Game.TILE_SIZE_X + offset.getY() < game.HEIGHT - 150)
-				offset.setY(game.HEIGHT - 150 - height * Game.TILE_SIZE_Y);
+			// Find corners of map
+			int top = offset.getY();
+			int bottom = offset.getY() + (int)(0.5 * (getHeight() + getWidth()) * Game.TILE_SIZE_Y);
+			int left = offset.getX() - (int)(0.5 * getHeight() * Game.TILE_SIZE_X);
+			int right = offset.getX() + (int)(0.5 * getWidth() * Game.TILE_SIZE_X);
+			
+			System.out.println("Offset:" + offset);
+			System.out.println("Left: " + left);
+			System.out.println("Right: " + right);
+			System.out.println("Bottom: " + bottom);
+			
+			if (top > 100)
+				offset.setY(100);
+			if (bottom < game.HEIGHT - 150)
+				offset.setY(game.HEIGHT - 150 - ((int)(0.5 * (getHeight() + getWidth()) * Game.TILE_SIZE_Y)));
+			
+			if (left > 100)
+				offset.setX(100 + (int)(0.5 * getHeight() * Game.TILE_SIZE_X));
+			if (right < game.WIDTH - 150)
+				offset.setX(game.WIDTH - 150 - (int)(0.5 * getWidth() * Game.TILE_SIZE_X));
 		}
 		this.offset = offset;
 	}
@@ -513,7 +532,7 @@ public class Map {
 		if (validPositions.size() > 0)
 			return validPositions
 					.get((int) Math.floor(validPositions.size() / 2));
-		return new Vector2i(0, 0);
+		return new Vector2i(0, 3);
 	}
 
 	public boolean getEditing() {

@@ -39,5 +39,10 @@
         <tile name="null" collision="1">
         	<texture spritesheet="0" xPos="0" yPos="0" />
         </tile>
+        <tile name="tree" collision="1">
+        	<!-- Render above where it would be rendered as it's a taller than usual sprite -->
+        	<textureData yOffset="-32"/>
+            <texture spritesheet="0" xPos="260" yPos="0" height="65" />
+        </tile>
     </tileInfo>
 </data>
