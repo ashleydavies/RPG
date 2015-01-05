@@ -1,5 +1,6 @@
 package com.adavieslyons.util.map;
 
+import java.awt.Font;
 import java.io.Console;
 import java.io.File;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.geom.Vector2f;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -156,9 +158,9 @@ public class Map {
 				screenBR.setX(width);
 			if (screenBR.getY() > height)
 				screenBR.setY(height);
-
-			for (int y = screenTL.getY(); y < screenBR.getY(); y++) {
-				for (int x = screenTL.getX(); x < screenBR.getX(); x++) {
+			
+			for (int y = 0; y < getHeight(); y++) {
+				for (int x = 0; x < getWidth(); x++) {
 					Vector2i center = entityManager.getPlayer().getPosition();
 					Vector2i renderPosition = tileCoordinatesToScreenCoordinates(
 							x, y);
@@ -193,10 +195,17 @@ public class Map {
 				/ Game.TILE_SIZE_Y;
 		int tCoordY = -(noOffset.getX() / Game.TILE_SIZE_X - noOffset.getY()
 				/ Game.TILE_SIZE_Y);
-		System.out.println("X: " + tCoordX + " Y: " + tCoordY + " OFFSET X: " + noOffset.getX() + " Y: " + noOffset.getY());
 		// Check if we need to move across depending on image map
-		int xRel = noOffset.getX() % Game.TILE_SIZE_X + 1;
-		int yRel = noOffset.getY() % Game.TILE_SIZE_Y + 1;
+		int xRel = noOffset.getX() % Game.TILE_SIZE_X;
+		int yRel = noOffset.getY() % Game.TILE_SIZE_Y;
+		System.out.println("X: " + tCoordX + " Y: " + tCoordY + " OFFSET X: " + noOffset.getX() + " Y: " + noOffset.getY() + " REL: " + xRel + " " + yRel);
+		
+		// if xRel is negative we need to shift (-1, +1)
+		if (xRel < 0) {
+			tCoordX--;
+			tCoordY++;
+			xRel = 64 + xRel;
+		}
 		switch (isoDistinguishTexture.getColor(xRel, yRel).getGreen()) {
 			case 0:
 				return new Vector2i(tCoordX, tCoordY);

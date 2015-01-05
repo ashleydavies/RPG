@@ -4,6 +4,7 @@ import org.newdawn.slick.*;
 
 import com.adavieslyons.orthorpg.gamestate.GameStateManager;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.orthorpg.gamestate.states.MenuState;
 
 /**
  * 
@@ -30,7 +31,8 @@ public class Game extends BasicGame {
 	@Override
 	public void init(GameContainer gc) throws SlickException {
 		gsm = new GameStateManager();
-		GameState s = new GameState(gsm);
+		//GameState s = new GameState(gsm);
+		MenuState s = new MenuState(gsm);
 		gsm.pushState(gc, s);
 	}
 

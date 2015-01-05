@@ -5,8 +5,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 public abstract class State {
-	@SuppressWarnings("unused")
-	private GameStateManager gameStateManager;
+	protected GameStateManager gameStateManager;
 
 	public State(GameStateManager gsm) {
 		gameStateManager = gsm;

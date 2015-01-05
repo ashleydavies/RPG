@@ -66,13 +66,12 @@ public abstract class MovingEntity extends Entity {
 			if (tileMoveCurrently >= 1) {
 				tileMoveCurrently = 0;
 				moving = false;
-				setPositionLerpFraction(1);
+				setPositionLerpFrom(position);
+				setPosition(position);
+				setPositionLerpFraction(0);
 			}
 		}
 		
-		if (!moving)
-			setPositionLerpFraction(0);
-
 		if (!moving && desiredPosition != position)
 			pathfind(desiredPosition.getX(), desiredPosition.getY());
 	}
