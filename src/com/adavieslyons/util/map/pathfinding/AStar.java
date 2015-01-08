@@ -1,39 +1,15 @@
 package com.adavieslyons.util.map.pathfinding;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
- * 
  * @author Ashley
- * 
- * 
+ *         <p/>
+ *         <p/>
  *         "Path" method mostly credits to WhiteFang on StackOverflow; see
  *         http://stackoverflow.com/questions/5601889/
  */
 public class AStar {
-	public static class Node {
-		Node parent;
-		List<Node> neighbors = new ArrayList<Node>();
-		int f;
-		int g;
-		int h;
-		int x;
-		int y;
-		int cost;
-
-		public int getX() {
-			return x;
-		}
-
-		public int getY() {
-			return y;
-		}
-	}
-
 	public static List<Node> getNeighbors(Node[][] matrix, int x, int y) {
 		List<Node> neighbors = new ArrayList<Node>();
 
@@ -58,6 +34,7 @@ public class AStar {
 			for (int x = 0; x < map.getColumns(); x++)
 				if (!map.getCollision(x, y)) {
 					matrix[y][x] = new Node();
+					matrix[y][x].mapReference = map;
 					matrix[y][x].x = x;
 					matrix[y][x].y = y;
 				}
@@ -104,6 +81,10 @@ public class AStar {
 				if (neighbor == null)
 					continue;
 
+				// Ignore neighbor if occupied
+				if (beginning.mapReference.getOccupied(neighbor.x, neighbor.y))
+					continue;
+
 				int g = current.g + neighbor.cost;
 
 				if (g < neighbor.g) {
@@ -137,5 +118,25 @@ public class AStar {
 
 	private static int heuristic(Node beginning, Node end) {
 		return (Math.abs(beginning.x - end.x) + Math.abs(beginning.y - end.y));
+	}
+
+	public static class Node {
+		Node parent;
+		CollisionMap mapReference;
+		List<Node> neighbors = new ArrayList<Node>();
+		int f;
+		int g;
+		int h;
+		int x;
+		int y;
+		int cost;
+
+		public int getX() {
+			return x;
+		}
+
+		public int getY() {
+			return y;
+		}
 	}
 }

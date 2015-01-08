@@ -1,5 +1,17 @@
 package com.adavieslyons.util;
 
+import com.adavieslyons.orthorpg.entities.Mob;
+import com.adavieslyons.util.dialog.DialogAction;
+import com.adavieslyons.util.dialog.DialogCondition;
+import com.adavieslyons.util.dialog.DialogNode;
+import com.adavieslyons.util.dialog.DialogReply;
+import org.newdawn.slick.Image;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,204 +20,189 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.newdawn.slick.Image;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import com.adavieslyons.orthorpg.entities.Mob;
-import com.adavieslyons.util.dialog.DialogAction;
-import com.adavieslyons.util.dialog.DialogCondition;
-import com.adavieslyons.util.dialog.DialogNode;
-import com.adavieslyons.util.dialog.DialogReply;
-
 /**
- * 
  * @author Ashley
  */
 public final class XMLParser {
-	static DocumentBuilderFactory dbFactory = DocumentBuilderFactory
-			.newInstance();
-	static DocumentBuilder dBuilder;
-	static final Properties ChatSubstitution;
+    static final Properties ChatSubstitution;
 
-	static {
-		ChatSubstitution = new Properties();
-		try {
-			ChatSubstitution.load(Mob.class.getClassLoader()
-					.getResourceAsStream(
-							"data/properties/NPCSubstitution.properties"));
-		} catch (IOException ex) {
-			Logger.getLogger(Mob.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
+    static {
+        ChatSubstitution = new Properties();
+        try {
+            ChatSubstitution.load(Mob.class.getClassLoader()
+                    .getResourceAsStream(
+                            "data/properties/NPCSubstitution.properties"));
+        } catch (IOException ex) {
+            Logger.getLogger(Mob.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
-	public static XMLParser instance = new XMLParser();
+    public static XMLParser instance = new XMLParser();
+    static DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+            .newInstance();
+    static DocumentBuilder dBuilder;
 
-	private XMLParser() {
-		try {
-			dBuilder = dbFactory.newDocumentBuilder();
-		} catch (Exception e) {
-		}
-	}
+    private XMLParser() {
+        try {
+            dBuilder = dbFactory.newDocumentBuilder();
+        } catch (Exception e) {
+        }
+    }
 
-	public Document parseXML(File file) {
-		try {
-			return dBuilder.parse(file);
-		} catch (Exception e) {
-		}
+    /* Static helpers */
+    public static String substituteDialogString(String stringIn) {
+        Enumeration<?> e = ChatSubstitution.propertyNames();
 
-		return null;
-	}
+        while (e.hasMoreElements()) {
+            String key = (String) e.nextElement();
+            stringIn = stringIn.replace("[" + key + "]",
+                    ChatSubstitution.getProperty(key));
+        }
 
-	public Document parseXML(InputStream file) {
-		try {
-			return dBuilder.parse(file);
-		} catch (Exception e) {
-		}
+        return stringIn;
+    }
 
-		return null;
-	}
+    //
+    // Loads a texture from a <texture> node
+    //
+    public static Image loadTexture(Element rootNode) {
+        int spriteSheet = Integer.parseInt(rootNode
+                .getElementsByTagName("spritesheet").item(0).getTextContent());
+        int xPos = Integer.parseInt(rootNode.getElementsByTagName("xPos")
+                .item(0).getTextContent());
+        int yPos = Integer.parseInt(rootNode.getElementsByTagName("yPos")
+                .item(0).getTextContent());
+        return SpriteSheet.getSpriteSheet(spriteSheet).getSubImage(xPos, yPos,
+                32, 64);
+    }
 
-	/* Static helpers */
-	public static String substituteDialogString(String stringIn) {
-		Enumeration<?> e = ChatSubstitution.propertyNames();
+    //
+    // Loads dialog from a <dialog> node
+    //
+    public static DialogNode[] loadDialog(Element rootNode) {
+        NodeList dialogNodes = rootNode.getElementsByTagName("node");
+        NodeList conditionNodes = rootNode.getElementsByTagName("condition");
 
-		while (e.hasMoreElements()) {
-			String key = (String) e.nextElement();
-			stringIn = stringIn.replace("[" + key + "]",
-					ChatSubstitution.getProperty(key));
-		}
+        DialogNode[] dialog = new DialogNode[dialogNodes.getLength()];
+        DialogCondition[] conditions = new DialogCondition[conditionNodes
+                .getLength()];
 
-		return stringIn;
-	}
+        for (int i = 0; i < conditionNodes.getLength(); i++) {
+            Element conditionNode = (Element) conditionNodes.item(i);
 
-	//
-	// Loads a texture from a <texture> node
-	//
-	public static Image loadTexture(Element rootNode) {
-		int spriteSheet = Integer.parseInt(rootNode
-				.getElementsByTagName("spritesheet").item(0).getTextContent());
-		int xPos = Integer.parseInt(rootNode.getElementsByTagName("xPos")
-				.item(0).getTextContent());
-		int yPos = Integer.parseInt(rootNode.getElementsByTagName("yPos")
-				.item(0).getTextContent());
-		return SpriteSheet.getSpriteSheet(spriteSheet).getSubImage(xPos, yPos,
-				32, 64);
-	}
+            int conditionNodeID = Integer.parseInt(conditionNode
+                    .getAttribute("id"));
+            String conditionNodeCondition = conditionNode
+                    .getAttribute("condition");
+            String conditionNodeArguments = conditionNode.getAttribute("args");
 
-	//
-	// Loads dialog from a <dialog> node
-	//
-	public static DialogNode[] loadDialog(Element rootNode) {
-		NodeList dialogNodes = rootNode.getElementsByTagName("node");
-		NodeList conditionNodes = rootNode.getElementsByTagName("condition");
+            conditions[conditionNodeID] = new DialogCondition(conditionNodeID,
+                    conditionNodeCondition, conditionNodeArguments);
+        }
 
-		DialogNode[] dialog = new DialogNode[dialogNodes.getLength()];
-		DialogCondition[] conditions = new DialogCondition[conditionNodes
-				.getLength()];
+        for (int i = 0; i < dialogNodes.getLength(); i++) {
+            Element dialogNode = (Element) dialogNodes.item(i);
 
-		for (int i = 0; i < conditionNodes.getLength(); i++) {
-			Element conditionNode = (Element) conditionNodes.item(i);
+            int dialogNodeID = Integer.parseInt(dialogNode.getAttribute("id"));
+            String dialogNodePrompt = substituteDialogString(dialogNode
+                    .getAttribute("prompt"));
 
-			int conditionNodeID = Integer.parseInt(conditionNode
-					.getAttribute("id"));
-			String conditionNodeCondition = conditionNode
-					.getAttribute("condition");
-			String conditionNodeArguments = conditionNode.getAttribute("args");
+            NodeList replyNodes = dialogNode.getElementsByTagName("reply");
 
-			conditions[conditionNodeID] = new DialogCondition(conditionNodeID,
-					conditionNodeCondition, conditionNodeArguments);
-		}
+            DialogReply[] replies = new DialogReply[replyNodes.getLength()];
 
-		for (int i = 0; i < dialogNodes.getLength(); i++) {
-			Element dialogNode = (Element) dialogNodes.item(i);
+            for (int o = 0; o < replyNodes.getLength(); o++) {
+                Element replyNode = (Element) replyNodes.item(o);
 
-			int dialogNodeID = Integer.parseInt(dialogNode.getAttribute("id"));
-			String dialogNodePrompt = substituteDialogString(dialogNode
-					.getAttribute("prompt"));
+                int replyNodeID = Integer
+                        .parseInt(replyNode.getAttribute("id"));
+                String replyNodePrompt = substituteDialogString(replyNode
+                        .getAttribute("prompt"));
 
-			NodeList replyNodes = dialogNode.getElementsByTagName("reply");
+                NodeList actionNodes = replyNode.getElementsByTagName("action");
+                NodeList replyNodeConditionNodes = replyNode
+                        .getElementsByTagName("replyCondition");
 
-			DialogReply[] replies = new DialogReply[replyNodes.getLength()];
+                DialogAction[] actions = new DialogAction[actionNodes
+                        .getLength()];
+                DialogCondition[] replyNodeConditions = new DialogCondition[replyNodeConditionNodes
+                        .getLength()];
 
-			for (int o = 0; o < replyNodes.getLength(); o++) {
-				Element replyNode = (Element) replyNodes.item(o);
+                for (int p = 0; p < replyNodeConditionNodes.getLength(); p++) {
+                    Element replyNodeConditionNode = (Element) replyNodeConditionNodes
+                            .item(p);
 
-				int replyNodeID = Integer
-						.parseInt(replyNode.getAttribute("id"));
-				String replyNodePrompt = substituteDialogString(replyNode
-						.getAttribute("prompt"));
+                    int replyNodeConditionNodeID = Integer
+                            .parseInt(replyNodeConditionNode.getAttribute("id"));
+                    int replyNodeConditionNodeConditionID = Integer
+                            .parseInt(replyNodeConditionNode
+                                    .getAttribute("conditionID"));
 
-				NodeList actionNodes = replyNode.getElementsByTagName("action");
-				NodeList replyNodeConditionNodes = replyNode
-						.getElementsByTagName("replyCondition");
+                    replyNodeConditions[replyNodeConditionNodeID] = conditions[replyNodeConditionNodeConditionID];
+                }
 
-				DialogAction[] actions = new DialogAction[actionNodes
-						.getLength()];
-				DialogCondition[] replyNodeConditions = new DialogCondition[replyNodeConditionNodes
-						.getLength()];
+                for (int j = 0; j < actionNodes.getLength(); j++) {
+                    Element actionNode = (Element) actionNodes.item(j);
 
-				for (int p = 0; p < replyNodeConditionNodes.getLength(); p++) {
-					Element replyNodeConditionNode = (Element) replyNodeConditionNodes
-							.item(p);
+                    int actionNodeID = Integer.parseInt(actionNode
+                            .getAttribute("id"));
+                    String actionNodeAction = actionNode.getAttribute("action");
+                    String actionNodeArguments = actionNode
+                            .getAttribute("args");
 
-					int replyNodeConditionNodeID = Integer
-							.parseInt(replyNodeConditionNode.getAttribute("id"));
-					int replyNodeConditionNodeConditionID = Integer
-							.parseInt(replyNodeConditionNode
-									.getAttribute("conditionID"));
+                    // Check which conditions apply to this action.
+                    NodeList actionNodeConditionNodes = actionNode
+                            .getElementsByTagName("actionCondition");
+                    DialogCondition[] actionNodeConditions = new DialogCondition[actionNodeConditionNodes
+                            .getLength()];
 
-					replyNodeConditions[replyNodeConditionNodeID] = conditions[replyNodeConditionNodeConditionID];
-				}
+                    for (int k = 0; k < actionNodeConditionNodes.getLength(); k++) {
+                        Element i_actionNodeConditionNode = (Element) actionNodeConditionNodes
+                                .item(k);
 
-				for (int j = 0; j < actionNodes.getLength(); j++) {
-					Element actionNode = (Element) actionNodes.item(j);
+                        int i_actionNodeConditionNodeID = Integer
+                                .parseInt(i_actionNodeConditionNode
+                                        .getAttribute("id"));
+                        int i_actionNodeConditionNodeConditionID = Integer
+                                .parseInt(i_actionNodeConditionNode
+                                        .getAttribute("conditionID"));
 
-					int actionNodeID = Integer.parseInt(actionNode
-							.getAttribute("id"));
-					String actionNodeAction = actionNode.getAttribute("action");
-					String actionNodeArguments = actionNode
-							.getAttribute("args");
+                        actionNodeConditions[i_actionNodeConditionNodeID] = conditions[i_actionNodeConditionNodeConditionID];
+                    }
 
-					// Check which conditions apply to this action.
-					NodeList actionNodeConditionNodes = actionNode
-							.getElementsByTagName("actionCondition");
-					DialogCondition[] actionNodeConditions = new DialogCondition[actionNodeConditionNodes
-							.getLength()];
+                    actions[actionNodeID] = new DialogAction(actionNodeID,
+                            actionNodeAction, actionNodeArguments,
+                            actionNodeConditions);
+                }
 
-					for (int k = 0; k < actionNodeConditionNodes.getLength(); k++) {
-						Element i_actionNodeConditionNode = (Element) actionNodeConditionNodes
-								.item(k);
+                replies[replyNodeID] = new DialogReply(replyNodeID,
+                        replyNodePrompt, actions, replyNodeConditions);
+            }
 
-						int i_actionNodeConditionNodeID = Integer
-								.parseInt(i_actionNodeConditionNode
-										.getAttribute("id"));
-						int i_actionNodeConditionNodeConditionID = Integer
-								.parseInt(i_actionNodeConditionNode
-										.getAttribute("conditionID"));
+            DialogNode completedNode = new DialogNode(dialogNodeID,
+                    dialogNodePrompt, replies);
 
-						actionNodeConditions[i_actionNodeConditionNodeID] = conditions[i_actionNodeConditionNodeConditionID];
-					}
+            dialog[i] = completedNode;
+        }
 
-					actions[actionNodeID] = new DialogAction(actionNodeID,
-							actionNodeAction, actionNodeArguments,
-							actionNodeConditions);
-				}
+        return dialog;
+    }
 
-				replies[replyNodeID] = new DialogReply(replyNodeID,
-						replyNodePrompt, actions, replyNodeConditions);
-			}
+    public Document parseXML(File file) {
+        try {
+            return dBuilder.parse(file);
+        } catch (Exception e) {
+        }
 
-			DialogNode completedNode = new DialogNode(dialogNodeID,
-					dialogNodePrompt, replies);
+        return null;
+    }
 
-			dialog[i] = completedNode;
-		}
+    public Document parseXML(InputStream file) {
+        try {
+            return dBuilder.parse(file);
+        } catch (Exception e) {
+        }
 
-		return dialog;
-	}
+        return null;
+    }
 }

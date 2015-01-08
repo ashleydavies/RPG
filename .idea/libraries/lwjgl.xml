@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="lwjgl">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../Zombia/jar/lwjgl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Zombia/jar/slick.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Zombia/jar/lwjgl_util_applet.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Zombia/jar/lwjgl_test.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Zombia/jar/lwjgl_util.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Zombia/jar/jinput.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://$PROJECT_DIR$/../Zombia/native/windows" />
+    </NATIVE>
+    <SOURCES />
+  </library>
+</component>

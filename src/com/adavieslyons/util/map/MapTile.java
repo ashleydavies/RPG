@@ -3,7 +3,6 @@ package com.adavieslyons.util.map;
 import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.util.SpriteSheet;
 import com.adavieslyons.util.XMLParser;
-
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -13,152 +12,151 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
- * 
  * @author Ashley
  */
 public class MapTile {
-	static MapTile[] tiles;
+    static MapTile[] tiles;
+    int id;
+    String name;
+    TextureType textureType;
+    Image[] textures;
 
-	public static MapTile getTile(int id) {
-		return tiles[id];
-	}
+    static {
+        Document info = XMLParser.instance.parseXML(MapTile.class
+                .getClassLoader().getResourceAsStream("data/xml/tileData.xml"));
 
-	public static MapTile[] getTiles() {
-		return tiles;
-	}
-	
-	int id;
-	String name;
-	private boolean collision;
-	private int frameLength;
-	private int xOffset;
-	private int yOffset;
-	private Color minimapColor;
-	TextureType textureType;
-	Image[] textures;
+        Element tileRoot = (Element) info.getElementsByTagName("tileInfo")
+                .item(0);
+        NodeList tileNodes = tileRoot.getElementsByTagName("tile");
+        tiles = new MapTile[tileNodes.getLength()];
 
-	static {
-		Document info = XMLParser.instance.parseXML(MapTile.class
-				.getClassLoader().getResourceAsStream("data/xml/tileData.xml"));
+        for (int i = 0; i < tileNodes.getLength(); i++) {
+            Element i_tileNode = (Element) tileNodes.item(i);
 
-		Element tileRoot = (Element) info.getElementsByTagName("tileInfo")
-				.item(0);
-		NodeList tileNodes = tileRoot.getElementsByTagName("tile");
-		tiles = new MapTile[tileNodes.getLength()];
+            String name = i_tileNode.getAttribute("name");
+            boolean collision = (Integer.parseInt(i_tileNode
+                    .getAttribute("collision")) == 1 ? true : false);
+            TextureType textureType = TextureType.STATIC;
+            int frameLength = 0;
+            int xOffset = 0;
+            int yOffset = 0;
 
-		for (int i = 0; i < tileNodes.getLength(); i++) {
-			Element i_tileNode = (Element) tileNodes.item(i);
+            NodeList textureDataNodeList = i_tileNode
+                    .getElementsByTagName("textureData");
+            if (textureDataNodeList.getLength() > 0) {
+                Element textureData = (Element) textureDataNodeList.item(0);
 
-			String name = i_tileNode.getAttribute("name");
-			boolean collision = (Integer.parseInt(i_tileNode
-					.getAttribute("collision")) == 1 ? true : false);
-			TextureType textureType = TextureType.STATIC;
-			int frameLength = 0;
-			int xOffset = 0;
-			int yOffset = 0;
+                if (textureData.hasAttribute("type"))
+                    textureType = TextureType.valueOf(textureData.getAttribute(
+                            "type").toUpperCase());
+                if (textureData.hasAttribute("frameTime"))
+                    frameLength = Integer.parseInt(textureData
+                            .getAttribute("frameTime"));
+                if (textureData.hasAttribute("xOffset"))
+                    xOffset = Integer.parseInt(textureData.getAttribute("xOffset"));
+                if (textureData.hasAttribute("yOffset"))
+                    yOffset = Integer.parseInt(textureData.getAttribute("yOffset"));
+            }
 
-			NodeList textureDataNodeList = i_tileNode
-					.getElementsByTagName("textureData");
-			if (textureDataNodeList.getLength() > 0) {
-				Element textureData = (Element) textureDataNodeList.item(0);
+            NodeList textureNodes = i_tileNode.getElementsByTagName("texture");
 
-				if (textureData.hasAttribute("type"))
-					textureType = TextureType.valueOf(textureData.getAttribute(
-							"type").toUpperCase());
-				if (textureData.hasAttribute("frameTime"))
-					frameLength = Integer.parseInt(textureData
-							.getAttribute("frameTime"));
-				if (textureData.hasAttribute("xOffset"))
-					xOffset = Integer.parseInt(textureData.getAttribute("xOffset"));
-				if (textureData.hasAttribute("yOffset"))
-					yOffset = Integer.parseInt(textureData.getAttribute("yOffset"));
-			}
+            Image[] textures = new Image[textureNodes.getLength()];
 
-			NodeList textureNodes = i_tileNode.getElementsByTagName("texture");
+            for (int t = 0; t < textureNodes.getLength(); t++) {
+                Element i_textureNode = (Element) textureNodes.item(t);
 
-			Image[] textures = new Image[textureNodes.getLength()];
+                int spritesheet = Integer.parseInt(i_textureNode
+                        .getAttribute("spritesheet"));
+                int xPos = Integer.parseInt(i_textureNode.getAttribute("xPos"));
+                int yPos = Integer.parseInt(i_textureNode.getAttribute("yPos"));
+                int width = Game.TILE_SIZE_X + 1;
+                int height = Game.TILE_SIZE_Y + 1;
+                if (i_textureNode.hasAttribute("width"))
+                    width = Integer.parseInt(i_textureNode.getAttribute("width"));
+                if (i_textureNode.hasAttribute("height"))
+                    height = Integer.parseInt(i_textureNode.getAttribute("height"));
 
-			for (int t = 0; t < textureNodes.getLength(); t++) {
-				Element i_textureNode = (Element) textureNodes.item(t);
+                textures[t] = SpriteSheet.getSpriteSheet(spritesheet)
+                        .getSubImage(xPos, yPos, width, height);
+            }
 
-				int spritesheet = Integer.parseInt(i_textureNode
-						.getAttribute("spritesheet"));
-				int xPos = Integer.parseInt(i_textureNode.getAttribute("xPos"));
-				int yPos = Integer.parseInt(i_textureNode.getAttribute("yPos"));
-				int width = Game.TILE_SIZE_X + 1;
-				int height = Game.TILE_SIZE_Y + 1;
-				if (i_textureNode.hasAttribute("width"))
-					width = Integer.parseInt(i_textureNode.getAttribute("width"));
-				if (i_textureNode.hasAttribute("height"))
-					height = Integer.parseInt(i_textureNode.getAttribute("height"));
-				
-				textures[t] = SpriteSheet.getSpriteSheet(spritesheet)
-						.getSubImage(xPos, yPos, width, height);
-			}
+            tiles[i] = new MapTile(i, name, collision, textureType, textures,
+                    frameLength, xOffset, yOffset);
+        }
+    }
 
-			tiles[i] = new MapTile(i, name, collision, textureType, textures,
-					frameLength, xOffset, yOffset);
-		}
-	}
+    private boolean collision;
+    private int frameLength;
+    private int xOffset;
+    private int yOffset;
+    private Color minimapColor;
 
-	private MapTile(int tileID, String Name, boolean Collision,
-			TextureType TextureType, Image[] Textures, int frameLength, int xOffset, int yOffset) {
-		System.out.println(Name);
-		id = tileID;
-		name = Name;
-		collision = Collision;
-		textureType = TextureType;
-		textures = Textures;
-		this.frameLength = frameLength;
-		this.xOffset = xOffset;
-		this.yOffset = yOffset;
-		
-		// Calculate average pixel colour and set the minimap colour
-		Image image = textures[0];
-		float R = 0, G = 0, B = 0;
-		for (int x = 0; x < image.getWidth(); x++) {
-			for (int y = 0; y < image.getHeight(); y++) {
-				Color pixelColor = image.getColor(x, y);
-				R += pixelColor.r;
-				G += pixelColor.g;
-				B += pixelColor.b;
-			}
-		}
-		R /= image.getWidth() * image.getHeight();
-		G /= image.getWidth() * image.getHeight();
-		B /= image.getWidth() * image.getHeight();
-		
-		minimapColor = new Color(R, G, B);
-	}
+    private MapTile(int tileID, String Name, boolean Collision,
+                    TextureType TextureType, Image[] Textures, int frameLength, int xOffset, int yOffset) {
+        System.out.println(Name);
+        id = tileID;
+        name = Name;
+        collision = Collision;
+        textureType = TextureType;
+        textures = Textures;
+        this.frameLength = frameLength;
+        this.xOffset = xOffset;
+        this.yOffset = yOffset;
 
-	public boolean getCollision() {
-		return collision;
-	}
+        // Calculate average pixel colour and set the minimap colour
+        Image image = textures[0];
+        float R = 0, G = 0, B = 0;
+        for (int x = 0; x < image.getWidth(); x++) {
+            for (int y = 0; y < image.getHeight(); y++) {
+                Color pixelColor = image.getColor(x, y);
+                R += pixelColor.r;
+                G += pixelColor.g;
+                B += pixelColor.b;
+            }
+        }
+        R /= image.getWidth() * image.getHeight();
+        G /= image.getWidth() * image.getHeight();
+        B /= image.getWidth() * image.getHeight();
 
-	public Image getBasicTexture() {
-		return textures[0];
-	}
+        minimapColor = new Color(R, G, B);
+    }
 
-	public void render(GameContainer gc, Graphics graphics, int x, int y,
-			int totalDelta) {
-		if (textureType == TextureType.STATIC)
-			graphics.drawImage(textures[0], x + xOffset, y + yOffset);
-		else if (textureType == TextureType.DYNAMIC) {
-			int totalFrameLength = frameLength * textures.length;
-			int frameDelta = totalDelta % totalFrameLength;
+    public static MapTile getTile(int id) {
+        return tiles[id];
+    }
 
-			for (int i = 0; i < textures.length; i++) {
-				if (frameDelta >= i * frameLength
-						&& frameDelta < (i + 1) * frameLength)
-					graphics.drawImage(textures[i], x + xOffset, y + yOffset);
-			}
-		}
-	}
+    public static MapTile[] getTiles() {
+        return tiles;
+    }
 
-	public Color getMinimapColor() {
-		if (name != "null")
-			return minimapColor;
-		else
-			return new Color(0, 0, 0, 255);
-	}
+    public boolean getCollision() {
+        return collision;
+    }
+
+    public Image getBasicTexture() {
+        return textures[0];
+    }
+
+    public void render(GameContainer gc, Graphics graphics, int x, int y,
+                       int totalDelta) {
+        if (textureType == TextureType.STATIC)
+            graphics.drawImage(textures[0], x + xOffset, y + yOffset);
+        else if (textureType == TextureType.DYNAMIC) {
+            int totalFrameLength = frameLength * textures.length;
+            int frameDelta = totalDelta % totalFrameLength;
+
+            for (int i = 0; i < textures.length; i++) {
+                if (frameDelta >= i * frameLength
+                        && frameDelta < (i + 1) * frameLength)
+                    graphics.drawImage(textures[i], x + xOffset, y + yOffset);
+            }
+        }
+    }
+
+    public Color getMinimapColor() {
+        if (name != "null")
+            return minimapColor;
+        else
+            return new Color(0, 0, 0, 255);
+    }
 }

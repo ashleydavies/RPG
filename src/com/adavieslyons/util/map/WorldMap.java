@@ -1,303 +1,295 @@
 package com.adavieslyons.util.map;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.util.XMLParser;
+import org.newdawn.slick.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.adavieslyons.orthorpg.gamestate.states.GameState;
-import com.adavieslyons.util.XMLParser;
-
 public class WorldMap {
-	private Image iconBackground;
-	private Image iconHoverBackground;
-	private Image iconSelectedBackground;
-	private Image iconUnclearedBackground;
-	private Image iconMapApproach;
-	private Image[] icons;
-	private Image worldMap;
-	private MapIconData[] mapIconData;
-	private MapConnection[] mapConnectors;
-	private MapIconData selectedIcon;
-	private MapDirection selectedApproachDirection;
+    private Image iconBackground;
+    private Image iconHoverBackground;
+    private Image iconSelectedBackground;
+    private Image iconUnclearedBackground;
+    private Image iconMapApproach;
+    private Image[] icons;
+    private Image worldMap;
+    private MapIconData[] mapIconData;
+    private MapConnection[] mapConnectors;
+    private MapIconData selectedIcon;
+    private MapDirection selectedApproachDirection;
 
-	public WorldMap() throws SlickException {
-		Image icons = new Image("img/mapIcons.png");
+    public WorldMap() throws SlickException {
+        Image icons = new Image("img/mapIcons.png");
 
-		this.icons = new Image[(icons.getWidth() / 32) - 1];
+        this.icons = new Image[(icons.getWidth() / 32) - 1];
 
-		for (int i = 0; i < icons.getWidth() / 32 - 1; i++) {
-			this.icons[i] = icons.getSubImage((i + 1) * 32, 0, 32, 32);
-		}
+        for (int i = 0; i < icons.getWidth() / 32 - 1; i++) {
+            this.icons[i] = icons.getSubImage((i + 1) * 32, 0, 32, 32);
+        }
 
-		this.iconBackground = icons.getSubImage(0, 0, 32, 32);
-		this.iconHoverBackground = icons.getSubImage(0, 32, 32, 32);
-		this.iconSelectedBackground = icons.getSubImage(0, 64, 32, 32);
-		this.iconUnclearedBackground = icons.getSubImage(0, 96, 32, 32);
-		this.iconMapApproach = icons.getSubImage(32, 96, 32, 32);
-		this.worldMap = new Image("img/worldmap.png");
+        this.iconBackground = icons.getSubImage(0, 0, 32, 32);
+        this.iconHoverBackground = icons.getSubImage(0, 32, 32, 32);
+        this.iconSelectedBackground = icons.getSubImage(0, 64, 32, 32);
+        this.iconUnclearedBackground = icons.getSubImage(0, 96, 32, 32);
+        this.iconMapApproach = icons.getSubImage(32, 96, 32, 32);
+        this.worldMap = new Image("img/worldmap.png");
 
-		// Now load the map icon data
-		Document document = XMLParser.instance.parseXML(this.getClass()
-				.getClassLoader()
-				.getResourceAsStream("data/xml/map/mapList.xml"));
+        // Now load the map icon data
+        Document document = XMLParser.instance.parseXML(this.getClass()
+                .getClassLoader()
+                .getResourceAsStream("data/xml/map/mapList.xml"));
 
-		NodeList mapNodes = document.getElementsByTagName("map");
-		this.mapIconData = new MapIconData[mapNodes.getLength()];
-		for (int i = 0; i < mapNodes.getLength(); i++) {
-			Element mapNode = (Element) mapNodes.item(i);
-			MapIconData newIconData = new MapIconData(
-					mapNode.getAttribute("name"), i, Integer.parseInt(mapNode
-							.getAttribute("icon")), Integer.parseInt(mapNode
-							.getAttribute("mX")), Integer.parseInt(mapNode
-							.getAttribute("mY")));
+        NodeList mapNodes = document.getElementsByTagName("map");
+        this.mapIconData = new MapIconData[mapNodes.getLength()];
+        for (int i = 0; i < mapNodes.getLength(); i++) {
+            Element mapNode = (Element) mapNodes.item(i);
+            MapIconData newIconData = new MapIconData(
+                    mapNode.getAttribute("name"), i, Integer.parseInt(mapNode
+                    .getAttribute("icon")), Integer.parseInt(mapNode
+                    .getAttribute("mX")), Integer.parseInt(mapNode
+                    .getAttribute("mY")));
 
-			this.mapIconData[i] = newIconData;
-		}
+            this.mapIconData[i] = newIconData;
+        }
 
-		NodeList connectionNodes = document.getElementsByTagName("connection");
-		this.mapConnectors = new MapConnection[connectionNodes.getLength()];
-		for (int i = 0; i < connectionNodes.getLength(); i++) {
-			Element connectionNode = (Element) connectionNodes.item(i);
-			MapConnection connection = new MapConnection(
-					this.mapIconData[Integer.parseInt(connectionNode
-							.getAttribute("map1"))],
-					this.mapIconData[Integer.parseInt(connectionNode
-							.getAttribute("map2"))],
-					MapDirection.valueOf(connectionNode.getAttribute("dir")
-							.toUpperCase()));
-			mapConnectors[i] = connection;
-		}
-		
-		leavingMapArea(1, MapDirection.NORTH);
-	}
+        NodeList connectionNodes = document.getElementsByTagName("connection");
+        this.mapConnectors = new MapConnection[connectionNodes.getLength()];
+        for (int i = 0; i < connectionNodes.getLength(); i++) {
+            Element connectionNode = (Element) connectionNodes.item(i);
+            MapConnection connection = new MapConnection(
+                    this.mapIconData[Integer.parseInt(connectionNode
+                            .getAttribute("map1"))],
+                    this.mapIconData[Integer.parseInt(connectionNode
+                            .getAttribute("map2"))],
+                    MapDirection.valueOf(connectionNode.getAttribute("dir")
+                            .toUpperCase()));
+            mapConnectors[i] = connection;
+        }
 
-	// Fired when player leaves a map into the world map
-	public void leavingMapArea(int fromMap, MapDirection leavingDirection) {
-		mapIconData[fromMap].setCleared(true);
-		MapIconData map = mapIconData[fromMap];
-		// We should have a connection from this on the direction
-		MapDirection oppositeDirection = MapDirection
-				.getOpposite(leavingDirection);
-		for (MapConnection connection : mapConnectors) {
-			if ((connection.map1 == map && connection.direction == leavingDirection)
-					|| (connection.map2 == map && connection.direction == oppositeDirection)) {
-				MapIconData mapNew = connection.map1;
-				if (connection.map1 == map)
-					mapNew = connection.map2;
-				setSelectedIcon(mapNew, oppositeDirection);
-			}
-		}
-	}
+        leavingMapArea(1, MapDirection.NORTH);
+    }
 
-	public void update(GameContainer gc, GameState game, int delta) throws SlickException {
-		for (MapIconData mapIcon : mapIconData) {
-			mapIcon.update(gc, game, delta);
-		}
-		
-		if (game.getInput().isKeyDown(Input.KEY_ENTER) && selectedIcon != null)
-			game.loadMap(gc, selectedIcon.getMapID(), selectedApproachDirection);
-	}
+    // Fired when player leaves a map into the world map
+    public void leavingMapArea(int fromMap, MapDirection leavingDirection) {
+        mapIconData[fromMap].setCleared(true);
+        MapIconData map = mapIconData[fromMap];
+        // We should have a connection from this on the direction
+        MapDirection oppositeDirection = MapDirection
+                .getOpposite(leavingDirection);
+        for (MapConnection connection : mapConnectors) {
+            if ((connection.map1 == map && connection.direction == leavingDirection)
+                    || (connection.map2 == map && connection.direction == oppositeDirection)) {
+                MapIconData mapNew = connection.map1;
+                if (connection.map1 == map)
+                    mapNew = connection.map2;
+                setSelectedIcon(mapNew, oppositeDirection);
+            }
+        }
+    }
 
-	public void render(GameContainer gc, Graphics graphics) {
-		graphics.drawImage(worldMap, 3, 3);
+    public void update(GameContainer gc, GameState game, int delta) throws SlickException {
+        for (MapIconData mapIcon : mapIconData) {
+            mapIcon.update(gc, game, delta);
+        }
 
-		// Render connections
-		for (MapConnection connection : mapConnectors) {
-			if (connection.map1.isCleared() || connection.map2.isCleared())
-				graphics.setColor(Color.green);
-			else
-				graphics.setColor(Color.red);
-			graphics.drawLine(connection.getMap1().getmX() + 16, connection
-					.getMap1().getmY() + 16, connection.getMap2().getmX() + 16,
-					connection.getMap2().getmY() + 16);
-			graphics.setColor(Color.black);
-		}
+        if (game.getInput().isKeyDown(Input.KEY_ENTER) && selectedIcon != null)
+            game.loadMap(gc, selectedIcon.getMapID(), selectedApproachDirection);
+    }
 
-		for (MapIconData mapIcon : mapIconData) {
-			mapIcon.render(gc, graphics, icons[mapIcon.getIconID()]);
-		}
-	}
+    public void render(GameContainer gc, Graphics graphics) {
+        graphics.drawImage(worldMap, 3, 3);
 
-	private void setSelectedIcon(MapIconData icon) {
-		MapDirection approachDirection = MapDirection.NORTH;
-		
-		for (MapConnection connection : mapConnectors) {
-			if (connection.map1 == icon) {
-				approachDirection = connection.direction;
-			}
-			else if (connection.map2 == icon) {
-				approachDirection = MapDirection.getOpposite(connection.direction);
-			}
-		}
-		
-		setSelectedIcon(icon, approachDirection);
-	}
+        // Render connections
+        for (MapConnection connection : mapConnectors) {
+            if (connection.map1.isCleared() || connection.map2.isCleared())
+                graphics.setColor(Color.green);
+            else
+                graphics.setColor(Color.red);
+            graphics.drawLine(connection.getMap1().getmX() + 16, connection
+                            .getMap1().getmY() + 16, connection.getMap2().getmX() + 16,
+                    connection.getMap2().getmY() + 16);
+            graphics.setColor(Color.black);
+        }
 
-	private void setSelectedIcon(MapIconData icon, MapDirection approachDirection) {
-		this.selectedIcon = icon;
-		this.selectedApproachDirection = approachDirection;
-	}
+        for (MapIconData mapIcon : mapIconData) {
+            mapIcon.render(gc, graphics, icons[mapIcon.getIconID()]);
+        }
+    }
 
-	public enum MapDirection {
-		NORTH, EAST, SOUTH, WEST;
+    private void setSelectedIcon(MapIconData icon) {
+        MapDirection approachDirection = MapDirection.NORTH;
 
-		public static MapDirection getOpposite(MapDirection direction) {
-			switch (direction) {
-				case NORTH:
-					return SOUTH;
-				case EAST:
-					return WEST;
-				case SOUTH:
-					return NORTH;
-				case WEST:
-					return EAST;
-			}
-			return null;
-		}
-	}
+        for (MapConnection connection : mapConnectors) {
+            if (connection.map1 == icon) {
+                approachDirection = connection.direction;
+            } else if (connection.map2 == icon) {
+                approachDirection = MapDirection.getOpposite(connection.direction);
+            }
+        }
 
-	private class MapConnection {
-		private final MapIconData map1;
-		private final MapIconData map2;
-		private final MapDirection direction;
+        setSelectedIcon(icon, approachDirection);
+    }
 
-		public MapConnection(MapIconData map1, MapIconData map2,
-				MapDirection direction) {
-			this.map1 = map1;
-			this.map2 = map2;
-			this.direction = direction;
-		}
+    private void setSelectedIcon(MapIconData icon, MapDirection approachDirection) {
+        this.selectedIcon = icon;
+        this.selectedApproachDirection = approachDirection;
+    }
 
-		public MapIconData getMap1() {
-			return map1;
-		}
+    public enum MapDirection {
+        NORTH, EAST, SOUTH, WEST;
 
-		public MapIconData getMap2() {
-			return map2;
-		}
+        public static MapDirection getOpposite(MapDirection direction) {
+            switch (direction) {
+                case NORTH:
+                    return SOUTH;
+                case EAST:
+                    return WEST;
+                case SOUTH:
+                    return NORTH;
+                case WEST:
+                    return EAST;
+            }
+            return null;
+        }
+    }
 
-		public MapDirection getDirection() {
-			return direction;
-		}
-	}
+    private class MapConnection {
+        private final MapIconData map1;
+        private final MapIconData map2;
+        private final MapDirection direction;
 
-	private class MapIconData {
-		private int mapID;
-		private int iconID;
-		private String name;
-		private int mX, mY;
-		private int tX, tY; // Tooltip coordinates
-		private boolean hovered;
-		private boolean cleared;
+        public MapConnection(MapIconData map1, MapIconData map2,
+                             MapDirection direction) {
+            this.map1 = map1;
+            this.map2 = map2;
+            this.direction = direction;
+        }
 
-		public MapIconData(String name, int mapID, int iconID, int mX, int mY) {
-			this.name = name;
-			this.mapID = mapID;
-			this.iconID = iconID;
-			this.mX = mX;
-			this.mY = mY;
-		}
+        public MapIconData getMap1() {
+            return map1;
+        }
 
-		public void update(GameContainer gc, GameState game, int delta) {
-			if (game.getInput().getMouseX() >= mX
-					&& game.getInput().getMouseX() <= mX + 32
-					&& game.getInput().getMouseY() >= mY
-					&& game.getInput().getMouseY() <= mY + 32) {
-				hovered = true;
-				tX = game.getInput().getMouseX() + 16;
-				tY = game.getInput().getMouseY() + 16;
-			} else
-				hovered = false;
+        public MapIconData getMap2() {
+            return map2;
+        }
 
-			if (hovered && game.getInput().isMouseButtonDown(0))
-				setSelectedIcon(this);
-		}
+        public MapDirection getDirection() {
+            return direction;
+        }
+    }
 
-		public void render(GameContainer gc, Graphics graphics, Image icon) {
-			if (selectedIcon == this) {
-				graphics.drawImage(iconSelectedBackground, mX, mY);
-				switch (selectedApproachDirection) {
-					case NORTH:
-						graphics.rotate(mX + 16, mY - 32 + 16, 180);
-						graphics.drawImage(iconMapApproach, mX, mY - 32);
-						graphics.resetTransform();
-						break;
-					case EAST:
-						graphics.rotate(mX + 32 + 16, mY + 16, 270);
-						graphics.drawImage(iconMapApproach, mX + 32, mY);
-						graphics.resetTransform();
-						break;
-					case SOUTH:
-						graphics.drawImage(iconMapApproach, mX, mY + 32);
-						break;
-					case WEST:
-						graphics.rotate(mX - 32 + 16, mY + 16, 90);
-						graphics.drawImage(iconMapApproach, mX - 32, mY);
-						graphics.resetTransform();
-						break;
-				}
-			}
-			else if (!cleared) {
-				graphics.drawImage(iconUnclearedBackground, mX, mY);
-			} else if (hovered) {
-				graphics.drawImage(iconHoverBackground, mX, mY);
-			} else
-				graphics.drawImage(iconBackground, mX, mY);
-			graphics.drawImage(icon, mX, mY);
+    private class MapIconData {
+        private int mapID;
+        private int iconID;
+        private String name;
+        private int mX, mY;
+        private int tX, tY; // Tooltip coordinates
+        private boolean hovered;
+        private boolean cleared;
 
-			if (hovered) {
-				graphics.drawString(name, tX, tY);
-			}
-		}
+        public MapIconData(String name, int mapID, int iconID, int mX, int mY) {
+            this.name = name;
+            this.mapID = mapID;
+            this.iconID = iconID;
+            this.mX = mX;
+            this.mY = mY;
+        }
 
-		public int getIconID() {
-			return iconID;
-		}
+        public void update(GameContainer gc, GameState game, int delta) {
+            if (game.getInput().getMouseX() >= mX
+                    && game.getInput().getMouseX() <= mX + 32
+                    && game.getInput().getMouseY() >= mY
+                    && game.getInput().getMouseY() <= mY + 32) {
+                hovered = true;
+                tX = game.getInput().getMouseX() + 16;
+                tY = game.getInput().getMouseY() + 16;
+            } else
+                hovered = false;
 
-		public void setIconID(int iconID) {
-			this.iconID = iconID;
-		}
+            if (hovered && game.getInput().isMouseButtonDown(0))
+                setSelectedIcon(this);
+        }
 
-		public int getMapID() {
-			return mapID;
-		}
-		
-		public boolean isCleared() {
-			return cleared;
-		}
+        public void render(GameContainer gc, Graphics graphics, Image icon) {
+            if (selectedIcon == this) {
+                graphics.drawImage(iconSelectedBackground, mX, mY);
+                switch (selectedApproachDirection) {
+                    case NORTH:
+                        graphics.rotate(mX + 16, mY - 32 + 16, 180);
+                        graphics.drawImage(iconMapApproach, mX, mY - 32);
+                        graphics.resetTransform();
+                        break;
+                    case EAST:
+                        graphics.rotate(mX + 32 + 16, mY + 16, 270);
+                        graphics.drawImage(iconMapApproach, mX + 32, mY);
+                        graphics.resetTransform();
+                        break;
+                    case SOUTH:
+                        graphics.drawImage(iconMapApproach, mX, mY + 32);
+                        break;
+                    case WEST:
+                        graphics.rotate(mX - 32 + 16, mY + 16, 90);
+                        graphics.drawImage(iconMapApproach, mX - 32, mY);
+                        graphics.resetTransform();
+                        break;
+                }
+            } else if (!cleared) {
+                graphics.drawImage(iconUnclearedBackground, mX, mY);
+            } else if (hovered) {
+                graphics.drawImage(iconHoverBackground, mX, mY);
+            } else
+                graphics.drawImage(iconBackground, mX, mY);
+            graphics.drawImage(icon, mX, mY);
 
-		public void setCleared(boolean cleared) {
-			this.cleared = cleared;
-		}
+            if (hovered) {
+                graphics.drawString(name, tX, tY);
+            }
+        }
 
-		public String getName() {
-			return name;
-		}
+        public int getIconID() {
+            return iconID;
+        }
 
-		public void setName(String name) {
-			this.name = name;
-		}
+        public void setIconID(int iconID) {
+            this.iconID = iconID;
+        }
 
-		public int getmX() {
-			return mX;
-		}
+        public int getMapID() {
+            return mapID;
+        }
 
-		public void setmX(int mX) {
-			this.mX = mX;
-		}
+        public boolean isCleared() {
+            return cleared;
+        }
 
-		public int getmY() {
-			return mY;
-		}
+        public void setCleared(boolean cleared) {
+            this.cleared = cleared;
+        }
 
-		public void setmY(int mY) {
-			this.mY = mY;
-		}
-	}
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getmX() {
+            return mX;
+        }
+
+        public void setmX(int mX) {
+            this.mX = mX;
+        }
+
+        public int getmY() {
+            return mY;
+        }
+
+        public void setmY(int mY) {
+            this.mY = mY;
+        }
+    }
 }

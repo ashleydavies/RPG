@@ -1,13 +1,10 @@
 package com.adavieslyons.orthorpg.entities;
 
-import java.util.List;
-
-import org.newdawn.slick.geom.Vector2f;
-
-import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.util.Vector2i;
 import com.adavieslyons.util.map.Map;
 import com.adavieslyons.util.map.pathfinding.AStar;
+
+import java.util.List;
 
 public abstract class MovingEntity extends Entity {
 	protected Vector2i desiredPosition;
@@ -30,19 +27,17 @@ public abstract class MovingEntity extends Entity {
 
 		try {
 			List<AStar.Node> path = AStar.path(map.getNodeMatrix()[position
-					.getY()][position.getX()],
+							.getY()][position.getX()],
 					map.getNodeMatrix()[tileY][tileX]);
-	
+
 			if (!path.isEmpty()) {
-				occupiedTileEndChange(positionLerpFrom);
-				positionLerpFrom = position;
+				lastPosition = position;
 				position = new Vector2i(path.get(0).getX(), path.get(0)
 						.getY());
 				occupiedTileStartChange(position);
 				moving = true;
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println("ENTITY HAS ISSUES PATHFINDING");
 		}
 	}
@@ -66,17 +61,19 @@ public abstract class MovingEntity extends Entity {
 			if (tileMoveCurrently >= 1) {
 				tileMoveCurrently = 0;
 				moving = false;
+				occupiedTileEndChange(lastPosition);
 				setPositionLerpFrom(position);
 				setPosition(position);
 				setPositionLerpFraction(0);
 			}
 		}
-		
+
 		if (!moving && desiredPosition != position)
 			pathfind(desiredPosition.getX(), desiredPosition.getY());
 	}
-		
+
 	protected void setNewPosition(Vector2i newPosition) {
+		lastPosition = newPosition;
 		setPosition(newPosition);
 		setPositionLerpFrom(newPosition);
 		setDesiredPosition(newPosition);
@@ -98,7 +95,8 @@ public abstract class MovingEntity extends Entity {
 	public void setFieldOfView(int fieldOfView) {
 		this.fieldOfView = fieldOfView;
 	}
-	
+
 	protected abstract void occupiedTileStartChange(Vector2i newTile);
+
 	protected abstract void occupiedTileEndChange(Vector2i oldTile);
 }

@@ -3,14 +3,15 @@ package com.adavieslyons.util.map.pathfinding;
 import com.adavieslyons.util.map.Map;
 
 /**
- * 
  * @author Ashley
  */
 public class CollisionMap {
 	boolean collisionData[][];
+	Map map;
 
 	public CollisionMap(Map map) {
 		collisionData = new boolean[map.getHeight()][map.getWidth()];
+		this.map = map;
 
 		int y = 0;
 
@@ -25,6 +26,10 @@ public class CollisionMap {
 
 			y++;
 		}
+	}
+
+	public boolean getOccupied(int x, int y) {
+		return map.getOccupied(x, y);
 	}
 
 	public boolean getCollision(int x, int y) {
