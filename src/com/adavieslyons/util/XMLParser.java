@@ -38,14 +38,14 @@ public final class XMLParser {
     }
 
     public static XMLParser instance = new XMLParser();
-    static DocumentBuilderFactory dbFactory = DocumentBuilderFactory
-            .newInstance();
-    static DocumentBuilder dBuilder;
+    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+    DocumentBuilder dBuilder;
 
     private XMLParser() {
         try {
             dBuilder = dbFactory.newDocumentBuilder();
         } catch (Exception e) {
+            System.out.println("FAILED TO CREATE DOCUMENT BUILDER: " + e.getMessage());
         }
     }
 
@@ -192,6 +192,7 @@ public final class XMLParser {
         try {
             return dBuilder.parse(file);
         } catch (Exception e) {
+            System.out.println("ERROR PARSING XML FILE");
         }
 
         return null;
@@ -201,6 +202,7 @@ public final class XMLParser {
         try {
             return dBuilder.parse(file);
         } catch (Exception e) {
+            System.out.println("ERROR PARSING XML FILE");
         }
 
         return null;
