@@ -25,6 +25,7 @@ public class MapLayer {
     }
 
     public MapTile getTile(int x, int y) {
+        System.out.println(tiles.length + " " + tiles[0].length);
         return MapTile.getTile(tiles[y][x].getId());
     }
 

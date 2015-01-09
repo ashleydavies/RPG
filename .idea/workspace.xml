@@ -2,24 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2aa46ee2-d256-43b1-ae1d-70ed2fe09d35" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dictionaries/Ashley.xml" />
-      <change type="DELETED" beforePath="C:\Users\Ashley\Documents\GitHub\RPG\mapExported.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/RPG/com/adavieslyons/orthorpg/gui/InventoryGUI.class" afterPath="$PROJECT_DIR$/out/production/RPG/com/adavieslyons/orthorpg/gui/InventoryGUI.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/RPG/data/xml/map/0.xml" afterPath="$PROJECT_DIR$/out/production/RPG/data/xml/map/0.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/data/xml/map/0.xml" afterPath="$PROJECT_DIR$/resources/data/xml/map/0.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gui/DialogGUI.java" afterPath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gui/DialogGUI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/entities/Entity.java" afterPath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/entities/Entity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/entities/EntityManager.java" afterPath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/entities/EntityManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/Game.java" afterPath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/Game.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gamestate/states/GameState.java" afterPath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gamestate/states/GameState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gamestate/GameStateManager.java" afterPath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gamestate/GameStateManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gui/InventoryGUI.java" afterPath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gui/InventoryGUI.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/RPG/com/adavieslyons/orthorpg/gui/DialogGUI.class" afterPath="$PROJECT_DIR$/out/production/RPG/com/adavieslyons/orthorpg/gui/DialogGUI.class" />
+      <change type="MODIFICATION" beforePath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\orthorpg\entities\Entity.class" afterPath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\orthorpg\entities\Entity.class" />
+      <change type="MODIFICATION" beforePath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\orthorpg\entities\EntityManager.class" afterPath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\orthorpg\entities\EntityManager.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/RPG/com/adavieslyons/orthorpg/Game.class" afterPath="$PROJECT_DIR$/out/production/RPG/com/adavieslyons/orthorpg/Game.class" />
+      <change type="MODIFICATION" beforePath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\orthorpg\gamestate\states\GameState$1.class" afterPath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\orthorpg\gamestate\states\GameState$1.class" />
+      <change type="MODIFICATION" beforePath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\orthorpg\gamestate\states\GameState$InnerState.class" afterPath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\orthorpg\gamestate\states\GameState$InnerState.class" />
+      <change type="MODIFICATION" beforePath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\orthorpg\gamestate\states\GameState.class" afterPath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\orthorpg\gamestate\states\GameState.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/RPG/com/adavieslyons/orthorpg/gamestate/GameStateManager.class" afterPath="$PROJECT_DIR$/out/production/RPG/com/adavieslyons/orthorpg/gamestate/GameStateManager.class" />
+      <change type="MODIFICATION" beforePath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\util\map\Map$1.class" afterPath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\util\map\Map$1.class" />
+      <change type="MODIFICATION" beforePath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\util\map\Map.class" afterPath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\util\map\Map.class" />
+      <change type="MODIFICATION" beforePath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\orthorpg\entities\Mob.class" afterPath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\orthorpg\entities\Mob.class" />
+      <change type="MODIFICATION" beforePath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\orthorpg\entities\Player.class" afterPath="C:\Users\Ashley\Documents\GitHub\RPG\out\production\RPG\com\adavieslyons\orthorpg\entities\Player.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/RPG/com/adavieslyons/orthorpg/gamestate/State.class" afterPath="$PROJECT_DIR$/out/production/RPG/com/adavieslyons/orthorpg/gamestate/State.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/adavieslyons/util/map/Map.java" afterPath="$PROJECT_DIR$/src/com/adavieslyons/util/map/Map.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/entities/Mob.java" afterPath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/entities/Mob.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/entities/Player.java" afterPath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/entities/Player.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gamestate/State.java" afterPath="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gamestate/State.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/RPG/data/xml/tileData.xml" afterPath="$PROJECT_DIR$/out/production/RPG/data/xml/tileData.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/data/xml/tileData.xml" afterPath="$PROJECT_DIR$/resources/data/xml/tileData.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/adavieslyons/util/map/MapLayer.java" afterPath="$PROJECT_DIR$/src/com/adavieslyons/util/map/MapLayer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="RPG.iws" />
@@ -45,11 +42,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Map.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Map.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/adavieslyons/util/map/Map.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2357" max-vertical-offset="8857">
-              <caret line="186" column="0" selection-start-line="186" selection-start-column="0" selection-end-line="186" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.45387995" vertical-offset="1118" max-vertical-offset="9486">
+              <caret line="111" column="53" selection-start-line="111" selection-start-column="53" selection-end-line="111" selection-end-column="53" />
+              <folding>
+                <element signature="e#4470#4471#0" expanded="true" />
+                <element signature="e#4520#4521#0" expanded="true" />
+                <element signature="e#9892#9893#0" expanded="true" />
+                <element signature="e#9942#9943#0" expanded="true" />
+                <element signature="e#16982#16983#0" expanded="true" />
+                <element signature="e#17050#17051#0" expanded="true" />
+                <element signature="e#17438#17439#0" expanded="true" />
+                <element signature="e#17467#17468#0" expanded="true" />
+                <element signature="e#18461#18462#0" expanded="true" />
+                <element signature="e#18514#18515#0" expanded="true" />
+                <element signature="e#18571#18572#0" expanded="true" />
+                <element signature="e#18623#18624#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MapLayer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/adavieslyons/util/map/MapLayer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="113" max-vertical-offset="1598">
+              <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -84,11 +104,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GameState.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GameState.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gamestate/states/GameState.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6066838" vertical-offset="2724" max-vertical-offset="3519">
-              <caret line="214" column="0" selection-start-line="214" selection-start-column="0" selection-end-line="214" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1602" max-vertical-offset="3519">
+              <caret line="148" column="21" selection-start-line="148" selection-start-column="21" selection-end-line="148" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -115,16 +135,6 @@
                 <element signature="e#1434#1435#0" expanded="true" />
                 <element signature="e#1478#1479#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Mob.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/adavieslyons/orthorpg/entities/Mob.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="945" max-vertical-offset="1649">
-              <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -182,9 +192,10 @@
         <option value="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/entities/Player.java" />
         <option value="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/entities/Mob.java" />
         <option value="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/Game.java" />
-        <option value="$PROJECT_DIR$/src/com/adavieslyons/util/map/Map.java" />
         <option value="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gui/DialogGUI.java" />
         <option value="$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gamestate/states/GameState.java" />
+        <option value="$PROJECT_DIR$/src/com/adavieslyons/util/map/MapLayer.java" />
+        <option value="$PROJECT_DIR$/src/com/adavieslyons/util/map/Map.java" />
       </list>
     </option>
   </component>
@@ -734,6 +745,13 @@
       <option name="number" value="Default" />
       <updated>1420740872532</updated>
     </task>
+    <task id="LOCAL-00001" summary="Dialog working once again (Although doesn't close yet), per pixel collision detection correct, game now correctly paths mouse events through to the most relevant object (entities -&gt; map)&#10;&#10;TODO: Dialog GUI needs it's own state">
+      <created>1420763691701</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1420763691701</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -750,7 +768,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32975295" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.120300755" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22234157" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23746918" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -781,6 +799,8 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
+    <MESSAGE value="Dialog working once again (Although doesn't close yet), per pixel collision detection correct, game now correctly paths mouse events through to the most relevant object (entities -&gt; map)&#10;&#10;TODO: Dialog GUI needs it's own state" />
+    <option name="LAST_COMMIT_MESSAGE" value="Dialog working once again (Although doesn't close yet), per pixel collision detection correct, game now correctly paths mouse events through to the most relevant object (entities -&gt; map)&#10;&#10;TODO: Dialog GUI needs it's own state" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -843,7 +863,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="4886" max-vertical-offset="8959">
           <caret line="328" column="0" selection-start-line="328" selection-start-column="0" selection-end-line="328" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#4470#4471#0" expanded="true" />
+            <element signature="e#4520#4521#0" expanded="true" />
+            <element signature="e#9892#9893#0" expanded="true" />
+            <element signature="e#9942#9943#0" expanded="true" />
+            <element signature="e#16982#16983#0" expanded="true" />
+            <element signature="e#17050#17051#0" expanded="true" />
+            <element signature="e#17438#17439#0" expanded="true" />
+            <element signature="e#17467#17468#0" expanded="true" />
+            <element signature="e#18461#18462#0" expanded="true" />
+            <element signature="e#18514#18515#0" expanded="true" />
+            <element signature="e#18571#18572#0" expanded="true" />
+            <element signature="e#18623#18624#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1109,19 +1142,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/adavieslyons/util/map/Map.java">
+    <entry file="file://$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gamestate/states/GameState.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2357" max-vertical-offset="8857">
-          <caret line="186" column="0" selection-start-line="186" selection-start-column="0" selection-end-line="186" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1602" max-vertical-offset="3519">
+          <caret line="148" column="21" selection-start-line="148" selection-start-column="21" selection-end-line="148" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/adavieslyons/orthorpg/gamestate/states/GameState.java">
+    <entry file="file://$PROJECT_DIR$/src/com/adavieslyons/util/map/MapLayer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6066838" vertical-offset="2724" max-vertical-offset="3519">
-          <caret line="214" column="0" selection-start-line="214" selection-start-column="0" selection-end-line="214" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="113" max-vertical-offset="1598">
+          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/adavieslyons/util/map/Map.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.45387995" vertical-offset="1118" max-vertical-offset="9486">
+          <caret line="111" column="53" selection-start-line="111" selection-start-column="53" selection-end-line="111" selection-end-column="53" />
+          <folding>
+            <element signature="e#4470#4471#0" expanded="true" />
+            <element signature="e#4520#4521#0" expanded="true" />
+            <element signature="e#9892#9893#0" expanded="true" />
+            <element signature="e#9942#9943#0" expanded="true" />
+            <element signature="e#16982#16983#0" expanded="true" />
+            <element signature="e#17050#17051#0" expanded="true" />
+            <element signature="e#17438#17439#0" expanded="true" />
+            <element signature="e#17467#17468#0" expanded="true" />
+            <element signature="e#18461#18462#0" expanded="true" />
+            <element signature="e#18514#18515#0" expanded="true" />
+            <element signature="e#18571#18572#0" expanded="true" />
+            <element signature="e#18623#18624#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
