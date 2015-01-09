@@ -21,7 +21,7 @@ public class Game extends BasicGame {
         AppGameContainer app = new AppGameContainer(new Game());
         app.setDisplayMode(1200, 800, false);
         app.setShowFPS(false);
-        // app.setTargetFrameRate(100);
+        //app.setTargetFrameRate(100);
         app.start();
     }
 
@@ -34,6 +34,15 @@ public class Game extends BasicGame {
     }
 
     @Override
+    public void mouseClicked(int button, int x, int y, int clickCount) {
+        try {
+            gsm.mouseClicked(button, x, y, clickCount);
+        } catch (SlickException e) {
+            System.out.println("ERROR ON MOUSE CLICK EVENT");
+        }
+    }
+
+    @Override
     public void update(GameContainer gc, int delta) throws SlickException {
         gsm.update(gc, delta);
     }
@@ -43,4 +52,5 @@ public class Game extends BasicGame {
             throws SlickException {
         gsm.render(gc, graphics);
     }
+
 }

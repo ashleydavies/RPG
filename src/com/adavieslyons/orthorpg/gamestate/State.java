@@ -20,4 +20,7 @@ public abstract class State {
 
     public abstract void render(GameContainer gc, Graphics graphics)
             throws SlickException;
+
+    public abstract void mouseClicked(int button, int x, int y, int clickCount)
+            throws SlickException;
 }

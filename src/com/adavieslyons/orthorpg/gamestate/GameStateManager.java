@@ -42,6 +42,10 @@ public class GameStateManager {
             i_state.render(gc, graphics);
     }
 
+    public void mouseClicked(int button, int x, int y, int clickCount) throws SlickException {
+        getActiveState().mouseClicked(button, x, y, clickCount);
+    }
+
     private State getActiveState() {
         return gameStates.get(getActiveStateIndex());
     }

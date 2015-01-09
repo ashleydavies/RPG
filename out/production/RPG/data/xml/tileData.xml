@@ -2,6 +2,9 @@
 
 <data>
     <tileInfo>
+        <tile name="null" collision="1">
+            <texture spritesheet="0" xPos="0" yPos="0" />
+        </tile>
         <tile name="grass" collision="0">            
             <texture spritesheet="0" xPos="0" yPos="33" />
         </tile>
@@ -35,9 +38,6 @@
         </tile>
         <tile name="woodfloor" collision="0">
             <texture spritesheet="0" xPos="96" yPos="128" />
-        </tile>
-        <tile name="null" collision="1">
-        	<texture spritesheet="0" xPos="0" yPos="0" />
         </tile>
         <tile name="tree" collision="1">
         	<!-- Render above where it would be rendered as it's a taller than usual sprite -->

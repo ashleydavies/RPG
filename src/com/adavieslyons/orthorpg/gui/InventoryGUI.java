@@ -3,6 +3,7 @@ package com.adavieslyons.orthorpg.gui;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.util.inventory.ItemStack;
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Rectangle;
 
 public class InventoryGUI extends GUIWindow {
     GameState game;
@@ -10,6 +11,7 @@ public class InventoryGUI extends GUIWindow {
     public InventoryGUI(GameContainer gc, GameState game) throws SlickException {
         super(gc, game, 504, 624);
         this.game = game;
+
         renderPrimaryContent(gc);
     }
 
@@ -17,6 +19,7 @@ public class InventoryGUI extends GUIWindow {
         Image itemSlot = ui.getSubImage(84, 0, 48, 48);
 
         Graphics graphics = gc.getGraphics();
+        graphics.setBackground(new Color(0, 0, 0, 0));
         graphics.clear();
 
         // Width of the core inventory slots

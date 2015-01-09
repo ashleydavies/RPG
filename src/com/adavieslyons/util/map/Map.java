@@ -81,9 +81,18 @@ public class Map {
                 if (game.getInput().isMouseButtonDown(0)
                         && mouseTile.getX() >= 0 && mouseTile.getY() >= 0
                         && mouseTile.getX() < width
-                        && mouseTile.getY() < height)
-                    setTile(mouseTile.getX(), mouseTile.getY(),
-                            tileEditingTile, 0);
+                        && mouseTile.getY() < height) {
+                    if (game.getInput().isKeyDown(Input.KEY_F)) {
+                        // FILL
+                        int tileID = getTile(mouseTile.getX(), mouseTile.getY(), 0).id;
+                        if (tileID == tileEditingTile)
+                            return;
+                        fillMap(mouseTile.getX(), mouseTile.getY(), tileID, tileEditingTile, 0);
+                    } else {
+                        setTile(mouseTile.getX(), mouseTile.getY(),
+                                tileEditingTile, 0);
+                    }
+                }
             }
         }
 
@@ -97,6 +106,20 @@ public class Map {
             addOffset(0, 1 * delta);
         if (game.getInput().isKeyDown(Input.KEY_DOWN))
             addOffset(0, -1 * delta);
+    }
+
+    public void fillMap(int x, int y, int tileID, int newTileID, int layer) {
+        if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
+            return;
+        if (layers[layer].getTile(x, y).id != tileID)
+            return;
+
+        setTile(x, y, newTileID, layer);
+
+        fillMap(x + 1, y, tileID, newTileID, layer);
+        fillMap(x - 1, y, tileID, newTileID, layer);
+        fillMap(x, y + 1, tileID, newTileID, layer);
+        fillMap(x, y - 1, tileID, newTileID, layer);
     }
 
     public void addOffset(int x, int y) {
@@ -184,7 +207,6 @@ public class Map {
         // Check if we need to move across depending on image map
         int xRel = noOffset.getX() % Game.TILE_SIZE_X;
         int yRel = noOffset.getY() % Game.TILE_SIZE_Y;
-        System.out.println("X: " + tCoordX + " Y: " + tCoordY + " OFFSET X: " + noOffset.getX() + " Y: " + noOffset.getY() + " REL: " + xRel + " " + yRel);
 
         // if xRel is negative we need to shift (-1, +1)
         if (xRel < 0) {
@@ -465,11 +487,6 @@ public class Map {
             int left = offset.getX() - (int) (0.5 * getHeight() * Game.TILE_SIZE_X);
             int right = offset.getX() + (int) (0.5 * getWidth() * Game.TILE_SIZE_X);
 
-            System.out.println("Offset:" + offset);
-            System.out.println("Left: " + left);
-            System.out.println("Right: " + right);
-            System.out.println("Bottom: " + bottom);
-
             if (top > 100)
                 offset.setY(100);
             if (bottom < game.HEIGHT - 150)
@@ -485,6 +502,10 @@ public class Map {
 
     public void setTile(int tX, int tY, int tileID, int layer) {
         layers[layer].setTile(tX, tY, tileID);
+    }
+
+    public MapTile getTile(int tX, int tY, int layer) {
+        return layers[layer].getTile(tX, tY);
     }
 
     public void focusTile(Vector2i tile) {
