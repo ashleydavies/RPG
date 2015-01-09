@@ -39,17 +39,21 @@ public final class DialogGUI extends GUIWindow {
         }
     }
 
-    public DialogGUI(GameContainer gc, GameState game, DialogNode[] dialog,
-                     IDialogable parent) throws SlickException {
+    public DialogGUI(GameContainer gc, GameState game) throws SlickException {
         super(gc, game, 504, 624);
+    }
 
+    public void loadDialog(GameContainer gc, GameState game) throws SlickException {
         String content = dialog[0].getPrompt();
         String[] responses = dialog[0].getReplyPrompts(game);
 
+        System.out.println("LOADING DIALOG");
+        renderPrimaryContent(gc, content, responses);
+    }
+
+    public void setDialog(DialogNode[] dialog, IDialogable parent) {
         this.dialog = dialog;
         this.parent = parent;
-
-        renderPrimaryContent(gc, content, responses);
     }
 
     public void renderPrimaryContent(GameContainer gc, String content,

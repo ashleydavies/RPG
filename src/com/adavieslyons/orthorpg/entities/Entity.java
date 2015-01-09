@@ -41,13 +41,26 @@ public abstract class Entity {
         int drawX = (int) (drawCoordinates.getX() + Game.TILE_SIZE_X / 2 - image.getWidth() / 2);
         int drawY = (int) (drawCoordinates.getY() - image.getHeight() / 2 - Game.TILE_SIZE_Y / 2);
 
-        if (gc.getInput().getMouseX() > drawX && gc.getInput().getMouseX() < drawX + image.getWidth()
-                && gc.getInput().getMouseY() > drawY && gc.getInput().getMouseY() < drawY + image.getHeight()) {
+        if (areScreenCoordinatesOnEntity(gc.getInput().getMouseX(), gc.getInput().getMouseY())) {
             Color color = image.getColor(gc.getInput().getMouseX() - drawX, gc.getInput().getMouseY() - drawY);
             if (color.getAlpha() != 0)
                 graphics.drawImage(hoverImage, drawX, drawY);
         }
         graphics.drawImage(image, drawX, drawY);
+    }
+
+    public boolean areScreenCoordinatesOnEntity(int x, int y) {
+        Vector2i positionCoordinates = map.tileCoordinatesToGameCoordinates(position);
+        Vector2i lerpFromCoordinates = map.tileCoordinatesToGameCoordinates(positionLerpFrom);
+        Vector2f drawCoordinates = lerpFromCoordinates.lerpTo(positionCoordinates, positionLerpFraction).add(new Vector2f(map.getOffset().getX(), map.getOffset().getY()));
+
+        int drawX = (int) (drawCoordinates.getX() + Game.TILE_SIZE_X / 2 - image.getWidth() / 2);
+        int drawY = (int) (drawCoordinates.getY() - image.getHeight() / 2 - Game.TILE_SIZE_Y / 2);
+
+        if (x > drawX && x < drawX + image.getWidth()
+                && y > drawY && y < drawY + image.getHeight())
+            return true;
+        return false;
     }
 
     public void generateHoverImage() throws SlickException {
@@ -83,6 +96,8 @@ public abstract class Entity {
             System.out.println("[ERROR] Cannot generate hover image for entity");
         }
     }
+
+    public abstract void onClick(GameState game) throws SlickException;
 
     public Vector2i getPositionLerpFrom() {
         return positionLerpFrom;

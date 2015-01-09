@@ -184,7 +184,6 @@ public class Map {
         // Check if we need to move across depending on image map
         int xRel = noOffset.getX() % Game.TILE_SIZE_X;
         int yRel = noOffset.getY() % Game.TILE_SIZE_Y;
-        System.out.println("X: " + tCoordX + " Y: " + tCoordY + " OFFSET X: " + noOffset.getX() + " Y: " + noOffset.getY() + " REL: " + xRel + " " + yRel);
 
         // if xRel is negative we need to shift (-1, +1)
         if (xRel < 0) {
@@ -464,11 +463,6 @@ public class Map {
             int bottom = offset.getY() + (int) (0.5 * (getHeight() + getWidth()) * Game.TILE_SIZE_Y);
             int left = offset.getX() - (int) (0.5 * getHeight() * Game.TILE_SIZE_X);
             int right = offset.getX() + (int) (0.5 * getWidth() * Game.TILE_SIZE_X);
-
-            System.out.println("Offset:" + offset);
-            System.out.println("Left: " + left);
-            System.out.println("Right: " + right);
-            System.out.println("Bottom: " + bottom);
 
             if (top > 100)
                 offset.setY(100);

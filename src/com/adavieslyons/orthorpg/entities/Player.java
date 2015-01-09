@@ -36,11 +36,6 @@ public class Player extends MovingEntity {
     @Override
     public void update(GameContainer gc, GameState game, int delta)
             throws SlickException {
-        if (game.getInput().isMouseButtonDown(0)) {
-            moveToTarget(map.screenCoordinatesToTileCoordinates(game.getInput()
-                    .getMouseX(), game.getInput().getMouseY()));
-        }
-        
         updateMove(delta);
     }
 
@@ -58,6 +53,16 @@ public class Player extends MovingEntity {
     public void render(GameContainer gc, Graphics graphics)
             throws SlickException {
         super.render(gc, graphics);
+    }
+
+    @Override
+    public void onClick(GameState game) {
+
+    }
+
+    public void gameClicked(GameState game, int x, int y) {
+        moveToTarget(map.screenCoordinatesToTileCoordinates(game.getInput()
+            .getMouseX(), game.getInput().getMouseY()));
     }
 
     public void onNewMapLoad(Map map, Vector2i newPosition) {

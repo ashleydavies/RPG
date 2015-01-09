@@ -75,6 +75,11 @@ public class Mob extends MovingPathEntity implements IDialogable, IAttackable {
         super.render(gc, graphics);
     }
 
+    @Override
+    public void onClick(GameState game) throws SlickException {
+        game.showDialog(dialog, this);
+    }
+
 
     @Override
     public void dialogCloseRequested() {
