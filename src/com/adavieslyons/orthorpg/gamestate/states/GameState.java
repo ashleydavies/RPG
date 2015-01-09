@@ -194,6 +194,7 @@ public class GameState extends State {
     public void loadMap(GameContainer gc, int mapID, WorldMap.MapDirection direction) throws SlickException {
         map = new Map();
         System.out.println("Loading Map " + mapID);
+        entityManager.clear();
         map.load(gc, this, mapID, entityManager);
         Vector2i playerPosition = map.getSuitablePlayerLocation(direction);
         player.onNewMapLoad(map, playerPosition);

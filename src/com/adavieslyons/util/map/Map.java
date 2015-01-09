@@ -120,6 +120,11 @@ public class Map {
         fillMap(x - 1, y, tileID, newTileID, layer);
         fillMap(x, y + 1, tileID, newTileID, layer);
         fillMap(x, y - 1, tileID, newTileID, layer);
+
+        fillMap(x - 1, y - 1, tileID, newTileID, layer);
+        fillMap(x + 1, y - 1, tileID, newTileID, layer);
+        fillMap(x - 1, y + 1, tileID, newTileID, layer);
+        fillMap(x + 1, y + 1, tileID, newTileID, layer);
     }
 
     public void addOffset(int x, int y) {

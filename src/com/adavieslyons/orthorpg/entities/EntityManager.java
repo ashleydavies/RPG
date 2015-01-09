@@ -26,6 +26,10 @@ public class EntityManager {
         }
     }
 
+    public void clear() {
+        mobs = new ArrayList<>();
+    }
+
     public Entity getMobFromScreenCoordinates(int x, int y) {
         for (Mob mob : mobs)
             if (mob.areScreenCoordinatesOnEntity(x, y))
