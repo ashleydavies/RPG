@@ -25,31 +25,25 @@ public class MapLayer {
     }
 
     public MapTile getTile(int x, int y) {
-        System.out.println(tiles.length + " " + tiles[0].length);
         return MapTile.getTile(tiles[y][x].getId());
     }
 
     void render(GameContainer gc, Graphics graphics, int totalDelta, boolean renderOccupants) throws SlickException {
-        Vector2i screenTL = new Vector2i(0, 0);//screenCoordinatesToTileCoordinates(0, 0);
-        Vector2i screenBR = new Vector2i(map.getWidth(), map.getHeight());//screenCoordinatesToTileCoordinates(gc.getWidth(), gc.getHeight());
+        Vector2i minXTile = map.screenCoordinatesToTileCoordinates(0, 0);
+        Vector2i minYTile = map.screenCoordinatesToTileCoordinates(gc.getWidth(), 0);
+        Vector2i maxYTile = map.screenCoordinatesToTileCoordinates(0, gc.getHeight());
+        Vector2i maxXTile = map.screenCoordinatesToTileCoordinates(gc.getWidth(), gc.getHeight());
+        if (minXTile.getX() < 0)
+            minXTile.setX(0);
+        if (minYTile.getY() < 0)
+            minYTile.setY(0);
+        if (maxXTile.getX() > map.getWidth())
+            maxXTile.setX(map.getWidth());
+        if (maxYTile.getY() > map.getHeight())
+            maxYTile.setY(map.getHeight());
 
-        screenTL.add(new Vector2i(1, 1));
-        screenBR.add(new Vector2i(2, 2));
-
-        if (screenTL.getX() < 0)
-            screenTL.setX(0);
-        if (screenTL.getY() < 0)
-            screenTL.setY(0);
-        if (screenBR.getX() > map.getWidth())
-            screenBR.setX(map.getWidth());
-        if (screenBR.getY() > map.getHeight())
-            screenBR.setY(map.getHeight());
-
-        screenTL = new Vector2i(0, 0);
-        screenBR = new Vector2i(map.getWidth(), map.getHeight());
-
-        for (int y = screenTL.getY(); y < screenBR.getY(); y++) {
-            for (int x = screenTL.getX(); x < screenBR.getX(); x++) {
+        for (int y = minYTile.getY(); y < maxYTile.getY(); y++) {
+            for (int x = minXTile.getX(); x < maxXTile.getX(); x++) {
                 MapTileData tile = tiles[y][x];
                 if (!map.isFogOfWar(x, y) || map.getEditing()) {
                     Vector2i renderPosition = map

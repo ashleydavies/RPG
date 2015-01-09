@@ -68,8 +68,6 @@ public class Player extends MovingEntity {
     public void onNewMapLoad(Map map, Vector2i newPosition) {
         setNewPosition(newPosition);
         moving = false;
-        System.out.println(newPosition);
-        System.out.println(desiredPosition);
         tileOccupied = map.setOccupied(position.getX(), position.getY(), this);
         this.map = map;
     }

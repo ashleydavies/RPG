@@ -158,35 +158,35 @@ public class Map {
     public void renderPostEntities(GameContainer gc, Graphics graphics)
             throws SlickException {
         if (!editing) {
-            Vector2i screenTL = screenCoordinatesToTileCoordinates(0, 0);
-            Vector2i screenBR = new Vector2i(layers[0].tiles[0].length, layers[0].tiles.length);//screenCoordinatesToTileCoordinates(gc.getWidth(), gc.getHeight());
+            Vector2i minXTile = screenCoordinatesToTileCoordinates(0, 0);
+            Vector2i minYTile = screenCoordinatesToTileCoordinates(gc.getWidth(), 0);
+            Vector2i maxYTile = screenCoordinatesToTileCoordinates(0, gc.getHeight());
+            Vector2i maxXTile = screenCoordinatesToTileCoordinates(gc.getWidth(), gc.getHeight());
+            if (minXTile.getX() < 0)
+                minXTile.setX(0);
+            if (minYTile.getY() < 0)
+                minYTile.setY(0);
+            if (maxXTile.getX() > getWidth())
+                maxXTile.setX(getWidth());
+            if (maxYTile.getY() > getHeight())
+                maxYTile.setY(getHeight());
 
-            screenTL.add(new Vector2i(2, 2));
-            screenBR.add(new Vector2i(1, 1));
-
-            if (screenTL.getX() < 0)
-                screenTL.setX(0);
-            if (screenTL.getY() < 0)
-                screenTL.setY(0);
-            if (screenBR.getX() > width)
-                screenBR.setX(width);
-            if (screenBR.getY() > height)
-                screenBR.setY(height);
-
-            for (int y = 0; y < getHeight(); y++) {
-                for (int x = 0; x < getWidth(); x++) {
-                    Vector2i center = entityManager.getPlayer().getPosition();
-                    Vector2i renderPosition = tileCoordinatesToScreenCoordinates(
-                            x, y);
-                    if (center.distance(new Vector2i(x, y)) <= entityManager
-                            .getPlayer().getFieldOfView()) {
-                        fogOfWar[x][y] = false;
-                    } else if (fogOfWar[x][y]) {
-                        fogOfWarTexture.draw(renderPosition.getX(),
-                                renderPosition.getY());
-                    } else {
-                        fogOfWarRevealedTexture.draw(renderPosition.getX(),
-                                renderPosition.getY());
+            for (int y = minYTile.getY(); y < maxYTile.getY(); y++) {
+                for (int x = minXTile.getX(); x < maxXTile.getX(); x++) {
+                    if (isTileAtPosition(x, y)) {
+                        Vector2i center = entityManager.getPlayer().getPosition();
+                        Vector2i renderPosition = tileCoordinatesToScreenCoordinates(
+                                x, y);
+                        if (center.distance(new Vector2i(x, y)) <= entityManager
+                                .getPlayer().getFieldOfView()) {
+                            fogOfWar[x][y] = false;
+                        } else if (fogOfWar[x][y]) {
+                            fogOfWarTexture.draw(renderPosition.getX(),
+                                    renderPosition.getY());
+                        } else {
+                            fogOfWarRevealedTexture.draw(renderPosition.getX(),
+                                    renderPosition.getY());
+                        }
                     }
                 }
             }
@@ -513,6 +513,16 @@ public class Map {
         return layers[layer].getTile(tX, tY);
     }
 
+    public boolean isTileAtPosition(int tX, int tY) {
+        for (MapLayer layer : layers) {
+            if (layer.getTile(tX, tY).id != 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void focusTile(Vector2i tile) {
         // Take tile position, convert to screen position, and set it as offset
         //setOffset(new Vector2i(
@@ -528,27 +538,23 @@ public class Map {
         ArrayList<Vector2i> validPositions = new ArrayList<Vector2i>();
         switch (direction) {
             case NORTH:
-                System.out.println("Calculating north positions");
                 for (int x = 1; x < width - 1; x++)
                     if (!getCollideable(x, 0) && !getCollideable(x, 1))
                         validPositions.add(new Vector2i(x, 1));
                 break;
             case EAST:
-                System.out.println("Calculating east positions");
                 for (int y = 1; y < height - 1; y++)
                     if (!getCollideable(width - 1, y)
                             && !getCollideable(width - 2, y))
                         validPositions.add(new Vector2i(width - 2, y));
                 break;
             case SOUTH:
-                System.out.println("Calculating south positions");
                 for (int x = 1; x < width - 1; x++)
                     if (!getCollideable(x, height - 1)
                             && !getCollideable(x, height - 2))
                         validPositions.add(new Vector2i(x, height - 2));
                 break;
             case WEST:
-                System.out.println("Calculating west positions");
                 for (int y = 1; y < height - 1; y++)
                     if (!getCollideable(0, y) && !getCollideable(1, y))
                         validPositions.add(new Vector2i(1, y));
