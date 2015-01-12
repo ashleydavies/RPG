@@ -38,4 +38,14 @@ public class SplashScreenState extends State {
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void mouseClicked(int button, int x, int y, int clickCount) throws SlickException {
+
+    }
+
+    @Override
+    public void keyPressed(int key, char c) throws SlickException {
+
+    }
 }

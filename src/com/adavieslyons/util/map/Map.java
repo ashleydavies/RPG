@@ -468,6 +468,10 @@ public class Map {
         return layers[layers.length - 1].getOccupied(tX, tY);
     }
 
+    public GameState getGame() {
+        return game;
+    }
+
     public MapTileData setOccupied(int x, int y, MovingEntity entity) {
         return layers[layers.length - 1].setOccupied(x, y, entity);
     }

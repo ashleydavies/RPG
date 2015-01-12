@@ -13,6 +13,7 @@ public abstract class MovingEntity extends Entity {
 
 	float tileMoveTimer = 1;
 	float tileMoveCurrently = 0;
+	protected int AP = 7;
 
 	public MovingEntity(Map map) {
 		super(map);
@@ -68,7 +69,7 @@ public abstract class MovingEntity extends Entity {
 			}
 		}
 
-		if (!moving && desiredPosition != position)
+		if (!moving && desiredPosition != position && (AP > 0 || !map.getGame().isBattle()))
 			pathfind(desiredPosition.getX(), desiredPosition.getY());
 	}
 

@@ -14,16 +14,22 @@ public class EntityManager {
     // And store the player separately too, for easier access
     private Player player;
     private Map map;
+    private GameState game;
 
     public EntityManager(Map map) {
         this.mobs = new ArrayList<Mob>();
         this.map = map;
+        this.game = map.getGame();
     }
 
     public void update(GameContainer gc, GameState game, int delta) throws SlickException {
         for (Mob mob : mobs) {
             mob.update(gc, game, delta);
         }
+    }
+
+    public GameState getGame() {
+        return game;
     }
 
     public void clear() {

@@ -79,7 +79,7 @@ public class InventoryGUI extends GUIWindow {
     }
 
     @Override
-    public void update(GameContainer gc, GameState game, int delta)
+    public void update(GameContainer gc, int delta)
             throws SlickException {
 
     }

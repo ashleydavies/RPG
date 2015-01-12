@@ -11,6 +11,10 @@ public abstract class State {
         gameStateManager = gsm;
     }
 
+    public GameStateManager getGameStateManager() {
+        return gameStateManager;
+    }
+
     public abstract void load(GameContainer gc) throws SlickException;
 
     public abstract void unload();
@@ -23,4 +27,6 @@ public abstract class State {
 
     public abstract void mouseClicked(int button, int x, int y, int clickCount)
             throws SlickException;
+
+    public abstract void keyPressed(int key, char c) throws SlickException;
 }

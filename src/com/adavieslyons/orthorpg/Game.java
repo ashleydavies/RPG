@@ -43,6 +43,15 @@ public class Game extends BasicGame {
     }
 
     @Override
+    public void keyPressed(int key, char c) {
+        try {
+            gsm.keyPressed(key, c);
+        } catch (SlickException e) {
+            System.out.println("ERROR ON KEY PRESS EVENT");
+        }
+    }
+
+    @Override
     public void update(GameContainer gc, int delta) throws SlickException {
         gsm.update(gc, delta);
     }

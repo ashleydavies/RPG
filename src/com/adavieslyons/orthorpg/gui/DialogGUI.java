@@ -26,6 +26,7 @@ public final class DialogGUI extends GUIWindow {
     private MouseOverArea[] replyAreas;
     private DialogNode[] dialog;
     private int currentDialog;
+    private int typedNum = -1;
     private IDialogable parent;
 
     static {
@@ -43,7 +44,7 @@ public final class DialogGUI extends GUIWindow {
         super(gc, game, 504, 624);
     }
 
-    public void loadDialog(GameContainer gc, GameState game) throws SlickException {
+    public void loadDialog(GameContainer gc) throws SlickException {
         String content = dialog[0].getPrompt();
         String[] responses = dialog[0].getReplyPrompts(game);
 
@@ -54,6 +55,11 @@ public final class DialogGUI extends GUIWindow {
     public void setDialog(DialogNode[] dialog, IDialogable parent) {
         this.dialog = dialog;
         this.parent = parent;
+    }
+
+    public void keyPressed(int key, char c) {
+        if (key >= 2 && key <= 10)
+            typedNum = key - 2; // Key codes for 1-9 are 2-10
     }
 
     public void renderPrimaryContent(GameContainer gc, String content,
@@ -145,8 +151,14 @@ public final class DialogGUI extends GUIWindow {
     }
 
     @Override
-    public void update(GameContainer gc, GameState game, int delta)
+    public void update(GameContainer gc, int delta)
             throws SlickException {
+        if (typedNum != -1) {
+            dialogReplyClicked(gc, typedNum);
+            renderDefaultContent(gc);
+            typedNum = -1;
+        }
+
         for (int i = 0; i < replyAreas.length; i++) {
             if (replyAreas[i].isMouseOver() && Mouse.isButtonDown(0)) {
                 replyAreasMouseDown[i] = true;
@@ -156,9 +168,9 @@ public final class DialogGUI extends GUIWindow {
 
                 System.out.println("Clicked " + i);
                 // parent.dialogReplyClicked(gc, game, i);
-                dialogReplyClicked(gc, game, i);
+                dialogReplyClicked(gc, i);
 
-                renderDefaultContent(gc, game);
+                renderDefaultContent(gc);
 
                 break;
             }
@@ -179,11 +191,15 @@ public final class DialogGUI extends GUIWindow {
                 windowRect.getY());
     }
 
-    public void dialogReplyClicked(GameContainer gc, GameState game, int i)
+    public void dialogReplyClicked(GameContainer gc, int i)
             throws SlickException {
         // i = reply clicked
-
-        DialogReply reply = dialog[currentDialog].getReplyCM(game, i);
+        DialogReply reply;
+        try {
+            reply = dialog[currentDialog].getReplyCM(game, i);
+        } catch (NullPointerException e) {
+            return; // Happens if i is out of bounds of replies usually
+        }
         System.out.println(reply);
         for (DialogAction action : reply.getActions()) {
             System.out.println("ACTION: " + action);
@@ -227,7 +243,7 @@ public final class DialogGUI extends GUIWindow {
         }
     }
 
-    public void beginDialog(GameContainer gc, GameState game)
+    public void beginDialog(GameContainer gc)
             throws SlickException {
         currentDialog = 0;
         renderPrimaryContent(gc, dialog[0].getPrompt(),

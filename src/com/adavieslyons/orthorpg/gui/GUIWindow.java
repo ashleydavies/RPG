@@ -13,6 +13,7 @@ public abstract class GUIWindow {
     Image windowBg;
     Image windowDefaultContent;
     Image windowDynamicContent;
+    GameState game;
 
     static {
         try {
@@ -23,6 +24,8 @@ public abstract class GUIWindow {
 
     public GUIWindow(GameContainer gc, GameState game, int width, int height)
             throws SlickException {
+        this.game = game;
+
         int x = gc.getWidth() / 2 - width / 2;
         int y = gc.getHeight() / 2 - height / 2;
 
@@ -33,7 +36,7 @@ public abstract class GUIWindow {
         windowDynamicContent = new Image(width, height);
 
         renderWindow(gc);
-        renderDefaultContent(gc, game);
+        renderDefaultContent(gc);
     }
 
     public void renderWindow(GameContainer gc) {
@@ -76,7 +79,7 @@ public abstract class GUIWindow {
         graphics.clear();
     }
 
-    public void renderDefaultContent(GameContainer gc, GameState game) {
+    public void renderDefaultContent(GameContainer gc) {
         Graphics graphics = gc.getGraphics();
         graphics.clear();
 
@@ -92,7 +95,7 @@ public abstract class GUIWindow {
     public abstract void render(GameContainer gc, Graphics graphics)
             throws SlickException;
 
-    public abstract void update(GameContainer gc, GameState game, int delta)
+    public abstract void update(GameContainer gc, int delta)
             throws SlickException;
     // public abstract void renderPrimaryContent(GameContainer gc);
 }

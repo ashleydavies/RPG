@@ -25,13 +25,13 @@ public class GameState extends State {
     public int HEIGHT;
     Map map;
     private WorldMap worldMap;
+    private DialogState dialogState;
+
+    private boolean isBattle = false;
     private Input input;
     private Player player;
     private SaveData currentGameData;
     private InventoryGUI inventoryGUI;
-    private DialogGUI dialogGUI;
-    private boolean dialogShowing;
-    private boolean dialogNeedsLoading;
     private EntityManager entityManager;
     private InnerState state;
 
@@ -43,8 +43,12 @@ public class GameState extends State {
     public void load(GameContainer gc) throws SlickException {
         WIDTH = gc.getWidth();
         HEIGHT = gc.getHeight();
+
         currentGameData = new SaveData();
         currentGameData.setIntSaveData(0, 50);
+
+        dialogState = new DialogState(gameStateManager, new DialogGUI(gc, this));
+        dialogState.setGame(this);
 
         input = new Input(gc.getHeight());
         map = new Map();
@@ -57,7 +61,6 @@ public class GameState extends State {
         worldMap = new WorldMap();
         map.focusTile(new Vector2i(40, 7));
         inventoryGUI = new InventoryGUI(gc, this);
-        dialogGUI = new DialogGUI(gc, this);
 
         Item.LoadItems(this);
         loadState(InnerState.PLAYING);
@@ -91,11 +94,6 @@ public class GameState extends State {
     public void update(GameContainer gc, int delta) throws SlickException {
         WIDTH = gc.getWidth();
         HEIGHT = gc.getHeight();
-
-        if (dialogNeedsLoading) {
-            dialogNeedsLoading = false;
-            dialogGUI.loadDialog(gc, this);
-        }
 
         switch (state) {
             case PLAYING:
@@ -133,10 +131,6 @@ public class GameState extends State {
                     loadState(InnerState.WORLD_MAP);
                     worldMap.leavingMapArea(map.getID(), WorldMap.MapDirection.WEST);
                 }
-
-                if (dialogShowing) {
-                    dialogGUI.update(gc, this, delta);
-                }
                 break;
             case WORLD_MAP:
                 worldMap.update(gc, this, delta);
@@ -144,7 +138,7 @@ public class GameState extends State {
             case INVENTORY:
                 if (input.isKeyPressed(Input.KEY_A))
                     System.out.println("Hello");
-                inventoryGUI.update(gc, this, delta);
+                inventoryGUI.update(gc, delta);
             case MAP_EDITOR:
                 map.update(gc, this, delta);
                 if (input.isKeyDown(Input.KEY_X))
@@ -152,6 +146,14 @@ public class GameState extends State {
             default:
                 break;
         }
+    }
+
+    public boolean isBattle() {
+        return isBattle;
+    }
+
+    public void setBattle(boolean isBattle) {
+        this.isBattle = isBattle;
     }
 
     @Override
@@ -172,10 +174,6 @@ public class GameState extends State {
                 map.render(gc, graphics);
                 break;
         }
-
-        if (dialogShowing) {
-            dialogGUI.render(gc, graphics);
-        }
     }
 
     @Override
@@ -189,6 +187,11 @@ public class GameState extends State {
 
         // No entity was clicked, notify player
         player.gameClicked(this, x, y);
+    }
+
+    @Override
+    public void keyPressed(int key, char c) throws SlickException {
+
     }
 
     public void loadMap(GameContainer gc, int mapID, WorldMap.MapDirection direction) throws SlickException {
@@ -218,10 +221,14 @@ public class GameState extends State {
         this.player = player;
     }
 
+    public DialogState getDialogState() {
+        return dialogState;
+    }
+
     public void showDialog(DialogNode[] dialog, IDialogable parent) throws SlickException {
-        dialogGUI.setDialog(dialog, parent);
-        dialogShowing = true;
-        dialogNeedsLoading = true;
+        dialogState.setDialog(dialog);
+        dialogState.setParent(parent);
+        gameStateManager.awaitTickPushState(dialogState);
     }
 
     private enum InnerState {

@@ -24,13 +24,14 @@ public class Mob extends MovingPathEntity implements IDialogable, IAttackable {
     private DialogNode[] dialog;
     private MapTileData tileOccupied;
     private Image dialogImage;
+    private GameState game;
 
     private DialogGUI dialogGUI;
 
     public Mob(GameContainer gc, GameState game, int mobID, Map map,
                Vector2i path[]) throws SlickException {
         super(map);
-
+        this.game = game;
         setPath(path);
 
         loadDataFromXML(gc, mobID, game);
@@ -84,12 +85,14 @@ public class Mob extends MovingPathEntity implements IDialogable, IAttackable {
     @Override
     public void dialogCloseRequested() {
         // TODO Auto-generated method stub
-
+        game.getGameStateManager().popState();
     }
 
     @Override
     protected void occupiedTileStartChange(Vector2i newTile) {
         tileOccupied = map.setOccupied(newTile.getX(), newTile.getY(), this);
+        if (map.getGame().isBattle())
+            AP--;
     }
 
     @Override

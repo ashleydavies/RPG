@@ -42,6 +42,8 @@ public class Player extends MovingEntity {
     @Override
     protected void occupiedTileStartChange(Vector2i newTile) {
         tileOccupied = map.setOccupied(newTile.getX(), newTile.getY(), this);
+        if (map.getGame().isBattle())
+            AP--;
     }
 
     @Override

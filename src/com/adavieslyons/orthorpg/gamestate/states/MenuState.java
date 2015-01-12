@@ -46,4 +46,14 @@ public class MenuState extends State {
             bNo++;
         }
     }
+
+    @Override
+    public void mouseClicked(int button, int x, int y, int clickCount) throws SlickException {
+
+    }
+
+    @Override
+    public void keyPressed(int key, char c) throws SlickException {
+
+    }
 }
