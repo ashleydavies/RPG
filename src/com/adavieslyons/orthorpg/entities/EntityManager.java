@@ -47,6 +47,8 @@ public class EntityManager {
         return player;
     }
 
+    public ArrayList<Mob> getMobs() { return mobs; }
+
     public void setPlayer(Player player) {
         this.player = player;
     }

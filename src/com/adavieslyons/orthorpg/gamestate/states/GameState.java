@@ -186,7 +186,7 @@ public class GameState extends State {
         }
 
         // No entity was clicked, notify player
-        player.gameClicked(this, x, y);
+        player.gameClicked(x, y);
     }
 
     @Override

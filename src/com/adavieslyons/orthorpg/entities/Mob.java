@@ -19,14 +19,24 @@ import org.w3c.dom.NodeList;
 /**
  * @author Ashley
  */
-public class Mob extends MovingPathEntity implements IDialogable, IAttackable {
+public class Mob extends MovingPathEntity implements IDialogable, ICombat {
     private String name;
     private DialogNode[] dialog;
     private MapTileData tileOccupied;
     private Image dialogImage;
     private GameState game;
 
-    private DialogGUI dialogGUI;
+    int fortitude;
+    int strength;
+    int intelligence;
+    int swordsmanship;
+    int archery;
+    int speed;
+    int combatMagic;
+    int darkMagic;
+    int utilityMagic;
+    int healingMagic;
+    int protectiveMagic;
 
     public Mob(GameContainer gc, GameState game, int mobID, Map map,
                Vector2i path[]) throws SlickException {
@@ -104,6 +114,7 @@ public class Mob extends MovingPathEntity implements IDialogable, IAttackable {
         return name;
     }
 
+
     @Override
     public String getDialogTitle() {
         return name;
@@ -113,4 +124,27 @@ public class Mob extends MovingPathEntity implements IDialogable, IAttackable {
     public Image getDialogImage() {
         return dialogImage;
     }
+
+    @Override
+    public int getFortitude() { return fortitude; }
+    @Override
+    public int getStrength() { return strength; }
+    @Override
+    public int getIntelligence() { return intelligence; }
+    @Override
+    public int getSwordsmanship() { return swordsmanship; }
+    @Override
+    public int getArchery() { return archery; }
+    @Override
+    public int getSpeed() { return speed; }
+    @Override
+    public int getCombatMagic() { return combatMagic; }
+    @Override
+    public int getDarkMagic() { return darkMagic; }
+    @Override
+    public int getUtilityMagic() { return utilityMagic; }
+    @Override
+    public int getHealingMagic() { return healingMagic; }
+    @Override
+    public int getProtectiveMagic() { return protectiveMagic; }
 }
