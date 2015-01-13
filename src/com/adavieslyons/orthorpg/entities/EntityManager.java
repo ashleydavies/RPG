@@ -15,16 +15,22 @@ public class EntityManager {
     private Player player;
     private Map map;
     private GameState game;
+    private TurnManager turnManager;
 
-    public EntityManager(Map map) {
+    public EntityManager(Map map, GameState game) {
         this.mobs = new ArrayList<Mob>();
         this.map = map;
-        this.game = map.getGame();
+        this.game = game;
+        this.turnManager = new TurnManager(this);
     }
 
     public void update(GameContainer gc, GameState game, int delta) throws SlickException {
-        for (Mob mob : mobs) {
-            mob.update(gc, game, delta);
+        if (game.isBattle()) {
+            turnManager.update(gc, delta);
+        } else {
+            for (Mob mob : mobs) {
+                mob.update(gc, game, delta);
+            }
         }
     }
 

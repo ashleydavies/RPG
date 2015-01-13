@@ -42,6 +42,16 @@ public class Player extends MovingEntity implements ICombat {
     }
 
     @Override
+    public int getMaxAP() {
+        return 7;
+    }
+
+    @Override
+    public void setAP(int AP) {
+        this.AP = AP;
+    }
+
+    @Override
     protected void occupiedTileStartChange(Vector2i newTile) {
         tileOccupied = map.setOccupied(newTile.getX(), newTile.getY(), this);
         if (map.getGame().isBattle())
@@ -99,4 +109,9 @@ public class Player extends MovingEntity implements ICombat {
     public int getUtilityMagic()    { return game.getCurrentGameData().getIntSaveData(16); }
     public int getHealingMagic()    { return game.getCurrentGameData().getIntSaveData(17); }
     public int getProtectiveMagic() { return game.getCurrentGameData().getIntSaveData(18); }
+
+    @Override
+    public int getAP() {
+        return AP;
+    }
 }

@@ -81,6 +81,16 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat {
     }
 
     @Override
+    public int getMaxAP() {
+        return 7;
+    }
+
+    @Override
+    public void setAP(int AP) {
+        this.AP = AP;
+    }
+
+    @Override
     public void render(GameContainer gc, Graphics graphics)
             throws SlickException {
         super.render(gc, graphics);
@@ -147,4 +157,9 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat {
     public int getHealingMagic() { return healingMagic; }
     @Override
     public int getProtectiveMagic() { return protectiveMagic; }
+
+    @Override
+    public int getAP() {
+        return AP;
+    }
 }

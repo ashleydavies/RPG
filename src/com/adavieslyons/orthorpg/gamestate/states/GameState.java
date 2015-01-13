@@ -27,7 +27,7 @@ public class GameState extends State {
     private WorldMap worldMap;
     private DialogState dialogState;
 
-    private boolean isBattle = false;
+    private boolean isBattle = true;
     private Input input;
     private Player player;
     private SaveData currentGameData;
@@ -52,7 +52,7 @@ public class GameState extends State {
 
         input = new Input(gc.getHeight());
         map = new Map();
-        entityManager = new EntityManager(map);
+        entityManager = new EntityManager(map, this);
         map.load(gc, this, 0, entityManager);
 
         player = new Player(gc, this, map, new Vector2i(40, 7));

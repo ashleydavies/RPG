@@ -40,6 +40,10 @@ public abstract class MovingEntity extends Entity {
 			}
 		} catch (Exception e) {
 			System.out.println("ENTITY HAS ISSUES PATHFINDING");
+			// If they're having issues pathfinding, set their AP to 0 to avoid wierd bugs
+			// if there is just the player and glitched entities they will infinitely hold up
+			// the battle queue
+			this.AP = 0;
 		}
 	}
 
