@@ -73,6 +73,7 @@ public final class DialogGUI extends GUIWindow {
 
         Graphics graphics = gc.getGraphics();
         graphics.clear();
+        graphics.setBackground(new Color(0, 0, 0, 0));
 
         int y = 12 + 32;
 

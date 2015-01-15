@@ -21,7 +21,7 @@ public class Game extends BasicGame {
         AppGameContainer app = new AppGameContainer(new Game());
         app.setDisplayMode(1200, 800, false);
         app.setShowFPS(false);
-        //app.setTargetFrameRate(100);
+        app.setTargetFrameRate(60);
         app.start();
     }
 

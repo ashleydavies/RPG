@@ -1,14 +1,13 @@
 package com.adavieslyons.orthorpg.entities;
 
+import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.util.Vector2i;
 import com.adavieslyons.util.inventory.ItemStack;
 import com.adavieslyons.util.map.Map;
 import com.adavieslyons.util.map.MapTileData;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  * @author Ashley
@@ -16,12 +15,16 @@ import org.newdawn.slick.SlickException;
 public class Player extends MovingEntity implements ICombat {
     private MapTileData tileOccupied;
     private GameState game;
+    private int HP;
+    private int mana;
     private ItemStack[] items = new ItemStack[27];
 
     public Player(GameContainer gc, GameState game, Map map, Vector2i position)
             throws SlickException {
         super(map);
         this.game = game;
+        this.HP = getFortitude() * 10 + 10;
+        this.mana = 100;
         this.setPosition(position);
         this.setFieldOfView(6);
         tileOccupied = map.setOccupied(position.getX(), position.getY(), this);
@@ -42,16 +45,6 @@ public class Player extends MovingEntity implements ICombat {
     }
 
     @Override
-    public int getMaxAP() {
-        return 7;
-    }
-
-    @Override
-    public void setAP(int AP) {
-        this.AP = AP;
-    }
-
-    @Override
     protected void occupiedTileStartChange(Vector2i newTile) {
         tileOccupied = map.setOccupied(newTile.getX(), newTile.getY(), this);
         if (map.getGame().isBattle())
@@ -67,6 +60,25 @@ public class Player extends MovingEntity implements ICombat {
     public void render(GameContainer gc, Graphics graphics)
             throws SlickException {
         super.render(gc, graphics);
+
+        if (game.isBattle()) {
+            Vector2i positionCoordinates = map.tileCoordinatesToGameCoordinates(position);
+            Vector2i lerpFromCoordinates = map.tileCoordinatesToGameCoordinates(positionLerpFrom);
+            Vector2f drawCoordinates = lerpFromCoordinates.lerpTo(positionCoordinates, positionLerpFraction).add(new Vector2f(map.getOffset().getX(), map.getOffset().getY()));
+
+            int drawX = (int) (drawCoordinates.getX() + Game.TILE_SIZE_X / 2 - 16);
+            int drawY = (int) (drawCoordinates.getY() - image.getHeight() / 2 - 5 - Game.TILE_SIZE_Y / 2);
+
+            graphics.setColor(Color.black);
+            graphics.drawRect(drawX, drawY, 32, 5);
+
+            int hpFraction = getHP() / getMaxHP();
+
+            graphics.setColor(Color.red);
+            graphics.fillRect(drawX + 1, drawY + 1, 31, 4);
+            graphics.setColor(Color.yellow);
+            graphics.fillRect(drawX + 1, drawY + 1, 31 * hpFraction, 4);
+        }
     }
 
     @Override
@@ -113,5 +125,47 @@ public class Player extends MovingEntity implements ICombat {
     @Override
     public int getAP() {
         return AP;
+    }
+
+    @Override
+    public int getMaxAP() {
+        return 7;
+    }
+
+    @Override
+    public void setAP(int AP) {
+        this.AP = AP;
+    }
+
+
+    @Override
+    public int getHP() {
+        return HP;
+    }
+
+    @Override
+    public int getMaxHP() {
+        return getFortitude() * 10 + 10;
+    }
+
+    @Override
+    public void setHP(int HP) {
+        this.HP = HP;
+    }
+
+
+    @Override
+    public int getMana() {
+        return mana;
+    }
+
+    @Override
+    public int getMaxMana() {
+        return 100;
+    }
+
+    @Override
+    public void setMana(int mana) {
+        this.mana = mana;
     }
 }

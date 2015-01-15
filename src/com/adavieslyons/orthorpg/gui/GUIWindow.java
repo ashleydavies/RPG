@@ -53,6 +53,7 @@ public abstract class GUIWindow {
         Graphics graphics = gc.getGraphics();
 
         graphics.clear();
+        graphics.setBackground(new Color(0, 0, 0, 0));
 
         graphics.drawImage(border_tl, 0, 0);
         graphics.drawImage(border_tr, windowRect.getWidth() - BW, 0);
@@ -82,6 +83,7 @@ public abstract class GUIWindow {
     public void renderDefaultContent(GameContainer gc) {
         Graphics graphics = gc.getGraphics();
         graphics.clear();
+        graphics.setBackground(new Color(0, 0, 0, 0));
 
         // Draw standard menu UI
         graphics.setColor(Color.black);

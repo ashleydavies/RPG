@@ -83,11 +83,11 @@ public class TurnManager {
             currentMob = mobs.get(turnMobID);
             if (currentMob.getAP() == 0) {
                 // Turn over
+                System.out.println("0 AP");
                 turnMobID++;
             }
         } while (currentMob.getAP() == 0);
 
-        System.out.println("Updating mob " + currentMob.toString() + " with AP " + currentMob.getAP());
         currentMob.update(gc, entityManager.getGame(), delta);
     }
 }

@@ -25,4 +25,12 @@ public interface ICombat {
     public int getMaxAP();
     public void setAP(int AP);
     public int getAP();
+
+    public int getMaxHP();
+    public void setHP(int HP);
+    public int getHP();
+
+    public int getMaxMana();
+    public void setMana(int Mana);
+    public int getMana();
 }

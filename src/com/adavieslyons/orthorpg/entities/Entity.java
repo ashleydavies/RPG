@@ -19,7 +19,7 @@ public abstract class Entity {
     protected Vector2i position;
     protected Vector2i positionLerpFrom;
     protected Vector2i lastPosition;
-    private float positionLerpFraction;
+    protected float positionLerpFraction;
 
     public Entity(Map map) {
         this.map = map;

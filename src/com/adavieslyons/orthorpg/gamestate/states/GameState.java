@@ -191,7 +191,9 @@ public class GameState extends State {
 
     @Override
     public void keyPressed(int key, char c) throws SlickException {
-
+        if (key == input.KEY_F) {
+            setBattle(!isBattle());
+        }
     }
 
     public void loadMap(GameContainer gc, int mapID, WorldMap.MapDirection direction) throws SlickException {

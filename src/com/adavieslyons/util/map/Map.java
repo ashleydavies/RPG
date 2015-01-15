@@ -382,7 +382,10 @@ public class Map {
                 Element mobNode = (Element) mobNodes.item(i);
 
                 int mobTypeID = Integer.parseInt(mobNode
-                        .getElementsByTagName("id").item(0).getTextContent());
+                        .getAttribute("id"));
+
+                int xPos = Integer.parseInt(mobNode.getAttribute("xPos"));
+                int yPos = Integer.parseInt(mobNode.getAttribute("xPos"));
 
                 NodeList pathContainerNodes = mobNode
                         .getElementsByTagName("path");
@@ -409,6 +412,7 @@ public class Map {
                     }
                 }
                 Mob mob = new Mob(gc, game, mobTypeID, this, path);
+                mob.setPosition(new Vector2i(xPos, yPos));
                 entityManager.addMob(mob);
             }
         }
