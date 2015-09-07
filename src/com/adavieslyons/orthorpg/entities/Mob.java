@@ -18,12 +18,13 @@ import org.w3c.dom.NodeList;
 /**
  * @author Ashley
  */
-public class Mob extends MovingPathEntity implements IDialogable, ICombat {
+public class Mob extends MovingPathEntity implements IDialogable, ICombat, ITakeTurns {
     private String name;
     private DialogNode[] dialog;
     private MapTileData tileOccupied;
     private Image dialogImage;
     private GameState game;
+    private boolean myTurn;
 
     int HP;
     int mana;
@@ -59,8 +60,7 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat {
         Element mobInfo = (Element) mobDoc.getElementsByTagName("info").item(0);
 
         String imageName = mobInfo.getAttribute("avatar");
-        Element textureElement = (Element) mobDoc.getElementsByTagName(
-                "texture").item(0);
+        Element textureElement = (Element) mobDoc.getElementsByTagName("texture").item(0);
 
         name = mobInfo.getAttribute("name");
         dialogImage = new Image("img/ui/avatar/mob/" + imageName);
@@ -81,6 +81,11 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat {
             throws SlickException {
         updateMove(delta);
         updatePath();
+    }
+
+    @Override
+    public void attack(ICombat enemy) {
+        //TODO: implement
     }
 
     @Override
@@ -110,7 +115,11 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat {
 
     @Override
     public void onClick(GameState game) throws SlickException {
-        game.showDialog(dialog, this);
+        if (game.isBattle()) {
+            game.getPlayer().attack(this);
+        } else {
+            game.showDialog(dialog, this);
+        }
     }
 
 
@@ -135,7 +144,6 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat {
     public String getName() {
         return name;
     }
-
 
     @Override
     public String getDialogTitle() {
@@ -215,5 +223,20 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat {
     @Override
     public void setMana(int Mana) {
         this.mana = Mana;
+    }
+
+    @Override
+    public void starTurn() {
+        myTurn = true;
+    }
+
+    @Override
+    public void endTurn() {
+        myTurn = false;
+    }
+
+    @Override
+    public boolean isMyTurn() {
+        return myTurn;
     }
 }

@@ -45,7 +45,7 @@ public class TileSelectorGUI extends GUIWindow {
     }
 
     @Override
-    public void update(GameContainer gc, GameState game, int delta)
+    public void update(GameContainer gc, int delta)
             throws SlickException {
         if (game.getInput().isMouseButtonDown(0)) {
             Vector2i mouseCoords = new Vector2i(game.getInput().getMouseX(), game.getInput().getMouseY());

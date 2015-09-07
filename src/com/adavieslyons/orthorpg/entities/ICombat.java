@@ -21,6 +21,7 @@ public interface ICombat {
     public int getProtectiveMagic();
 
     public void update(GameContainer gc, GameState game, int delta) throws SlickException;
+    public void attack(ICombat enemy);
 
     public int getMaxAP();
     public void setAP(int AP);

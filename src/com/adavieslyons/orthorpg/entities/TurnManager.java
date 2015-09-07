@@ -12,7 +12,7 @@ import java.util.Arrays;
  * Created by Ashley on 12/01/2015.
  */
 public class TurnManager {
-    private ArrayList<ICombat> mobs;
+    private ArrayList<ITakeTurns> mobs;
     private EntityManager entityManager;
     private int turnMobID = -1;
 
@@ -25,7 +25,7 @@ public class TurnManager {
         entityManager.getPlayer().setDesiredPosition(entityManager.getPlayer().getPosition());
         System.out.println("Initialising turn");
 
-        Mob[] unsortedMobs = new Mob[entityManager.getMobs().size()];
+        ITakeTurns[] unsortedMobs = new ITakeTurns[entityManager.getMobs().size()];
         unsortedMobs = entityManager.getMobs().toArray(unsortedMobs);
 
         boolean sorted;
@@ -36,7 +36,7 @@ public class TurnManager {
 
             for (int i = 0; i < unsortedMobs.length - 1; i++) {
                 if (unsortedMobs[i + 1].getSpeed() > unsortedMobs[i].getSpeed()) {
-                    Mob mob = unsortedMobs[i + 1];
+                    ITakeTurns mob = unsortedMobs[i + 1];
                     unsortedMobs[i + 1] = unsortedMobs[i];
                     unsortedMobs[i] = mob;
 
@@ -48,7 +48,7 @@ public class TurnManager {
         // Now sort them and the player into the mobs arraylist
         boolean playerInserted = false;
         mobs = new ArrayList<>();
-        for (Mob mob : unsortedMobs) {
+        for (ITakeTurns mob : unsortedMobs) {
             mob.setAP(mob.getMaxAP());
             if (mob.getSpeed() > entityManager.getPlayer().getSpeed() || playerInserted) {
                 mobs.add(mob);
@@ -73,7 +73,7 @@ public class TurnManager {
             System.out.println("Not combat");
         }
         // Find who's turn it is
-        ICombat currentMob;
+        ITakeTurns currentMob;
         do {
             if (turnMobID == -1 || turnMobID == mobs.size()) {
                 // We have reached the end

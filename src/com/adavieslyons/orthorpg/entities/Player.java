@@ -12,12 +12,13 @@ import org.newdawn.slick.geom.Vector2f;
 /**
  * @author Ashley
  */
-public class Player extends MovingEntity implements ICombat {
+public class Player extends MovingEntity implements ICombat, ITakeTurns {
     private MapTileData tileOccupied;
     private GameState game;
     private int HP;
     private int mana;
     private ItemStack[] items = new ItemStack[27];
+    private boolean myTurn;
 
     public Player(GameContainer gc, GameState game, Map map, Vector2i position)
             throws SlickException {
@@ -42,6 +43,13 @@ public class Player extends MovingEntity implements ICombat {
     public void update(GameContainer gc, GameState game, int delta)
             throws SlickException {
         updateMove(delta);
+    }
+
+    @Override
+    public void attack(ICombat enemy) {
+        if (this.isMyTurn()) {
+
+        }
     }
 
     @Override
@@ -88,7 +96,7 @@ public class Player extends MovingEntity implements ICombat {
 
     public void gameClicked(int x, int y) {
         moveToTarget(map.screenCoordinatesToTileCoordinates(game.getInput()
-            .getMouseX(), game.getInput().getMouseY()));
+                .getMouseX(), game.getInput().getMouseY()));
     }
 
     public void onNewMapLoad(Map map, Vector2i newPosition) {
@@ -167,5 +175,21 @@ public class Player extends MovingEntity implements ICombat {
     @Override
     public void setMana(int mana) {
         this.mana = mana;
+    }
+
+
+    @Override
+    public void starTurn() {
+        myTurn = true;
+    }
+
+    @Override
+    public void endTurn() {
+        myTurn = false;
+    }
+
+    @Override
+    public boolean isMyTurn() {
+        return myTurn;
     }
 }

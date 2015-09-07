@@ -66,4 +66,5 @@ public class EntityManager {
     public void removeMob(Mob mob) {
         mobs.remove(mob);
     }
+
 }

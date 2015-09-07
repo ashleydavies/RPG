@@ -76,7 +76,7 @@ public class Map {
                 tsGUIOpen = false;
                 tsGUI.reset();
             } else if (tsGUIOpen) {
-                tsGUI.update(gc, game, delta);
+                tsGUI.update(gc, delta);
             } else {
                 if (game.getInput().isMouseButtonDown(0)
                         && mouseTile.getX() >= 0 && mouseTile.getY() >= 0
