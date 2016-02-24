@@ -14,26 +14,24 @@ import org.newdawn.slick.geom.Vector2f;
 public abstract class Entity {
     protected Map map;
     protected Image image;
-    private Image hoverImage;
     // In terms of tiles
     protected Vector2i position;
     protected Vector2i positionLerpFrom;
     protected Vector2i lastPosition;
     protected float positionLerpFraction;
+    private Image hoverImage;
 
     public Entity(Map map) {
         this.map = map;
 
-        position = new Vector2i(0, 0);
-        lastPosition = position;
-        positionLerpFrom = new Vector2i(0, 0);
+        this.position = new Vector2i(0, 0);
+        this.lastPosition = new Vector2i(0, 0);
+        this.positionLerpFrom = new Vector2i(0, 0);
     }
 
-    public abstract void update(GameContainer gc, GameState game, int delta)
-            ;
+    public abstract void update(GameContainer gc, GameState game, int delta);
 
-    public void render(GameContainer gc, Graphics graphics)
-            throws SlickException {
+    public void render(GameContainer gc, Graphics graphics) {
         Vector2i positionCoordinates = map.tileCoordinatesToGameCoordinates(position);
         Vector2i lerpFromCoordinates = map.tileCoordinatesToGameCoordinates(positionLerpFrom);
         Vector2f drawCoordinates = lerpFromCoordinates.lerpTo(positionCoordinates, positionLerpFraction).add(new Vector2f(map.getOffset().getX(), map.getOffset().getY()));

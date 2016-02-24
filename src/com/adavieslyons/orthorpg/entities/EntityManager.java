@@ -8,9 +8,7 @@ import org.newdawn.slick.SlickException;
 import java.util.ArrayList;
 
 public class EntityManager {
-    // We maintain a list of mobs as they have varying actions if in battle
     private ArrayList<Mob> mobs;
-    // And store the player separately too, for easier access
     private Player player;
     private final Map map;
     private final GameState game;

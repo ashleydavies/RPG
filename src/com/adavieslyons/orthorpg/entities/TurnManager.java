@@ -1,7 +1,6 @@
 package com.adavieslyons.orthorpg.entities;
 
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.SlickException;
 
 import java.util.ArrayList;
 

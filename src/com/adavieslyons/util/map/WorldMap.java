@@ -20,8 +20,8 @@ public class WorldMap {
     private MapIconData selectedIcon;
     private MapDirection selectedApproachDirection;
 
-    public WorldMap() throws SlickException {
-        Image icons = new Image("img/mapIcons.png");
+    public WorldMap() {
+        Image icons = FileLoader.getImage("mapIcons");
 
         this.icons = new Image[(icons.getWidth() / 32) - 1];
 
@@ -34,7 +34,7 @@ public class WorldMap {
         this.iconSelectedBackground = icons.getSubImage(0, 64, 32, 32);
         this.iconUnclearedBackground = icons.getSubImage(0, 96, 32, 32);
         this.iconMapApproach = icons.getSubImage(32, 96, 32, 32);
-        this.worldMap = new Image("img/worldmap.png");
+        this.worldMap = FileLoader.getImage("worldmap");
 
         // Now load the map icon data
         Document document = FileLoader.getXML("map/mapList");

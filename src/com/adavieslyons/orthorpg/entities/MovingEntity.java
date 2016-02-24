@@ -31,7 +31,7 @@ public abstract class MovingEntity extends Entity {
                             .getY()][position.getX()],
                     map.getNodeMatrix()[tileY][tileX]);
 
-            if (!path.isEmpty()) {
+            if (path != null && !path.isEmpty()) {
                 lastPosition = position;
                 position = new Vector2i(path.get(0).getX(), path.get(0)
                         .getY());
@@ -39,8 +39,8 @@ public abstract class MovingEntity extends Entity {
                 moving = true;
             }
         } catch (Exception e) {
-            System.out.println("ENTITY HAS ISSUES PATHFINDING");
-            // If they're having issues pathfinding, set their AP to 0 to avoid wierd bugs
+            System.out.println("Pathfinding issue!");
+            // If they're having issues pathfinding, set their AP to 0 to avoid weird bugs
             // if there is just the player and glitched entities they will infinitely hold up
             // the battle queue
             this.AP = 0;

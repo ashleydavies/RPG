@@ -1,5 +1,6 @@
 package com.adavieslyons.util;
 
+import com.adavieslyons.util.xml.XMLParser;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.w3c.dom.Document;
@@ -51,4 +52,6 @@ public class FileLoader {
             throw new Error("Failed to load properties file " + propertiesName);
         }
     }
+
+
 }

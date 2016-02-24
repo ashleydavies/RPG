@@ -2,6 +2,7 @@ package com.adavieslyons.orthorpg.entities;
 
 import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.util.FileLoader;
 import com.adavieslyons.util.Vector2i;
 import com.adavieslyons.util.inventory.ItemStack;
 import com.adavieslyons.util.map.Map;
@@ -20,8 +21,7 @@ public class Player extends MovingEntity implements ICombat, ITakeTurns {
     private final ItemStack[] items = new ItemStack[27];
     private boolean myTurn;
 
-    public Player(GameContainer gc, GameState game, Map map, Vector2i position)
-            throws SlickException {
+    public Player(GameContainer gc, GameState game, Map map, Vector2i position) {
         super(map);
         this.game = game;
         this.HP = getFortitude() * 10 + 10;
@@ -29,7 +29,7 @@ public class Player extends MovingEntity implements ICombat, ITakeTurns {
         this.setPosition(position);
         this.setFieldOfView(6);
         tileOccupied = map.setOccupied(position.getX(), position.getY(), this);
-        setImage(new Image("img/player.png"));
+        setImage(FileLoader.getImage("player"));
 
         items[0] = new ItemStack(0, 1);
         items[1] = new ItemStack(1, 1);
@@ -64,8 +64,7 @@ public class Player extends MovingEntity implements ICombat, ITakeTurns {
     }
 
     @Override
-    public void render(GameContainer gc, Graphics graphics)
-            throws SlickException {
+    public void render(GameContainer gc, Graphics graphics) {
         super.render(gc, graphics);
 
         if (game.isBattle()) {

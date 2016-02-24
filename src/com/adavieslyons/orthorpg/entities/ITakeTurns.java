@@ -2,7 +2,6 @@ package com.adavieslyons.orthorpg.entities;
 
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.SlickException;
 
 /**
  * Created by Ashley on 07/09/2015.

@@ -35,6 +35,10 @@ public class SpriteSheet {
         return spriteSheets[id];
     }
 
+    public static Image getSubImage(int id, int x, int y, int width, int height) {
+        return getSpriteSheet(id).getSubImage(x, y, width, height);
+    }
+
     public Image getSubImage(int x, int y, int width, int height) {
         return spriteSheet.getSubImage(x, y, width, height);
     }

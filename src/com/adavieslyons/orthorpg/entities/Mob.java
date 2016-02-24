@@ -3,8 +3,9 @@ package com.adavieslyons.orthorpg.entities;
 import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.util.FileLoader;
+import com.adavieslyons.util.xml.MobData;
+import com.adavieslyons.util.xml.RPGXML;
 import com.adavieslyons.util.Vector2i;
-import com.adavieslyons.util.XMLParser;
 import com.adavieslyons.util.dialog.DialogNode;
 import com.adavieslyons.util.dialog.IDialogable;
 import com.adavieslyons.util.map.Map;
@@ -43,33 +44,19 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat, ITake
                Vector2i path[]) {
         super(map);
         this.game = game;
+
+        loadData(mobID);
         this.HP = getFortitude() * 10 + 10;
         this.mana = 100;
         setPath(path);
-
-        loadDataFromXML(gc, mobID, game);
     }
 
-    private void loadDataFromXML(GameContainer gc, int mobID, GameState game) {
-        Document mobDoc = FileLoader.getXML("mob/" + mobID);
-
-        Element mobInfo = (Element) mobDoc.getElementsByTagName("info").item(0);
-
-        String imageName = mobInfo.getAttribute("avatar");
-        Element textureElement = (Element) mobDoc.getElementsByTagName("texture").item(0);
-
-        name = mobInfo.getAttribute("name");
-        dialogImage = FileLoader.getImage("ui/avatar/mob/" + imageName);
-        setImage(XMLParser.loadTexture(textureElement));
-
-        // Parse dialog if they have any
-        NodeList dialogList = mobDoc.getElementsByTagName("dialog");
-
-        if (dialogList.getLength() > 0) {
-            dialog = XMLParser.loadDialog((Element) dialogList.item(0));
-        }
-
-
+    private void loadData(int mobID) {
+        MobData data = RPGXML.loadMob(mobID);
+        this.name = data.name;
+        this.dialog = data.dialog;
+        this.dialogImage = data.dialogImage;
+        this.setImage(data.image);
     }
 
     @Override
@@ -84,8 +71,7 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat, ITake
     }
 
     @Override
-    public void render(GameContainer gc, Graphics graphics)
-            throws SlickException {
+    public void render(GameContainer gc, Graphics graphics) {
         super.render(gc, graphics);
 
         if (game.isBattle()) {
@@ -120,7 +106,6 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat, ITake
 
     @Override
     public void dialogCloseRequested() {
-        // TODO Auto-generated method stub
         game.getGameStateManager().popState();
     }
 

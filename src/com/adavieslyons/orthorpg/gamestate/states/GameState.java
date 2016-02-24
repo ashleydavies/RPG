@@ -20,8 +20,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-import java.io.IOException;
-
 public class GameState extends State {
     public int WIDTH;
     public int HEIGHT;

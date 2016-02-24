@@ -2,8 +2,8 @@ package com.adavieslyons.legacy.event;
 
 /**
  * @author Ashley
- *
-public class Event {
-
-}
-*/
+ * <p/>
+ * public class Event {
+ * <p/>
+ * }
+ */

@@ -1,7 +1,6 @@
 package com.adavieslyons.orthorpg.gui;
 
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
-import com.adavieslyons.util.FileLoader;
 import com.adavieslyons.util.SaveData;
 import com.adavieslyons.util.dialog.DialogAction;
 import com.adavieslyons.util.dialog.DialogNode;
