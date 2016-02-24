@@ -1,8 +1,8 @@
 package com.adavieslyons.util.map;
 
 import com.adavieslyons.orthorpg.Game;
+import com.adavieslyons.util.FileLoader;
 import com.adavieslyons.util.SpriteSheet;
-import com.adavieslyons.util.XMLParser;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -11,19 +11,20 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.util.Objects;
+
 /**
  * @author Ashley
  */
 public class MapTile {
-    static MapTile[] tiles;
-    int id;
-    String name;
-    TextureType textureType;
-    Image[] textures;
+    private static final MapTile[] tiles;
+    final int id;
+    private final String name;
+    private final TextureType textureType;
+    private final Image[] textures;
 
     static {
-        Document info = XMLParser.instance.parseXML(MapTile.class
-                .getClassLoader().getResourceAsStream("data/xml/tileData.xml"));
+        Document info = FileLoader.getXML("tileData");
 
         Element tileRoot = (Element) info.getElementsByTagName("tileInfo")
                 .item(0);
@@ -35,7 +36,7 @@ public class MapTile {
 
             String name = i_tileNode.getAttribute("name");
             boolean collision = (Integer.parseInt(i_tileNode
-                    .getAttribute("collision")) == 1 ? true : false);
+                    .getAttribute("collision")) == 1);
             TextureType textureType = TextureType.STATIC;
             int frameLength = 0;
             int xOffset = 0;
@@ -85,11 +86,11 @@ public class MapTile {
         }
     }
 
-    private boolean collision;
-    private int frameLength;
-    private int xOffset;
-    private int yOffset;
-    private Color minimapColor;
+    private final boolean collision;
+    private final int frameLength;
+    private final int xOffset;
+    private final int yOffset;
+    private final Color minimapColor;
 
     private MapTile(int tileID, String Name, boolean Collision,
                     TextureType TextureType, Image[] Textures, int frameLength, int xOffset, int yOffset) {
@@ -154,9 +155,10 @@ public class MapTile {
     }
 
     public Color getMinimapColor() {
-        if (name != "null")
+        if (!name.equals("null")) {
             return minimapColor;
-        else
+        } else {
             return new Color(0, 0, 0, 255);
+        }
     }
 }

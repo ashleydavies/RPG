@@ -6,7 +6,7 @@ import com.adavieslyons.orthorpg.gamestate.states.GameState;
  * @author Ashley
  */
 public class DialogNode {
-    final int id;
+    private final int id;
     private final String prompt;
     private final DialogReply[] replies;
 

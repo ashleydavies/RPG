@@ -12,8 +12,8 @@ import org.w3c.dom.Element;
  * @author Ashley
  */
 public class MapLayer {
-    MapTileData tiles[][];
-    Map map;
+    private final MapTileData[][] tiles;
+    private final Map map;
 
     public MapLayer(MapTileData tiles[][], Map map) {
         this.map = map;
@@ -54,7 +54,7 @@ public class MapLayer {
 
                     if (((y == 0 || y == tiles.length - 1) || (x == 0 || x == tiles[0].length - 1))
                             && !MapTile.getTile(tile.getId()).getCollision())
-                        map.mapBorderTexture.draw(renderPosition.getX(),
+                        map.getBorderTexture().draw(renderPosition.getX(),
                                 renderPosition.getY());
 
                     if (renderOccupants && map.areEntitiesVisible(new Vector2i(x, y)))

@@ -1,7 +1,6 @@
 package com.adavieslyons.orthorpg.entities;
 
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
-import com.adavieslyons.util.Vector2i;
 import com.adavieslyons.util.map.Map;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
@@ -13,12 +12,12 @@ public class EntityManager {
     private ArrayList<Mob> mobs;
     // And store the player separately too, for easier access
     private Player player;
-    private Map map;
-    private GameState game;
-    private TurnManager turnManager;
+    private final Map map;
+    private final GameState game;
+    private final TurnManager turnManager;
 
     public EntityManager(Map map, GameState game) {
-        this.mobs = new ArrayList<Mob>();
+        this.mobs = new ArrayList<>();
         this.map = map;
         this.game = game;
         this.turnManager = new TurnManager(this);
@@ -53,7 +52,9 @@ public class EntityManager {
         return player;
     }
 
-    public ArrayList<Mob> getMobs() { return mobs; }
+    public ArrayList<Mob> getMobs() {
+        return mobs;
+    }
 
     public void setPlayer(Player player) {
         this.player = player;

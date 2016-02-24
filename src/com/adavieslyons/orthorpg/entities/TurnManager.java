@@ -1,26 +1,23 @@
 package com.adavieslyons.orthorpg.entities;
 
-import com.adavieslyons.orthorpg.gamestate.states.GameState;
-import org.lwjgl.Sys;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by Ashley on 12/01/2015.
  */
 public class TurnManager {
     private ArrayList<ITakeTurns> mobs;
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
     private int turnMobID = -1;
 
     public TurnManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    public void initialiseTurn() {
+    private void initialiseTurn() {
         entityManager.getPlayer().setAP(entityManager.getPlayer().getMaxAP());
         entityManager.getPlayer().setDesiredPosition(entityManager.getPlayer().getPosition());
         System.out.println("Initialising turn");
@@ -67,7 +64,7 @@ public class TurnManager {
         System.out.println("Turn initialised");
     }
 
-    public void update(GameContainer gc, int delta) throws SlickException {
+    public void update(GameContainer gc, int delta) {
         if (!entityManager.getGame().isBattle()) {
             // End combat
             System.out.println("Not combat");

@@ -45,7 +45,7 @@ public class SplashScreenState extends State {
     }
 
     @Override
-    public void keyPressed(int key, char c) throws SlickException {
+    public void keyPressed(int key, char c) {
 
     }
 }

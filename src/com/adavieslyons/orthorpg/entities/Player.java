@@ -14,10 +14,10 @@ import org.newdawn.slick.geom.Vector2f;
  */
 public class Player extends MovingEntity implements ICombat, ITakeTurns {
     private MapTileData tileOccupied;
-    private GameState game;
+    private final GameState game;
     private int HP;
     private int mana;
-    private ItemStack[] items = new ItemStack[27];
+    private final ItemStack[] items = new ItemStack[27];
     private boolean myTurn;
 
     public Player(GameContainer gc, GameState game, Map map, Vector2i position)
@@ -40,8 +40,7 @@ public class Player extends MovingEntity implements ICombat, ITakeTurns {
     }
 
     @Override
-    public void update(GameContainer gc, GameState game, int delta)
-            throws SlickException {
+    public void update(GameContainer gc, GameState game, int delta) {
         updateMove(delta);
     }
 
@@ -111,24 +110,77 @@ public class Player extends MovingEntity implements ICombat, ITakeTurns {
     }
 
 
-    public int getFortitude()       { return game.getCurrentGameData().getIntSaveData(1); }
-    public int getStrength()        { return game.getCurrentGameData().getIntSaveData(2); }
-    public int getIntelligence()    { return game.getCurrentGameData().getIntSaveData(3); }
-    public int getAgility()         { return game.getCurrentGameData().getIntSaveData(4); }
-    public int getPersuasiveness()  { return game.getCurrentGameData().getIntSaveData(5); }
-    public int getPerception()      { return game.getCurrentGameData().getIntSaveData(6); }
-    public int getLuck()            { return game.getCurrentGameData().getIntSaveData(7); }
-    public int getEngineering()     { return game.getCurrentGameData().getIntSaveData(8); }
-    public int getSwordsmanship()   { return game.getCurrentGameData().getIntSaveData(9); }
-    public int getArchery()         { return game.getCurrentGameData().getIntSaveData(10); }
-    public int getSpeed()           { return game.getCurrentGameData().getIntSaveData(11); }
-    public int getAnalysis()        { return game.getCurrentGameData().getIntSaveData(12); }
-    public int getPickpocketing()   { return game.getCurrentGameData().getIntSaveData(13); }
-    public int getCombatMagic()     { return game.getCurrentGameData().getIntSaveData(14); }
-    public int getDarkMagic()       { return game.getCurrentGameData().getIntSaveData(15); }
-    public int getUtilityMagic()    { return game.getCurrentGameData().getIntSaveData(16); }
-    public int getHealingMagic()    { return game.getCurrentGameData().getIntSaveData(17); }
-    public int getProtectiveMagic() { return game.getCurrentGameData().getIntSaveData(18); }
+    public int getFortitude() {
+        return game.getCurrentGameData().getIntSaveData(1);
+    }
+
+    public int getStrength() {
+        return game.getCurrentGameData().getIntSaveData(2);
+    }
+
+    public int getIntelligence() {
+        return game.getCurrentGameData().getIntSaveData(3);
+    }
+
+    public int getAgility() {
+        return game.getCurrentGameData().getIntSaveData(4);
+    }
+
+    public int getPersuasiveness() {
+        return game.getCurrentGameData().getIntSaveData(5);
+    }
+
+    public int getPerception() {
+        return game.getCurrentGameData().getIntSaveData(6);
+    }
+
+    public int getLuck() {
+        return game.getCurrentGameData().getIntSaveData(7);
+    }
+
+    public int getEngineering() {
+        return game.getCurrentGameData().getIntSaveData(8);
+    }
+
+    public int getSwordsmanship() {
+        return game.getCurrentGameData().getIntSaveData(9);
+    }
+
+    public int getArchery() {
+        return game.getCurrentGameData().getIntSaveData(10);
+    }
+
+    public int getSpeed() {
+        return game.getCurrentGameData().getIntSaveData(11);
+    }
+
+    public int getAnalysis() {
+        return game.getCurrentGameData().getIntSaveData(12);
+    }
+
+    public int getPickpocketing() {
+        return game.getCurrentGameData().getIntSaveData(13);
+    }
+
+    public int getCombatMagic() {
+        return game.getCurrentGameData().getIntSaveData(14);
+    }
+
+    public int getDarkMagic() {
+        return game.getCurrentGameData().getIntSaveData(15);
+    }
+
+    public int getUtilityMagic() {
+        return game.getCurrentGameData().getIntSaveData(16);
+    }
+
+    public int getHealingMagic() {
+        return game.getCurrentGameData().getIntSaveData(17);
+    }
+
+    public int getProtectiveMagic() {
+        return game.getCurrentGameData().getIntSaveData(18);
+    }
 
     @Override
     public int getAP() {

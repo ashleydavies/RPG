@@ -1,9 +1,9 @@
 package com.adavieslyons.util.inventory;
 
 public interface IInventory {
-    public ItemStack[] getItems();
+    ItemStack[] getItems();
 
-    public void addItem();
+    void addItem();
 
-    public void modifyStack();
+    void modifyStack();
 }

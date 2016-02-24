@@ -1,7 +1,7 @@
 package com.adavieslyons.util.map;
 
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
-import com.adavieslyons.util.XMLParser;
+import com.adavieslyons.util.FileLoader;
 import org.newdawn.slick.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -37,9 +37,7 @@ public class WorldMap {
         this.worldMap = new Image("img/worldmap.png");
 
         // Now load the map icon data
-        Document document = XMLParser.instance.parseXML(this.getClass()
-                .getClassLoader()
-                .getResourceAsStream("data/xml/map/mapList.xml"));
+        Document document = FileLoader.getXML("map/mapList");
 
         NodeList mapNodes = document.getElementsByTagName("map");
         this.mapIconData = new MapIconData[mapNodes.getLength()];
@@ -181,7 +179,7 @@ public class WorldMap {
     }
 
     private class MapIconData {
-        private int mapID;
+        private final int mapID;
         private int iconID;
         private String name;
         private int mX, mY;

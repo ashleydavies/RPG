@@ -6,7 +6,7 @@ import org.newdawn.slick.geom.Rectangle;
 
 /**
  * @author Ashley
- */
+ *
 public abstract class GUIElement {
     Rectangle rect;
 
@@ -23,4 +23,4 @@ public abstract class GUIElement {
     public void setRect(Rectangle rect) {
         this.rect = rect;
     }
-}
+}*/

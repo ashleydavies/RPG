@@ -8,9 +8,9 @@ import org.newdawn.slick.SlickException;
 
 // Minimal implementation of GUIWindow, just for rendering a raw image in a window
 public class ImageGUI extends GUIWindow {
-    int x;
-    int y;
-    Image image;
+    private int x;
+    private int y;
+    private Image image;
 
     public ImageGUI(GameContainer gc, GameState game, int x, int y, Image image)
             throws SlickException {
@@ -21,8 +21,7 @@ public class ImageGUI extends GUIWindow {
     }
 
     @Override
-    public void render(GameContainer gc, Graphics graphics)
-            throws SlickException {
+    public void render(GameContainer gc, Graphics graphics) {
         graphics.drawImage(windowBg, x, y);
         graphics.drawImage(image, x + BW, y + BW);
     }

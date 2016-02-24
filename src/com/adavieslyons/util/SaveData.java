@@ -6,22 +6,16 @@ import java.util.Properties;
  * @author Ashley
  */
 public class SaveData {
-    static final Properties FriendlyNames;
-    static final int MAX_INT_SAVE_DATA = 100;
-    static final int MAX_BOOL_SAVE_DATA = 100;
-    static final int MAX_STRING_SAVE_DATA = 100;
+    private static final Properties FriendlyNames;
+    private static final int MAX_INT_SAVE_DATA = 100;
+    private static final int MAX_BOOL_SAVE_DATA = 100;
+    private static final int MAX_STRING_SAVE_DATA = 100;
 
     static {
-        FriendlyNames = new Properties();
-        try {
-            FriendlyNames.load(SaveData.class.getClassLoader()
-                    .getResourceAsStream(
-                            "data/properties/IntDataFriendlyNames.properties"));
-        } catch (Exception e) {
-        }
+        FriendlyNames = FileLoader.getProperties("IntDataFriendlyNames");
     }
 
-    int intSaveData[] = new int[MAX_INT_SAVE_DATA];
+    private final int[] intSaveData = new int[MAX_INT_SAVE_DATA];
     boolean boolSaveData[] = new boolean[MAX_BOOL_SAVE_DATA];
     String stringSaveData[] = new String[MAX_STRING_SAVE_DATA];
 

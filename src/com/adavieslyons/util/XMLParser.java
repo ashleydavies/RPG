@@ -13,6 +13,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -23,25 +24,26 @@ import java.util.logging.Logger;
 /**
  * @author Ashley
  */
-public final class XMLParser {
+public enum XMLParser {
+    INSTANCE;
+
     static final Properties ChatSubstitution;
 
     static {
         ChatSubstitution = new Properties();
         try {
-            ChatSubstitution.load(Mob.class.getClassLoader()
-                    .getResourceAsStream(
-                            "data/properties/NPCSubstitution.properties"));
+            InputStream in = new FileInputStream("data/properties/NPCSubstitution.properties");
+            ChatSubstitution.load(in);
+            in.close();
         } catch (IOException ex) {
             Logger.getLogger(Mob.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public static XMLParser instance = new XMLParser();
-    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+    final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
     DocumentBuilder dBuilder;
 
-    private XMLParser() {
+    XMLParser() {
         try {
             dBuilder = dbFactory.newDocumentBuilder();
         } catch (Exception e) {
@@ -50,7 +52,7 @@ public final class XMLParser {
     }
 
     /* Static helpers */
-    public static String substituteDialogString(String stringIn) {
+    private static String substituteDialogString(String stringIn) {
         Enumeration<?> e = ChatSubstitution.propertyNames();
 
         while (e.hasMoreElements()) {

@@ -5,7 +5,7 @@ import org.newdawn.slick.Graphics;
 
 /**
  * @author Ashley
- */
+ *
 public class Colour {
     Color restoreColour;
     Graphics restoreGraphics;
@@ -33,3 +33,4 @@ public class Colour {
         this.colour = colour;
     }
 }
+*/

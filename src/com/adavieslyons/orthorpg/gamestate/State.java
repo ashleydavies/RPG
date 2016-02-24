@@ -5,7 +5,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 public abstract class State {
-    protected GameStateManager gameStateManager;
+    protected final GameStateManager gameStateManager;
 
     public State(GameStateManager gsm) {
         gameStateManager = gsm;
@@ -28,5 +28,5 @@ public abstract class State {
     public abstract void mouseClicked(int button, int x, int y, int clickCount)
             throws SlickException;
 
-    public abstract void keyPressed(int key, char c) throws SlickException;
+    public abstract void keyPressed(int key, char c);
 }

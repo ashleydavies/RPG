@@ -10,7 +10,7 @@ import org.newdawn.slick.SlickException;
  */
 public class MapTileData {
     private final int id;
-    protected int data[];
+    private final int[] data;
     private MovingEntity occupyingEntity;
 
     public MapTileData(int Id) {

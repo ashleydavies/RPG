@@ -1,6 +1,7 @@
 package com.adavieslyons.orthorpg.gui;
 
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.util.FileLoader;
 import com.adavieslyons.util.SaveData;
 import com.adavieslyons.util.dialog.DialogAction;
 import com.adavieslyons.util.dialog.DialogNode;
@@ -19,8 +20,8 @@ import java.awt.Font;
  * @author Ashley
  */
 public final class DialogGUI extends GUIWindow {
-    static TrueTypeFont dialogFont;
-    static TrueTypeFont dialogTitleFont;
+    private static final TrueTypeFont dialogFont;
+    private static final TrueTypeFont dialogTitleFont;
 
     private boolean[] replyAreasMouseDown;
     private MouseOverArea[] replyAreas;
@@ -30,14 +31,11 @@ public final class DialogGUI extends GUIWindow {
     private IDialogable parent;
 
     static {
-        try {
-            ui = new Image("img/ui/ui.png");
-            dialogFont = new TrueTypeFont(
-                    new Font("sans-serif", Font.PLAIN, 17), true);
-            dialogTitleFont = new TrueTypeFont(
-                    new Font("Arial", Font.BOLD, 36), true);
-        } catch (SlickException e) {
-        }
+        //ui = FileLoader.getImage("ui/ui");
+        dialogFont = new TrueTypeFont(
+                new Font("sans-serif", Font.PLAIN, 17), true);
+        dialogTitleFont = new TrueTypeFont(
+                new Font("Arial", Font.BOLD, 36), true);
     }
 
     public DialogGUI(GameContainer gc, GameState game) throws SlickException {
@@ -62,8 +60,8 @@ public final class DialogGUI extends GUIWindow {
             typedNum = key - 2; // Key codes for 1-9 are 2-10
     }
 
-    public void renderPrimaryContent(GameContainer gc, String content,
-                                     String[] responses) throws SlickException {
+    private void renderPrimaryContent(GameContainer gc, String content,
+                                      String[] responses) throws SlickException {
         content = prepareString(content);
         responses = prepareStrings(responses);
 
@@ -116,7 +114,7 @@ public final class DialogGUI extends GUIWindow {
         graphics.clear();
     }
 
-    public final String[] prepareStrings(String[] content) {
+    private String[] prepareStrings(String[] content) {
         String[] retArray = new String[content.length];
         int i = 0;
         for (String str : content)
@@ -125,7 +123,7 @@ public final class DialogGUI extends GUIWindow {
         return retArray;
     }
 
-    public final String prepareString(String content) {
+    private String prepareString(String content) {
         String prepString = " ";
         content = content.replace("[N]", "\n");
         String[] content_words = content.split(" ");
@@ -164,7 +162,7 @@ public final class DialogGUI extends GUIWindow {
             if (replyAreas[i].isMouseOver() && Mouse.isButtonDown(0)) {
                 replyAreasMouseDown[i] = true;
             } else if (replyAreas[i].isMouseOver() && !Mouse.isButtonDown(0)
-                    && replyAreasMouseDown[i] == true) {
+                    && replyAreasMouseDown[i]) {
                 replyAreasMouseDown[i] = false;
 
                 System.out.println("Clicked " + i);
@@ -183,8 +181,7 @@ public final class DialogGUI extends GUIWindow {
     }
 
     @Override
-    public void render(GameContainer gc, Graphics graphics)
-            throws SlickException {
+    public void render(GameContainer gc, Graphics graphics) {
         graphics.drawImage(windowBg, windowRect.getX(), windowRect.getY());
         graphics.drawImage(windowDefaultContent, windowRect.getX(),
                 windowRect.getY());
@@ -192,7 +189,7 @@ public final class DialogGUI extends GUIWindow {
                 windowRect.getY());
     }
 
-    public void dialogReplyClicked(GameContainer gc, int i)
+    private void dialogReplyClicked(GameContainer gc, int i)
             throws SlickException {
         // i = reply clicked
         DialogReply reply;
@@ -251,7 +248,7 @@ public final class DialogGUI extends GUIWindow {
                 dialog[0].getReplyPrompts(game));
     }
 
-    public void endDialog() {
+    private void endDialog() {
         parent.dialogCloseRequested();
     }
 }

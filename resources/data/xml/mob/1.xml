@@ -2,7 +2,7 @@
 
 <mob>
 	
-	<info name="Farmer Joe" avatar="fred.png" />
+	<info name="Farmer Joe" avatar="fred" />
 	
     <texture id="0">
         <spritesheet>1</spritesheet>

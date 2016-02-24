@@ -1,8 +1,8 @@
 package com.adavieslyons.util.inventory;
 
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.util.FileLoader;
 import com.adavieslyons.util.SpriteSheet;
-import com.adavieslyons.util.XMLParser;
 import org.newdawn.slick.Image;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -19,8 +19,8 @@ public class Item {
     private final Image image;
     private final Modifier[] modifiers;
 
-    public Item(int id, String name, String description, ItemType type,
-                Image image, Modifier modifiers[]) {
+    private Item(int id, String name, String description, ItemType type,
+                 Image image, Modifier modifiers[]) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -31,10 +31,10 @@ public class Item {
 
     public static void LoadItems(GameState game) {
         // Load item data from the XML file
-        items = new ArrayList<Item>();
+        items = new ArrayList<>();
 
-        Document document = XMLParser.instance.parseXML(Item.class
-                .getClassLoader().getResourceAsStream("data/xml/itemData.xml"));
+        Document document = FileLoader.getXML("itemData");
+
         NodeList itemNodes = document.getElementsByTagName("item");
 
         for (int i = 0; i < itemNodes.getLength(); i++) {

@@ -27,9 +27,7 @@ public final class FileUtility {
             }
         };
 
-        File[] files = root.listFiles(beginsWith);
-
-        return files;
+        return root.listFiles(beginsWith);
     }
 
     public String IDFormat(int num) {

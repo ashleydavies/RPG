@@ -4,29 +4,29 @@ import com.adavieslyons.util.Vector2i;
 import com.adavieslyons.util.map.Map;
 
 public abstract class MovingPathEntity extends MovingEntity {
-	private int currentPathPosition = 0;
-	private Vector2i path[];
+    private int currentPathPosition = 0;
+    private Vector2i path[];
 
-	public MovingPathEntity(Map map) {
-		super(map);
-	}
+    public MovingPathEntity(Map map) {
+        super(map);
+    }
 
-	protected void updatePath() {
-		if (!moving) {
-			if (getPosition().equals(path[currentPathPosition])) {
-				currentPathPosition++;
+    protected void updatePath() {
+        if (!moving) {
+            if (getPosition().equals(path[currentPathPosition])) {
+                currentPathPosition++;
 
-				if (currentPathPosition >= path.length)
-					currentPathPosition = 0;
-			}
+                if (currentPathPosition >= path.length)
+                    currentPathPosition = 0;
+            }
 
-			moveToTarget(path[currentPathPosition].getX(),
-					path[currentPathPosition].getY());
-		}
+            moveToTarget(path[currentPathPosition].getX(),
+                    path[currentPathPosition].getY());
+        }
 
-	}
+    }
 
-	public void setPath(Vector2i[] path) {
-		this.path = path;
-	}
+    public void setPath(Vector2i[] path) {
+        this.path = path;
+    }
 }

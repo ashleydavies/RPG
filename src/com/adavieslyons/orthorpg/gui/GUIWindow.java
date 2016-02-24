@@ -1,25 +1,23 @@
 package com.adavieslyons.orthorpg.gui;
 
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
+import com.adavieslyons.util.FileLoader;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Rectangle;
 
 public abstract class GUIWindow {
     static final int BW = 12; // Border Width
 
-    static Image ui;
+    static final Image ui;
 
-    Rectangle windowRect;
+    final Rectangle windowRect;
     Image windowBg;
     Image windowDefaultContent;
     Image windowDynamicContent;
-    GameState game;
+    final GameState game;
 
     static {
-        try {
-            ui = new Image("img/ui/ui.png");
-        } catch (SlickException e) {
-        }
+        ui = FileLoader.getImage("ui/ui");
     }
 
     public GUIWindow(GameContainer gc, GameState game, int width, int height)
@@ -39,7 +37,7 @@ public abstract class GUIWindow {
         renderDefaultContent(gc);
     }
 
-    public void renderWindow(GameContainer gc) {
+    private void renderWindow(GameContainer gc) {
         Image border_tl = ui.getSubImage(0, 0, BW, BW);
         Image border_tr = ui.getSubImage(BW, 0, BW, BW);
         Image border_bl = ui.getSubImage(0, BW, BW, BW);
@@ -95,7 +93,7 @@ public abstract class GUIWindow {
     }
 
     public abstract void render(GameContainer gc, Graphics graphics)
-            throws SlickException;
+            ;
 
     public abstract void update(GameContainer gc, int delta)
             throws SlickException;

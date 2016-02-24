@@ -6,7 +6,7 @@ import com.adavieslyons.orthorpg.gamestate.states.GameState;
  * @author Ashley
  */
 public class DialogAction {
-    final int id;
+    private final int id;
     private final String action;
     private final String[] args;
     private final DialogCondition[] conditions;

@@ -6,7 +6,7 @@ import org.newdawn.slick.geom.Rectangle;
 
 /**
  * @author Ashley
- */
+ *
 public class Button extends GUIElement {
     Colour background;
 
@@ -23,3 +23,4 @@ public class Button extends GUIElement {
         background.restore();
     }
 }
+*/

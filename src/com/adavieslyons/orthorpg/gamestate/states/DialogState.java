@@ -13,11 +13,11 @@ import org.newdawn.slick.SlickException;
  * Created by Ashley on 10/01/2015.
  */
 public class DialogState extends State {
-    DialogNode[] dialog;
-    IDialogable parent;
-    DialogGUI dialogGUI;
-    GameState game;
-    boolean loaded = false;
+    private DialogNode[] dialog;
+    private IDialogable parent;
+    private final DialogGUI dialogGUI;
+    private GameState game;
+    private boolean loaded = false;
 
     public DialogState(GameStateManager gsm, DialogGUI dialogGUI) {
         super(gsm);
@@ -63,9 +63,11 @@ public class DialogState extends State {
     public void setParent(IDialogable parent) {
         this.parent = parent;
     }
+
     public void setDialog(DialogNode[] dialog) {
         this.dialog = dialog;
     }
+
     public void setGame(GameState game) {
         this.game = game;
     }

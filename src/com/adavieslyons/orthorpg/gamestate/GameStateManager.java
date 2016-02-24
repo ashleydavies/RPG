@@ -1,6 +1,5 @@
 package com.adavieslyons.orthorpg.gamestate;
 
-import com.adavieslyons.orthorpg.gamestate.states.DialogState;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -9,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameStateManager {
-    List<State> gameStates;
-    State nextState;
+    private final List<State> gameStates;
+    private State nextState;
 
     public GameStateManager() {
-        gameStates = new ArrayList<State>();
+        gameStates = new ArrayList<>();
     }
 
     public void setState(GameContainer gc, State state) throws SlickException {
@@ -54,7 +53,7 @@ public class GameStateManager {
         getActiveState().mouseClicked(button, x, y, clickCount);
     }
 
-    public void keyPressed(int key, char c) throws SlickException {
+    public void keyPressed(int key, char c) {
         getActiveState().keyPressed(key, c);
     }
 

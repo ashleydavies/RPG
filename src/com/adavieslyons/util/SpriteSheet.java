@@ -1,44 +1,31 @@
 package com.adavieslyons.util;
 
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-
-import java.io.IOException;
-import java.util.Properties;
 
 /**
  * @author Ashley
  */
 public class SpriteSheet {
-    static final Properties spriteSheetProperties;
-    static final SpriteSheet[] spriteSheets;
-    Image spriteSheet;
+    private static final Properties spriteSheetProperties;
+    private static final SpriteSheet[] spriteSheets;
 
     static {
-        spriteSheetProperties = new Properties();
-        try {
-            spriteSheetProperties.load(SpriteSheet.class.getClassLoader()
-                    .getResourceAsStream(
-                            "data/properties/Spritesheets.properties"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        spriteSheetProperties = FileLoader.getProperties("Spritesheets");
 
-        int count = Integer.parseInt(spriteSheetProperties
-                .getProperty("totalCount"));
+        int count = spriteSheetProperties.getIntProperty("totalCount");
+
         spriteSheets = new SpriteSheet[count];
 
         for (int i = 0; i < count; i++) {
-            try {
-                spriteSheets[i] = new SpriteSheet(new Image(
-                        "img/"
-                                + spriteSheetProperties.getProperty(Integer
-                                .toString(i))));
-            } catch (SlickException ex) {
-                ex.printStackTrace();
-            }
+            spriteSheets[i] = new SpriteSheet(
+                    FileLoader.getImage(
+                            spriteSheetProperties.getProperty(i)
+                    )
+            );
         }
     }
+
+    private final Image spriteSheet;
 
     private SpriteSheet(Image image) {
         spriteSheet = image;

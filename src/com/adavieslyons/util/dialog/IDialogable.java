@@ -5,7 +5,7 @@ import org.newdawn.slick.Image;
 public interface IDialogable {
     void dialogCloseRequested();
 
-    public String getDialogTitle();
+    String getDialogTitle();
 
-    public Image getDialogImage();
+    Image getDialogImage();
 }

@@ -22,7 +22,7 @@ public class TileSelectorGUI extends GUIWindow {
         tileSelected = false;
     }
 
-    public void renderPrimaryContent(GameContainer gc) throws SlickException {
+    private void renderPrimaryContent(GameContainer gc) {
         Graphics graphics = gc.getGraphics();
         graphics.clear();
 
@@ -37,8 +37,7 @@ public class TileSelectorGUI extends GUIWindow {
     }
 
     @Override
-    public void render(GameContainer gc, Graphics graphics)
-            throws SlickException {
+    public void render(GameContainer gc, Graphics graphics) {
         graphics.drawImage(windowBg, windowRect.getX(), windowRect.getY());
         graphics.drawImage(windowDynamicContent, windowRect.getX(),
                 windowRect.getY());
@@ -53,8 +52,7 @@ public class TileSelectorGUI extends GUIWindow {
             if (mouseCoords.getY() > windowRect.getY() + BW + 8 && mouseCoords.getY() < windowRect.getY() + BW + 8 + 32) {
                 if (mouseCoords.getX() > windowRect.getX() + BW + 8 && mouseCoords.getX() < windowRect.getX() + BW + 8 + Game.TILE_SIZE_X * MapTile.getTiles().length) {
                     // Inside a tile
-                    int tile = (int) Math.floor(mouseCoords.getX() - windowRect.getX() - BW - 8) / Game.TILE_SIZE_X;
-                    selectedTile = tile;
+                    selectedTile = (int) Math.floor(mouseCoords.getX() - windowRect.getX() - BW - 8) / Game.TILE_SIZE_X;
                     tileSelected = true;
                 }
             }

@@ -20,10 +20,12 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+import java.io.IOException;
+
 public class GameState extends State {
     public int WIDTH;
     public int HEIGHT;
-    Map map;
+    private Map map;
     private WorldMap worldMap;
     private DialogState dialogState;
 
@@ -70,7 +72,7 @@ public class GameState extends State {
             System.out.println(i + " " + SaveData.getFriendlyName(i));
     }
 
-    public void loadState(InnerState state) {
+    private void loadState(InnerState state) {
         this.state = state;
         switch (state) {
             case PLAYING:
@@ -152,7 +154,7 @@ public class GameState extends State {
         return isBattle;
     }
 
-    public void setBattle(boolean isBattle) {
+    private void setBattle(boolean isBattle) {
         this.isBattle = isBattle;
     }
 
@@ -190,8 +192,8 @@ public class GameState extends State {
     }
 
     @Override
-    public void keyPressed(int key, char c) throws SlickException {
-        if (key == input.KEY_F) {
+    public void keyPressed(int key, char c) {
+        if (key == Input.KEY_F) {
             setBattle(!isBattle());
         }
     }
@@ -206,6 +208,7 @@ public class GameState extends State {
         map.focusTile(playerPosition);
         loadState(InnerState.PLAYING);
     }
+
     //GameContainer gc;
     public SaveData getCurrentGameData() {
         return currentGameData;
@@ -227,7 +230,7 @@ public class GameState extends State {
         return dialogState;
     }
 
-    public void showDialog(DialogNode[] dialog, IDialogable parent) throws SlickException {
+    public void showDialog(DialogNode[] dialog, IDialogable parent) {
         dialogState.setDialog(dialog);
         dialogState.setParent(parent);
         gameStateManager.awaitTickPushState(dialogState);

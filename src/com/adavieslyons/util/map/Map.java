@@ -7,9 +7,9 @@ import com.adavieslyons.orthorpg.entities.MovingEntity;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
 import com.adavieslyons.orthorpg.gui.ImageGUI;
 import com.adavieslyons.orthorpg.gui.TileSelectorGUI;
+import com.adavieslyons.util.FileLoader;
 import com.adavieslyons.util.SpriteSheet;
 import com.adavieslyons.util.Vector2i;
-import com.adavieslyons.util.XMLParser;
 import com.adavieslyons.util.map.pathfinding.AStar;
 import com.adavieslyons.util.map.pathfinding.AStar.Node;
 import com.adavieslyons.util.map.pathfinding.CollisionMap;
@@ -26,6 +26,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -33,30 +34,30 @@ import java.util.Arrays;
  * @author Ashley
  */
 public class Map {
-    int id;
-    EntityManager entityManager;
-    GameState game;
-    Document info;
-    int width = -1;
-    int height;
-    MapLayer layers[];
-    boolean fogOfWar[][];
-    boolean occupiedTiles[][];
-    CollisionMap collisionMap;
-    Node[][] nodeMatrix;
-    Image fogOfWarTexture;
-    Image fogOfWarRevealedTexture;
-    Image mapBorderTexture;
-    Image isoDistinguishTexture;
-    Image minimapImage;
-    TileSelectorGUI tsGUI;
-    ImageGUI minimapBackgroundGUI;
-    int tileEditingTile = 0;
-    boolean tsGUIOpen;
-    boolean editing;
-    int totalDelta;
+    private int id;
+    private EntityManager entityManager;
+    private GameState game;
+    private Document info;
+    private int width = -1;
+    private int height;
+    private MapLayer layers[];
+    private boolean fogOfWar[][];
+    private boolean occupiedTiles[][];
+    private CollisionMap collisionMap;
+    private Node[][] nodeMatrix;
+    private Image fogOfWarTexture;
+    private Image fogOfWarRevealedTexture;
+    private Image borderTexture;
+    private Image isoDistinguishTexture;
+    private Image minimapImage;
+    private TileSelectorGUI tsGUI;
+    private ImageGUI minimapBackgroundGUI;
+    private int tileEditingTile = 0;
+    private boolean tsGUIOpen;
+    private boolean editing;
+    private int totalDelta;
 
-    Vector2i offset = new Vector2i(0, 0);
+    private Vector2i offset = new Vector2i(0, 0);
 
     public void update(GameContainer gc, GameState game, int delta)
             throws SlickException {
@@ -98,17 +99,17 @@ public class Map {
 
         // Move with arrow keys
         if (game.getInput().isKeyDown(Input.KEY_LEFT))
-            addOffset(1 * delta, 0);
+            addOffset(delta, 0);
         if (game.getInput().isKeyDown(Input.KEY_RIGHT))
             addOffset(-1 * delta, 0);
 
         if (game.getInput().isKeyDown(Input.KEY_UP))
-            addOffset(0, 1 * delta);
+            addOffset(0, delta);
         if (game.getInput().isKeyDown(Input.KEY_DOWN))
             addOffset(0, -1 * delta);
     }
 
-    public void fillMap(int x, int y, int tileID, int newTileID, int layer) {
+    private void fillMap(int x, int y, int tileID, int newTileID, int layer) {
         if (x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
             return;
         if (layers[layer].getTile(x, y).id != tileID)
@@ -127,11 +128,11 @@ public class Map {
         fillMap(x + 1, y + 1, tileID, newTileID, layer);
     }
 
-    public void addOffset(int x, int y) {
+    private void addOffset(int x, int y) {
         addOffset(new Vector2i(x, y));
     }
 
-    public void addOffset(Vector2i offset) {
+    private void addOffset(Vector2i offset) {
         setOffset(this.offset.add(offset));
     }
 
@@ -155,8 +156,7 @@ public class Map {
             tsGUI.render(gc, graphics);
     }
 
-    public void renderPostEntities(GameContainer gc, Graphics graphics)
-            throws SlickException {
+    public void renderPostEntities(GameContainer gc, Graphics graphics) {
         if (!editing) {
             Vector2i minXTile = screenCoordinatesToTileCoordinates(0, 0);
             Vector2i minYTile = screenCoordinatesToTileCoordinates(gc.getWidth(), 0);
@@ -236,26 +236,20 @@ public class Map {
     }
 
     // SCREEN => TILE
-    public Vector2i screenCoordinatesToTileCoordinates(Vector2i coordinates) {
+    private Vector2i screenCoordinatesToTileCoordinates(Vector2i coordinates) {
         return screenCoordinatesToTileCoordinates(coordinates.getX(),
                 coordinates.getY());
     }
 
     // TILE => GAME
-    public Vector2i tileCoordinatesToGameCoordinates(int x, int y) {
-        float xP = x;
-        float yP = y;
-
-        return new Vector2i((int) ((xP * 0.5 - yP * 0.5) * Game.TILE_SIZE_X),
-                (int) ((yP * 0.5 + xP * 0.5) * Game.TILE_SIZE_Y));
+    private Vector2i tileCoordinatesToGameCoordinates(int x, int y) {
+        return new Vector2i((int) ((x * 0.5 - y * 0.5) * Game.TILE_SIZE_X),
+                (int) ((y * 0.5 + x * 0.5) * Game.TILE_SIZE_Y));
     }
 
     public Vector2i tileCoordinatesToScreenCoordinates(int x, int y) {
-        float xP = x;
-        float yP = y;
-
-        return new Vector2i((int) ((xP * 0.5 - yP * 0.5) * Game.TILE_SIZE_X),
-                (int) ((yP * 0.5 + xP * 0.5) * Game.TILE_SIZE_Y)).add(offset);
+        return new Vector2i((int) ((x * 0.5 - y * 0.5) * Game.TILE_SIZE_X),
+                (int) ((y * 0.5 + x * 0.5) * Game.TILE_SIZE_Y)).add(offset);
     }
 
     // TILE => GAME
@@ -265,7 +259,7 @@ public class Map {
     }
 
     // SCREEN => GAME
-    public Vector2i screenCoordinatesToGameCoordinates(
+    private Vector2i screenCoordinatesToGameCoordinates(
             Vector2i screenCoordinates) {
         return screenCoordinates.subtract(offset);
     }
@@ -286,8 +280,8 @@ public class Map {
         generateNewMap(gc, game, mapID, entityManager, 80, 80);
     }
 
-    public void generateNewMap(GameContainer gc, GameState game, int mapID,
-                               EntityManager entityManager, int width, int height)
+    private void generateNewMap(GameContainer gc, GameState game, int mapID,
+                                EntityManager entityManager, int width, int height)
             throws SlickException {
         this.game = game;
         this.id = mapID;
@@ -333,8 +327,8 @@ public class Map {
         this.game = game;
         this.id = mapID;
         this.entityManager = entityManager;
-        info = XMLParser.instance.parseXML(this.getClass().getClassLoader()
-                .getResourceAsStream("data/xml/map/" + mapID + ".xml"));
+
+        info = FileLoader.getXML("map/" + mapID);
 
         Element layerRoot = (Element) info.getElementsByTagName("tileData")
                 .item(0);
@@ -422,7 +416,7 @@ public class Map {
         fogOfWarRevealedTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0,
                 (Game.TILE_SIZE_Y + 1) * 4, Game.TILE_SIZE_X + 1,
                 Game.TILE_SIZE_Y + 1);
-        mapBorderTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0,
+        borderTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0,
                 (Game.TILE_SIZE_Y + 1) * 4, Game.TILE_SIZE_X + 1,
                 Game.TILE_SIZE_Y + 1);
         isoDistinguishTexture = SpriteSheet.getSpriteSheet(0).getSubImage(0,
@@ -440,7 +434,7 @@ public class Map {
         minimapBackgroundGUI = new ImageGUI(gc, game, 16, 16, minimapImage);
     }
 
-    public void generateMinimapImage() throws SlickException {
+    private void generateMinimapImage() throws SlickException {
         this.minimapImage = new Image(this.getWidth(), this.getHeight());
         Graphics graphics = minimapImage.getGraphics();
         for (int x = 0; x < this.getWidth(); x++) {
@@ -492,7 +486,7 @@ public class Map {
         return offset;
     }
 
-    public void setOffset(Vector2i offset) {
+    private void setOffset(Vector2i offset) {
         if (!getEditing()) {
             // Find corners of map
             int top = offset.getY();
@@ -513,15 +507,15 @@ public class Map {
         this.offset = offset;
     }
 
-    public void setTile(int tX, int tY, int tileID, int layer) {
+    private void setTile(int tX, int tY, int tileID, int layer) {
         layers[layer].setTile(tX, tY, tileID);
     }
 
-    public MapTile getTile(int tX, int tY, int layer) {
+    private MapTile getTile(int tX, int tY, int layer) {
         return layers[layer].getTile(tX, tY);
     }
 
-    public boolean isTileAtPosition(int tX, int tY) {
+    private boolean isTileAtPosition(int tX, int tY) {
         for (MapLayer layer : layers) {
             if (layer.getTile(tX, tY).id != 0) {
                 return true;
@@ -543,7 +537,7 @@ public class Map {
         // General algorithm
         // Record positions for valid positions
         // Take n/2nd position
-        ArrayList<Vector2i> validPositions = new ArrayList<Vector2i>();
+        ArrayList<Vector2i> validPositions = new ArrayList<>();
         switch (direction) {
             case NORTH:
                 for (int x = 1; x < width - 1; x++)
@@ -614,5 +608,9 @@ public class Map {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Image getBorderTexture() {
+        return borderTexture;
     }
 }

@@ -2,7 +2,7 @@ package com.adavieslyons.orthorpg.entities;
 
 import com.adavieslyons.orthorpg.Game;
 import com.adavieslyons.orthorpg.gamestate.states.GameState;
-import com.adavieslyons.orthorpg.gui.DialogGUI;
+import com.adavieslyons.util.FileLoader;
 import com.adavieslyons.util.Vector2i;
 import com.adavieslyons.util.XMLParser;
 import com.adavieslyons.util.dialog.DialogNode;
@@ -19,29 +19,28 @@ import org.w3c.dom.NodeList;
  * @author Ashley
  */
 public class Mob extends MovingPathEntity implements IDialogable, ICombat, ITakeTurns {
+    private int HP;
+    private int mana;
+    private int fortitude;
+    private int strength;
+    private int intelligence;
+    private int swordsmanship;
+    private int archery;
+    private int speed;
+    private int combatMagic;
+    private int darkMagic;
+    private int utilityMagic;
+    private int healingMagic;
+    private int protectiveMagic;
     private String name;
     private DialogNode[] dialog;
     private MapTileData tileOccupied;
     private Image dialogImage;
-    private GameState game;
+    private final GameState game;
     private boolean myTurn;
 
-    int HP;
-    int mana;
-    int fortitude;
-    int strength;
-    int intelligence;
-    int swordsmanship;
-    int archery;
-    int speed;
-    int combatMagic;
-    int darkMagic;
-    int utilityMagic;
-    int healingMagic;
-    int protectiveMagic;
-
     public Mob(GameContainer gc, GameState game, int mobID, Map map,
-               Vector2i path[]) throws SlickException {
+               Vector2i path[]) {
         super(map);
         this.game = game;
         this.HP = getFortitude() * 10 + 10;
@@ -51,11 +50,8 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat, ITake
         loadDataFromXML(gc, mobID, game);
     }
 
-    public void loadDataFromXML(GameContainer gc, int mobID, GameState game)
-            throws SlickException {
-        Document mobDoc = XMLParser.instance.parseXML(this.getClass()
-                .getClassLoader()
-                .getResourceAsStream("data/xml/mob/" + mobID + ".xml"));
+    private void loadDataFromXML(GameContainer gc, int mobID, GameState game) {
+        Document mobDoc = FileLoader.getXML("mob/" + mobID);
 
         Element mobInfo = (Element) mobDoc.getElementsByTagName("info").item(0);
 
@@ -63,7 +59,7 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat, ITake
         Element textureElement = (Element) mobDoc.getElementsByTagName("texture").item(0);
 
         name = mobInfo.getAttribute("name");
-        dialogImage = new Image("img/ui/avatar/mob/" + imageName);
+        dialogImage = FileLoader.getImage("ui/avatar/mob/" + imageName);
         setImage(XMLParser.loadTexture(textureElement));
 
         // Parse dialog if they have any
@@ -77,8 +73,7 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat, ITake
     }
 
     @Override
-    public void update(GameContainer gc, GameState game, int delta)
-            throws SlickException {
+    public void update(GameContainer gc, GameState game, int delta) {
         updateMove(delta);
         updatePath();
     }
@@ -114,7 +109,7 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat, ITake
     }
 
     @Override
-    public void onClick(GameState game) throws SlickException {
+    public void onClick(GameState game) {
         if (game.isBattle()) {
             game.getPlayer().attack(this);
         } else {
@@ -156,31 +151,68 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat, ITake
     }
 
     @Override
-    public int getFortitude() { return fortitude; }
+    public int getFortitude() {
+        return fortitude;
+    }
+
     @Override
-    public int getStrength() { return strength; }
+    public int getStrength() {
+        return strength;
+    }
+
     @Override
-    public int getIntelligence() { return intelligence; }
+    public int getIntelligence() {
+        return intelligence;
+    }
+
     @Override
-    public int getSwordsmanship() { return swordsmanship; }
+    public int getSwordsmanship() {
+        return swordsmanship;
+    }
+
     @Override
-    public int getArchery() { return archery; }
+    public int getArchery() {
+        return archery;
+    }
+
     @Override
-    public int getSpeed() { return speed; }
+    public int getSpeed() {
+        return speed;
+    }
+
     @Override
-    public int getCombatMagic() { return combatMagic; }
+    public int getCombatMagic() {
+        return combatMagic;
+    }
+
     @Override
-    public int getDarkMagic() { return darkMagic; }
+    public int getDarkMagic() {
+        return darkMagic;
+    }
+
     @Override
-    public int getUtilityMagic() { return utilityMagic; }
+    public int getUtilityMagic() {
+        return utilityMagic;
+    }
+
     @Override
-    public int getHealingMagic() { return healingMagic; }
+    public int getHealingMagic() {
+        return healingMagic;
+    }
+
     @Override
-    public int getProtectiveMagic() { return protectiveMagic; }
+    public int getProtectiveMagic() {
+        return protectiveMagic;
+    }
 
     @Override
     public int getAP() {
         return AP;
+    }
+
+    @Override
+    public void setAP(int AP) {
+        this.AP = AP;
     }
 
     @Override
@@ -189,14 +221,13 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat, ITake
     }
 
     @Override
-    public void setAP(int AP) {
-        this.AP = AP;
-    }
-
-
-    @Override
     public int getHP() {
         return HP;
+    }
+
+    @Override
+    public void setHP(int HP) {
+        this.HP = HP;
     }
 
     @Override
@@ -205,24 +236,18 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat, ITake
     }
 
     @Override
-    public void setHP(int HP) {
-        this.HP = HP;
-    }
-
-
-    @Override
     public int getMana() {
         return mana;
     }
 
     @Override
-    public int getMaxMana() {
-        return 100;
+    public void setMana(int Mana) {
+        this.mana = Mana;
     }
 
     @Override
-    public void setMana(int Mana) {
-        this.mana = Mana;
+    public int getMaxMana() {
+        return 100;
     }
 
     @Override

@@ -14,7 +14,7 @@ import org.newdawn.slick.geom.Vector2f;
 public abstract class Entity {
     protected Map map;
     protected Image image;
-    protected Image hoverImage;
+    private Image hoverImage;
     // In terms of tiles
     protected Vector2i position;
     protected Vector2i positionLerpFrom;
@@ -30,7 +30,7 @@ public abstract class Entity {
     }
 
     public abstract void update(GameContainer gc, GameState game, int delta)
-            throws SlickException;
+            ;
 
     public void render(GameContainer gc, Graphics graphics)
             throws SlickException {
@@ -57,13 +57,11 @@ public abstract class Entity {
         int drawX = (int) (drawCoordinates.getX() + Game.TILE_SIZE_X / 2 - image.getWidth() / 2);
         int drawY = (int) (drawCoordinates.getY() - image.getHeight() / 2 - Game.TILE_SIZE_Y / 2);
 
-        if (x > drawX && x < drawX + image.getWidth()
-                && y > drawY && y < drawY + image.getHeight())
-            return true;
-        return false;
+        return x > drawX && x < drawX + image.getWidth()
+                && y > drawY && y < drawY + image.getHeight();
     }
 
-    public void generateHoverImage() throws SlickException {
+    private void generateHoverImage() throws SlickException {
         hoverImage = new Image(image.getWidth(), image.getHeight());
         Graphics hoverImageGraphics = hoverImage.getGraphics();
         hoverImageGraphics.setColor(new Color(256, 256, 256, 64));
@@ -97,7 +95,7 @@ public abstract class Entity {
         }
     }
 
-    public abstract void onClick(GameState game) throws SlickException;
+    public abstract void onClick(GameState game);
 
     public Vector2i getPositionLerpFrom() {
         return positionLerpFrom;
@@ -115,18 +113,17 @@ public abstract class Entity {
         this.position = position;
     }
 
-    public Vector2f getRenderPosition() {
+    private Vector2f getRenderPosition() {
         Vector2i positionCoordinates = map.tileCoordinatesToGameCoordinates(position);
         Vector2i lerpFromCoordinates = map.tileCoordinatesToGameCoordinates(positionLerpFrom);
-        Vector2f drawCoordinates = lerpFromCoordinates.lerpTo(positionCoordinates, positionLerpFraction);
-        return drawCoordinates;
+        return lerpFromCoordinates.lerpTo(positionCoordinates, positionLerpFraction);
     }
 
     public void setPositionLerpFraction(float positionLerpFraction) {
         this.positionLerpFraction = positionLerpFraction;
     }
 
-    public Rectangle getRenderBounds() {
+    private Rectangle getRenderBounds() {
         return new Rectangle(getRenderPosition().getX(),
                 getRenderPosition().getY(), 32, 64);
     }

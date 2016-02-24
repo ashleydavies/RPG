@@ -8,30 +8,47 @@ import org.newdawn.slick.SlickException;
  * Created by Ashley on 12/01/2015.
  */
 public interface ICombat {
-    public int getFortitude();
-    public int getStrength();
-    public int getIntelligence();
-    public int getSwordsmanship();
-    public int getArchery();
-    public int getSpeed();
-    public int getCombatMagic();
-    public int getDarkMagic();
-    public int getUtilityMagic();
-    public int getHealingMagic();
-    public int getProtectiveMagic();
+    int getFortitude();
 
-    public void update(GameContainer gc, GameState game, int delta) throws SlickException;
-    public void attack(ICombat enemy);
+    int getStrength();
 
-    public int getMaxAP();
-    public void setAP(int AP);
-    public int getAP();
+    int getIntelligence();
 
-    public int getMaxHP();
-    public void setHP(int HP);
-    public int getHP();
+    int getSwordsmanship();
 
-    public int getMaxMana();
-    public void setMana(int Mana);
-    public int getMana();
+    int getArchery();
+
+    int getSpeed();
+
+    int getCombatMagic();
+
+    int getDarkMagic();
+
+    int getUtilityMagic();
+
+    int getHealingMagic();
+
+    int getProtectiveMagic();
+
+    void update(GameContainer gc, GameState game, int delta);
+
+    void attack(ICombat enemy);
+
+    int getMaxAP();
+
+    void setAP(int AP);
+
+    int getAP();
+
+    int getMaxHP();
+
+    void setHP(int HP);
+
+    int getHP();
+
+    int getMaxMana();
+
+    void setMana(int Mana);
+
+    int getMana();
 }

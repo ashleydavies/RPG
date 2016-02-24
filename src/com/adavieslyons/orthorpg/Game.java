@@ -11,7 +11,7 @@ public class Game extends BasicGame {
     public static final int TILE_SIZE_X = 64;
     public static final int TILE_SIZE_Y = 32;
 
-    GameStateManager gsm;
+    private GameStateManager gsm;
 
     private Game() {
         super("RPG");
@@ -44,11 +44,7 @@ public class Game extends BasicGame {
 
     @Override
     public void keyPressed(int key, char c) {
-        try {
-            gsm.keyPressed(key, c);
-        } catch (SlickException e) {
-            System.out.println("ERROR ON KEY PRESS EVENT");
-        }
+        gsm.keyPressed(key, c);
     }
 
     @Override

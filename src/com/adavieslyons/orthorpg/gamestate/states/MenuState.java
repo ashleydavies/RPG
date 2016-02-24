@@ -2,13 +2,14 @@ package com.adavieslyons.orthorpg.gamestate.states;
 
 import com.adavieslyons.orthorpg.gamestate.GameStateManager;
 import com.adavieslyons.orthorpg.gamestate.State;
+import com.adavieslyons.util.FileLoader;
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.*;
 
 public class MenuState extends State {
-    Image buttonTexture;
-    Image headerImage;
-    String[] buttons = {"Play", "Settings", "Help", "Exit"};
+    private Image buttonTexture;
+    private Image headerImage;
+    private final String[] buttons = {"Play", "Settings", "Help", "Exit"};
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
@@ -17,8 +18,8 @@ public class MenuState extends State {
 
     @Override
     public void load(GameContainer gc) throws SlickException {
-        buttonTexture = new Image("img/button.png");
-        headerImage = new Image("img/header.png");
+        buttonTexture = FileLoader.getImage("button");
+        headerImage = FileLoader.getImage("header");
     }
 
     @Override
@@ -53,7 +54,7 @@ public class MenuState extends State {
     }
 
     @Override
-    public void keyPressed(int key, char c) throws SlickException {
+    public void keyPressed(int key, char c) {
 
     }
 }
