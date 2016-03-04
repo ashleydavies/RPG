@@ -13,10 +13,8 @@ import org.w3c.dom.Element;
  */
 public class MapLayer {
     private final MapTileData[][] tiles;
-    private final Map map;
 
-    public MapLayer(MapTileData tiles[][], Map map) {
-        this.map = map;
+    public MapLayer(MapTileData tiles[][]) {
         this.tiles = tiles;
     }
 
@@ -28,7 +26,7 @@ public class MapLayer {
         return MapTile.getTile(tiles[y][x].getId());
     }
 
-    void render(GameContainer gc, Graphics graphics, int totalDelta, boolean renderOccupants) throws SlickException {
+    void render(GameContainer gc, Graphics graphics, Map map, int totalDelta, boolean renderOccupants) throws SlickException {
         Vector2i minXTile = map.screenCoordinatesToTileCoordinates(0, 0);
         Vector2i minYTile = map.screenCoordinatesToTileCoordinates(gc.getWidth(), 0);
         Vector2i maxYTile = map.screenCoordinatesToTileCoordinates(0, gc.getHeight());

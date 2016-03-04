@@ -78,7 +78,7 @@ public class RPGXML {
         return data;
     }
 
-    public static MapData loadMap(GameState game, Map map, Document node) {
+    public static MapData loadMap(GameState game, Document node) {
         // Pre: Map has at least one layer, row and column
         MapData data = new MapData();
 
@@ -94,7 +94,7 @@ public class RPGXML {
         }
 
         for (int i = 0; i < layerNodes.getLength(); i++) {
-            layers[i] = loadMapLayer(map, data, elem(layerNodes.item(i)));
+            layers[i] = loadMapLayer(data, elem(layerNodes.item(i)));
         }
 
         Element mobRoot = (Element) node.getElementsByTagName("mobs").item(0);
@@ -103,7 +103,7 @@ public class RPGXML {
             NodeList mobNodes = mobRoot.getElementsByTagName("mob");
 
             for (int i = 0; i < mobNodes.getLength(); i++) {
-                mobs.add(loadMapMobData(game, map, elem(mobNodes.item(i))));
+                mobs.add(loadMapMobData(game, elem(mobNodes.item(i))));
             }
         }
 
@@ -116,7 +116,7 @@ public class RPGXML {
     //
     // Loads map/mob data from a <mob> node
     //
-    private static Mob loadMapMobData(GameState game, Map map, Element node) {
+    private static Mob loadMapMobData(GameState game, Element node) {
         int nodeID = intAttr(node, "id");
         int nodeX = intAttr(node, "xPos");
         int nodeY = intAttr(node, "yPos");
@@ -150,22 +150,22 @@ public class RPGXML {
     //
     // Loads map layers from a map document's layer nodes
     //
-    private static MapLayer loadMapLayer(Map map, MapData data, Element node) {
+    private static MapLayer loadMapLayer(MapData data, Element node) {
         NodeList rowNodes = childElems(node, "row");
 
         MapTileData[][] layerTiles = new MapTileData[data.getHeight()][data.getWidth()];
 
         for (int i = 0; i < data.getHeight(); i++) {
-            layerTiles[i] = loadMapRow(map, data, elem(rowNodes.item(i)));
+            layerTiles[i] = loadMapRow(data, elem(rowNodes.item(i)));
         }
 
-        return new MapLayer(layerTiles, map);
+        return new MapLayer(layerTiles);
     }
 
     //
     // Loads a map row from a <row> node
     //
-    private static MapTileData[] loadMapRow(Map map, MapData data, Element node) {
+    private static MapTileData[] loadMapRow(MapData data, Element node) {
         NodeList colNodes = childElems(node, "tile");
 
         MapTileData[] rowTiles = new MapTileData[data.getWidth()];

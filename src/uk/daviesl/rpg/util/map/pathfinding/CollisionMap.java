@@ -13,14 +13,10 @@ public class CollisionMap {
         collisionData = new boolean[map.getHeight()][map.getWidth()];
         this.map = map;
 
-        int y = 0;
-
-        for (boolean[] column : collisionData) {
-            for (int x = 0; x < column.length; x++) {
-                column[x] = map.getCollideable(x, y);
+        for (int y = 0; y < collisionData.length; y++) {
+            for (int x = 0; x < collisionData[y].length; x++) {
+                collisionData[y][x] = map.getCollideable(x, y);
             }
-
-            y++;
         }
     }
 
