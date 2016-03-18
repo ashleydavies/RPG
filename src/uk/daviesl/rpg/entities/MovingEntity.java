@@ -1,6 +1,7 @@
 package uk.daviesl.rpg.entities;
 
 import uk.daviesl.rpg.util.Vector2i;
+import uk.daviesl.rpg.util.map.GameMap;
 import uk.daviesl.rpg.util.map.Map;
 import uk.daviesl.rpg.util.map.pathfinding.AStar;
 
@@ -15,7 +16,7 @@ public abstract class MovingEntity extends Entity {
     private float tileMoveCurrently = 0;
     protected int AP = 7;
 
-    public MovingEntity(Map map) {
+    public MovingEntity(GameMap map) {
         super(map);
 
         desiredPosition = new Vector2i(0, 0);

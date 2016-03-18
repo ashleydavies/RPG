@@ -7,6 +7,7 @@ import uk.daviesl.rpg.util.SpriteSheet;
 import uk.daviesl.rpg.util.Vector2i;
 import uk.daviesl.rpg.util.dialog.DialogNode;
 import uk.daviesl.rpg.util.dialog.DialogReply;
+import uk.daviesl.rpg.util.map.GameMap;
 import uk.daviesl.rpg.util.map.Map;
 import uk.daviesl.rpg.util.map.MapLayer;
 import uk.daviesl.rpg.util.map.MapTileData;
@@ -97,6 +98,13 @@ public class RPGXML {
             layers[i] = loadMapLayer(data, elem(layerNodes.item(i)));
         }
 
+
+        data.setLayers(layers);
+
+        return data;
+    }
+
+    private static List<Mob> loadMapMobs(GameState game, GameMap map, Document node) {
         Element mobRoot = (Element) node.getElementsByTagName("mobs").item(0);
         List<Mob> mobs = new ArrayList<Mob>();
         if (mobRoot != null) {
@@ -107,16 +115,13 @@ public class RPGXML {
             }
         }
 
-        data.setLayers(layers);
-        data.setMobs(mobs);
-
-        return data;
+        return mobs;
     }
 
     //
     // Loads map/mob data from a <mob> node
     //
-    private static Mob loadMapMobData(GameState game, Element node) {
+    private static Mob loadMapMobData(GameState game, Element node, GameMap map) {
         int nodeID = intAttr(node, "id");
         int nodeX = intAttr(node, "xPos");
         int nodeY = intAttr(node, "yPos");

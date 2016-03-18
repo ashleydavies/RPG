@@ -12,6 +12,7 @@ import uk.daviesl.rpg.util.Vector2i;
 import uk.daviesl.rpg.util.dialog.DialogNode;
 import uk.daviesl.rpg.util.dialog.IDialogable;
 import uk.daviesl.rpg.util.inventory.Item;
+import uk.daviesl.rpg.util.map.GameMap;
 import uk.daviesl.rpg.util.map.Map;
 import uk.daviesl.rpg.util.map.WorldMap;
 import org.lwjgl.input.Keyboard;
@@ -23,7 +24,7 @@ import org.newdawn.slick.SlickException;
 public class GameState extends State {
     public int WIDTH;
     public int HEIGHT;
-    private Map map;
+    private GameMap map;
     private WorldMap worldMap;
     private DialogState dialogState;
 
@@ -52,7 +53,7 @@ public class GameState extends State {
 
         input = new Input(gc.getHeight());
         entityManager = new EntityManager(this);
-        map = new Map(gc, this, 0, entityManager);
+        map = GameMap.loadMap(gc, this, 0);
 
         player = new Player(gc, this, map, new Vector2i(40, 7));
         entityManager.setPlayer(player);
@@ -74,10 +75,8 @@ public class GameState extends State {
         switch (state) {
             case PLAYING:
             case INVENTORY:
-                map.setEditing(false);
                 break;
             case MAP_EDITOR:
-                map.setEditing(true);
                 break;
             default:
                 break;
@@ -116,19 +115,19 @@ public class GameState extends State {
                 if (player.getPosition().getY() == 0) {
                     System.out.println("Player transferring map (Via North)");
                     loadState(InnerState.WORLD_MAP);
-                    worldMap.leavingMapArea(map.getID(), WorldMap.MapDirection.NORTH);
+                    worldMap.leavingMapArea(map.getMapID(), WorldMap.MapDirection.NORTH);
                 } else if (player.getPosition().getX() == map.getWidth() - 1) {
                     System.out.println("Player transferring map (Via East)");
                     loadState(InnerState.WORLD_MAP);
-                    worldMap.leavingMapArea(map.getID(), WorldMap.MapDirection.EAST);
+                    worldMap.leavingMapArea(map.getMapID(), WorldMap.MapDirection.EAST);
                 } else if (player.getPosition().getY() == map.getHeight() - 1) {
                     System.out.println("Player transferring map (Via South)");
                     loadState(InnerState.WORLD_MAP);
-                    worldMap.leavingMapArea(map.getID(), WorldMap.MapDirection.SOUTH);
+                    worldMap.leavingMapArea(map.getMapID(), WorldMap.MapDirection.SOUTH);
                 } else if (player.getPosition().getX() == 0) {
                     System.out.println("Player transferring map (Via West)");
                     loadState(InnerState.WORLD_MAP);
-                    worldMap.leavingMapArea(map.getID(), WorldMap.MapDirection.WEST);
+                    worldMap.leavingMapArea(map.getMapID(), WorldMap.MapDirection.WEST);
                 }
                 break;
             case WORLD_MAP:
@@ -198,7 +197,7 @@ public class GameState extends State {
     public void loadMap(GameContainer gc, int mapID, WorldMap.MapDirection direction) throws SlickException {
         entityManager.clear();
 
-        map = new Map(gc, this, mapID, entityManager);
+        map = GameMap.loadMap(gc, this, mapID);
 
         Vector2i playerPosition = map.getSuitablePlayerLocation(direction);
         player.onNewMapLoad(map, playerPosition);

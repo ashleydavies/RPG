@@ -41,9 +41,9 @@ public abstract class Map {
 
         this.borderTexture = coreTextureImage(0, 4, 1, 1);
         this.isoDistinguishTexture = coreTextureImage(0, 5, 1, 1);
-        mapSetup(gc, game);
     }
 
+    public abstract void render(GameContainer gc, Graphics graphics) throws SlickException;
     public void update(GameContainer gc, GameState game, int delta)
             throws SlickException {
 
@@ -80,8 +80,6 @@ public abstract class Map {
         return false;
     }
 
-    public void render(GameContainer gc, Graphics graphics) throws SlickException {
-    }
 
     // SCREEN => TILE
     public Vector2i screenCoordinatesToTileCoordinates(int x, int y) {
@@ -157,16 +155,6 @@ public abstract class Map {
         return gameCoordinates.add(offset);
     }
 
-    public void generateNewMap(GameContainer gc, GameState game, int mapID,
-                               EntityManager entityManager) throws SlickException {
-        generateNewMap(gc, game, mapID, entityManager, 80, 80);
-    }
-
-    private void mapSetup(GameContainer gc, GameState game) {
-        generateMinimapImage();
-        minimapBackgroundGUI = new ImageGUI(gc, game, 16, 16, minimapImage);
-    }
-
     protected Image coreTextureImage(int tiles_x, int tiles_y, int tiles_w, int tiles_h) {
         return SpriteSheet.getSubImage(0, (Game.TILE_SIZE_X + 1) * tiles_x, (Game.TILE_SIZE_Y + 1) * tiles_y,
                 (Game.TILE_SIZE_X + 1) * tiles_w, (Game.TILE_SIZE_Y + 1) * tiles_h);
@@ -187,10 +175,6 @@ public abstract class Map {
         return layers[layers.length - 1].getOccupied(tX, tY);
     }
 
-    public GameState getGame() {
-        return game;
-    }
-
     public MapTileData setOccupied(int x, int y, MovingEntity entity) {
         return layers[layers.length - 1].setOccupied(x, y, entity);
     }
@@ -202,24 +186,7 @@ public abstract class Map {
         return offset;
     }
 
-    private void setOffset(Vector2i offset) {
-        if (!getEditing()) {
-            // Find corners of map
-            int top = offset.getY();
-            int bottom = offset.getY() + (int) (0.5 * (getHeight() + getWidth()) * Game.TILE_SIZE_Y);
-            int left = offset.getX() - (int) (0.5 * getHeight() * Game.TILE_SIZE_X);
-            int right = offset.getX() + (int) (0.5 * getWidth() * Game.TILE_SIZE_X);
-
-            if (top > 100)
-                offset.setY(100);
-            if (bottom < game.HEIGHT - 150)
-                offset.setY(game.HEIGHT - 150 - ((int) (0.5 * (getHeight() + getWidth()) * Game.TILE_SIZE_Y)));
-
-            if (left > 100)
-                offset.setX(100 + (int) (0.5 * getHeight() * Game.TILE_SIZE_X));
-            if (right < game.WIDTH - 150)
-                offset.setX(game.WIDTH - 150 - (int) (0.5 * getWidth() * Game.TILE_SIZE_X));
-        }
+    protected void setOffset (Vector2i offset) {
         this.offset = offset;
     }
 
@@ -243,7 +210,7 @@ public abstract class Map {
 
     public void focusTile(Vector2i tile) {
         // Take tile position, convert to screen position, and set it as offset
-        //setOffset(new Vector2i(
+        //(new Vector2i(
         //		-(tile.getX() * Game.TILE_SIZE_X - game.WIDTH / 2),
         //		-(tile.getY() * Game.TILE_SIZE_Y - game.HEIGHT / 2)));
     }

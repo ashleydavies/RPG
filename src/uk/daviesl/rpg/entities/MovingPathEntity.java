@@ -1,13 +1,14 @@
 package uk.daviesl.rpg.entities;
 
 import uk.daviesl.rpg.util.Vector2i;
+import uk.daviesl.rpg.util.map.GameMap;
 import uk.daviesl.rpg.util.map.Map;
 
 public abstract class MovingPathEntity extends MovingEntity {
     private int currentPathPosition = 0;
     private Vector2i path[];
 
-    public MovingPathEntity(Map map) {
+    public MovingPathEntity(GameMap map) {
         super(map);
     }
 

@@ -5,6 +5,7 @@ import uk.daviesl.rpg.gamestate.states.GameState;
 import uk.daviesl.rpg.util.FileLoader;
 import uk.daviesl.rpg.util.Vector2i;
 import uk.daviesl.rpg.util.inventory.ItemStack;
+import uk.daviesl.rpg.util.map.GameMap;
 import uk.daviesl.rpg.util.map.Map;
 import uk.daviesl.rpg.util.map.MapTileData;
 import org.newdawn.slick.*;
@@ -21,7 +22,7 @@ public class Player extends MovingEntity implements ICombat, ITakeTurns {
     private final ItemStack[] items = new ItemStack[27];
     private boolean myTurn;
 
-    public Player(GameContainer gc, GameState game, Map map, Vector2i position) {
+    public Player(GameContainer gc, GameState game, GameMap map, Vector2i position) {
         super(map);
         this.game = game;
         this.HP = getFortitude() * 10 + 10;
@@ -97,7 +98,7 @@ public class Player extends MovingEntity implements ICombat, ITakeTurns {
                 .getMouseX(), game.getInput().getMouseY()));
     }
 
-    public void onNewMapLoad(Map map, Vector2i newPosition) {
+    public void onNewMapLoad(GameMap map, Vector2i newPosition) {
         setNewPosition(newPosition);
         moving = false;
         tileOccupied = map.setOccupied(position.getX(), position.getY(), this);

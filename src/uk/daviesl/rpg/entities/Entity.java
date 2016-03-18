@@ -3,6 +3,7 @@ package uk.daviesl.rpg.entities;
 import uk.daviesl.rpg.Game;
 import uk.daviesl.rpg.gamestate.states.GameState;
 import uk.daviesl.rpg.util.Vector2i;
+import uk.daviesl.rpg.util.map.GameMap;
 import uk.daviesl.rpg.util.map.Map;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Rectangle;
@@ -12,7 +13,7 @@ import org.newdawn.slick.geom.Vector2f;
  * @author Ashley
  */
 public abstract class Entity {
-    protected Map map;
+    protected GameMap map;
     protected Image image;
     // In terms of tiles
     protected Vector2i position;
@@ -21,7 +22,7 @@ public abstract class Entity {
     protected float positionLerpFraction;
     private Image hoverImage;
 
-    public Entity(Map map) {
+    public Entity(GameMap map) {
         this.map = map;
 
         this.position = new Vector2i(0, 0);

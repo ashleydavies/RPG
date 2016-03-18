@@ -4,6 +4,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import uk.daviesl.rpg.Game;
 import uk.daviesl.rpg.entities.EntityManager;
 import uk.daviesl.rpg.gamestate.states.GameState;
 import uk.daviesl.rpg.gui.ImageGUI;
@@ -51,8 +52,8 @@ public class GameMap extends Map {
     }
 
     public static GameMap loadMap(GameContainer gc, GameState game, int mapID) {
-        MapData data = RPGXML.loadMap(game, FileLoader.getXML("map/" + mapID));
         EntityManager entityManager = new EntityManager(game);
+        MapData data = RPGXML.loadMap(game, FileLoader.getXML("map/" + mapID), entityManager);
         data.getMobs().forEach(entityManager::addMob);
 
         return new GameMap(gc, game, mapID, data.getWidth(), data.getHeight(), data.getLayers(), entityManager);
@@ -105,14 +106,66 @@ public class GameMap extends Map {
 
         minimapBackgroundGUI.render(gc, graphics);
     }
+
     public AStar.Node[][] getNodeMatrix() {
         return nodeMatrix;
     }
+
     public boolean isFogOfWar(int tX, int tY) {
         return fogOfWar[tX][tY];
     }
+
     public void revealCoordinate(int tX, int tY) {
         fogOfWar[tX][tY] = false;
     }
 
+    private void mapSetup(GameContainer gc, GameState game) {
+        generateMinimapImage();
+        minimapBackgroundGUI = new ImageGUI(gc, game, 16, 16, minimapImage);
+    }
+
+    private void generateMinimapImage() {
+        try {
+            this.minimapImage = new Image(this.getWidth(), this.getHeight());
+            Graphics graphics = minimapImage.getGraphics();
+            for (int x = 0; x < this.getWidth(); x++) {
+                for (int y = 0; y < this.getHeight(); y++) {
+                    graphics.setColor(layers[0].getTile(x, y).getMinimapColor());
+                    graphics.drawRect(x, y, 1, 1);
+                }
+            }
+            graphics.flush();
+        } catch (SlickException e) {
+            System.out.println("Unrecoverable failure to initialise or draw to image canvas for outlined image.");
+        }
+    }
+
+    public int getMapID() {
+        return mapID;
+    }
+
+    public GameState getGame() {
+        return game;
+    }
+
+    @Override
+    protected void setOffset(Vector2i offset) {
+        // Find corners of map
+        int top = offset.getY();
+        int bottom = offset.getY() + (int) (0.5 * (getHeight() + getWidth()) * Game.TILE_SIZE_Y);
+        int left = offset.getX() - (int) (0.5 * getHeight() * Game.TILE_SIZE_X);
+        int right = offset.getX() + (int) (0.5 * getWidth() * Game.TILE_SIZE_X);
+
+        if (top > 100)
+            offset.setY(100);
+        if (bottom < game.HEIGHT - 150)
+            offset.setY(game.HEIGHT - 150 - ((int) (0.5 * (getHeight() + getWidth()) * Game.TILE_SIZE_Y)));
+
+        if (left > 100)
+            offset.setX(100 + (int) (0.5 * getHeight() * Game.TILE_SIZE_X));
+        if (right < game.WIDTH - 150)
+            offset.setX(game.WIDTH - 150 - (int) (0.5 * getWidth() * Game.TILE_SIZE_X));
+
+        super.setOffset(offset);
+    }
 }

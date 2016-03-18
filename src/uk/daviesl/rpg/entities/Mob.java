@@ -2,6 +2,7 @@ package uk.daviesl.rpg.entities;
 
 import uk.daviesl.rpg.Game;
 import uk.daviesl.rpg.gamestate.states.GameState;
+import uk.daviesl.rpg.util.map.GameMap;
 import uk.daviesl.rpg.util.xml.MobData;
 import uk.daviesl.rpg.util.xml.RPGXML;
 import uk.daviesl.rpg.util.Vector2i;
@@ -36,7 +37,7 @@ public class Mob extends MovingPathEntity implements IDialogable, ICombat, ITake
     private final GameState game;
     private boolean myTurn;
 
-    public Mob(GameState game, int mobID, Map map) {
+    public Mob(GameState game, int mobID, GameMap map) {
         super(map);
         loadData(mobID);
 
