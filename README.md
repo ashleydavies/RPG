@@ -1,3 +1,7 @@
+========
+THIS PROJECT IS BEING REMADE AT /ashleydavies/ShaRPG
+========
+
 RPG
 ========
 
